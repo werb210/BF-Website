@@ -5,7 +5,7 @@ export default function Industries() {
   return (
     <section className="mx-auto max-w-7xl bg-[#020817] px-5 py-10 text-white md:px-6 md:py-12">
       <h1 className="text-3xl font-bold md:text-5xl">Industries We Advise</h1>
-      <div className="mt-5 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-2 sm:flex sm:flex-wrap">
         {industries.map((industry) => (
           <Link
             key={`selector-${industry.slug}`}

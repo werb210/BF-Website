@@ -114,7 +114,7 @@ export default function ProductDetail({ slug }: ProductDetailProps) {
         <img src={product.image} alt={product.name} className="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" />
         <div className="absolute inset-0 bg-black/65" />
         <div className="relative mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-16">
-          <h1 className="text-4xl font-bold md:text-6xl">{pageH1}</h1>
+          <h1 className="text-4xl font-bold md:text-5xl">{pageH1}</h1>
           <p className="mt-4 max-w-3xl text-base text-slate-200 md:text-lg">{product.heroSummary}</p>
         </div>
       </section>

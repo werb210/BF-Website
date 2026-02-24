@@ -19,7 +19,7 @@ export default function RetailInventoryFinancing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <h1 className="text-4xl lg:text-5xl font-bold text-secondary leading-tight" data-testid="page-title">
+              <h1 className="text-4xl md:text-5xl font-bold text-secondary leading-tight" data-testid="page-title">
                 Retail Inventory Financing Takes Your Business to the Next Level
               </h1>
               <p className="text-lg text-gray-700 leading-relaxed" data-testid="page-description">
@@ -209,7 +209,7 @@ export default function RetailInventoryFinancing() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {[
               "Fashion & Apparel",
               "Electronics & Tech",

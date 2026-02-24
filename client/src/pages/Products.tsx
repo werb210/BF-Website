@@ -6,7 +6,7 @@ export default function Products() {
     <div className="bg-[#020817] text-white">
       <section className="mx-auto max-w-7xl px-6 py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-200">Products</p>
-        <h1 className="mt-3 text-5xl font-bold md:text-6xl">Products Available</h1>
+        <h1 className="mt-3 text-4xl font-bold md:text-5xl">Products Available</h1>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-12">

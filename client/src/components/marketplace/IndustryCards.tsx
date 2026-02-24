@@ -8,7 +8,7 @@ export function IndustryCards() {
       <div className="mx-auto max-w-6xl px-4">
         <h2 className="text-2xl font-semibold">Industries</h2>
         <p className="mt-2 max-w-3xl text-sm text-slate-600">Different businesses have different cycles. Explore common scenarios and product fit by industry.</p>
-        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-3">
           {highlights.map((item) => (
             <article key={item} className="rounded-lg border bg-white p-3 text-sm font-medium">{item}</article>
           ))}
