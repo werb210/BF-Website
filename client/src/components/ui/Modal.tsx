@@ -31,7 +31,7 @@ const overlay: CSSProperties = {
 
 const container: CSSProperties = {
   position: "relative",
-  background: "#fff",
+  background: "white",
   padding: 30,
   width: "90%",
   maxWidth: 700,
