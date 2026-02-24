@@ -208,7 +208,7 @@ export default function CapitalReadinessScore() {
           <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
             <p className="text-sm uppercase tracking-[0.18em] text-slate-500">Your Readiness Result</p>
             <div className="mt-4 flex flex-wrap items-end gap-4">
-              <p className="text-6xl font-bold text-slate-900">{score}</p>
+              <p className="text-4xl md:text-5xl font-bold text-slate-900">{score}</p>
               <p className="mb-2 rounded-full bg-slate-900 px-4 py-1.5 text-sm font-semibold text-white">{tier}</p>
             </div>
 

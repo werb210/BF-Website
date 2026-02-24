@@ -25,7 +25,7 @@ export default function MediaFinancing() {
               data-testid="hero-image"
             />
             
-            <h1 className="text-4xl lg:text-5xl font-bold text-secondary mb-4" data-testid="page-title">
+            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-4" data-testid="page-title">
               Media Financing
             </h1>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed" data-testid="page-subtitle">

@@ -71,13 +71,13 @@ export default function Home() {
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-white">
             <p className="mb-4 text-sm uppercase tracking-widest text-white/60">Boutique Capital Advisory</p>
 
-            <h1 className="mb-6 max-w-3xl text-4xl font-bold leading-tight md:text-6xl">Strategic financing structured with precision.</h1>
+            <h1 className="mb-6 max-w-3xl text-4xl font-bold leading-tight md:text-5xl">Strategic financing structured with precision.</h1>
 
             <p className="mb-8 max-w-2xl text-lg text-white/80">
               Institutional-grade financing strategy built for growth-stage and mature operators.
             </p>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <a
                 href="https://client.boreal.financial"
                 onClick={(event) => {

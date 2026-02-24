@@ -23,7 +23,7 @@ export default function IndustryDetail({ slug }: Props) {
         <img src={industry.heroImage} alt={industry.name} className="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" />
         <div className="absolute inset-0 bg-black/70" />
         <div className="relative mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-20">
-          <h1 className="text-4xl font-bold md:text-6xl">{industry.name}</h1>
+          <h1 className="text-4xl font-bold md:text-5xl">{industry.name}</h1>
           <p className="mt-4 max-w-3xl text-base text-slate-200 md:text-lg">{industry.advisory}</p>
           <a href={applyHref} className="mt-6 inline-flex rounded-full bg-white px-5 py-2.5 font-semibold text-black">Apply Now</a>
         </div>

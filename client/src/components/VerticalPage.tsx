@@ -28,7 +28,7 @@ export function VerticalPage({ title, headline, subheadline, image, solutions }:
       <section className="mx-auto grid max-w-7xl items-center gap-12 px-6 md:grid-cols-2">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">{title}</p>
-          <h1 className="mt-3 text-5xl font-semibold text-slate-900">{headline}</h1>
+          <h1 className="mt-3 text-4xl md:text-5xl font-semibold text-slate-900">{headline}</h1>
           <p className="mt-5 text-lg text-slate-600">{subheadline}</p>
           <div className="mt-8 flex gap-3">
             <a href={APPLY_URL} className="rounded-lg bg-slate-900 px-6 py-3 text-white">Apply Now</a>
@@ -42,7 +42,7 @@ export function VerticalPage({ title, headline, subheadline, image, solutions }:
         <div className="mx-auto max-w-6xl px-6">
           <h2 className="text-4xl font-semibold text-slate-900">AI-Driven Capital Structuring</h2>
           <p className="mt-4 text-lg text-slate-600">Boreal’s AI underwriting engine analyzes banking trends, contract structures, and capital stack positioning to match your profile to lender criteria before submission — increasing approval probability and reducing structuring friction.</p>
-          <div className="mt-8 grid grid-cols-2 gap-4 rounded-2xl border border-slate-200 bg-white p-8 md:grid-cols-4">
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4 rounded-2xl border border-slate-200 bg-white p-8">
             {['Intake', 'AI Packaging', 'Lender Match', 'Structured Offer'].map((step) => (
               <div key={step} className="rounded-lg bg-slate-50 p-4 text-center font-semibold text-slate-700">{step}</div>
             ))}
@@ -81,7 +81,7 @@ export function VerticalPage({ title, headline, subheadline, image, solutions }:
       <section className="bg-slate-50">
         <div className="mx-auto max-w-6xl px-6 text-center">
           <h2 className="text-4xl font-semibold text-slate-900">40+ Capital Providers</h2>
-          <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-5">
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-5 gap-4">
             {Array.from({ length: 10 }).map((_, i) => <div key={i} className="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-500">Provider {i + 1}</div>)}
           </div>
         </div>

@@ -83,7 +83,7 @@ export default function ScoreModal({ open, onClose }: ScoreModalProps) {
           />
         ))}
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <button className="rounded border border-gray-300 px-4 py-2" onClick={onClose} disabled={submitting}>
             Cancel
           </button>
