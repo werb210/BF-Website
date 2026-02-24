@@ -2,29 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-.scroll-row {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 10px;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+/* Boreal Locked Design System */
+
+:root {
+  color-scheme: dark;
 }
 
-.scroll-row::-webkit-scrollbar {
-  display: none;
+html,
+body,
+#root {
+  height: 100%;
 }
 
-.scroll-card {
-  min-width: 320px;
-  scroll-snap-align: start;
-  flex: 0 0 min(320px, 82vw);
+body {
+  margin: 0;
+  background: #020C1C;
+  color: rgba(255, 255, 255, 0.92);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (min-width: 1024px) {
-  .scroll-card {
-    flex-basis: calc((100% - 40px) / 3);
-    min-width: calc((100% - 40px) / 3);
-  }
+/* Standard container */
+.boreal-container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Standard card */
+.boreal-card {
+  background: #0E2239;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
