@@ -64,7 +64,7 @@ export function getIndustryFaqs(productName: string, industryName: string): FaqI
   return [
     {
       question: `Is ${productName} available for ${industryName} businesses?`,
-      answer: `Absolutely. ${industryName[0].toUpperCase()}${industryName.slice(
+      answer: `Absolutely. ${industryName.charAt(0).toUpperCase()}${industryName.slice(
         1
       )} operators can access programs designed for contract cycles, seasonality, and working-capital needs.`
     },

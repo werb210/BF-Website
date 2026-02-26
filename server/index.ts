@@ -16,7 +16,6 @@ const app = express();
 app.use(securityHeaders);
 
 app.use((req, _res, next) => {
-  // @ts-expect-error traceId is attached at runtime
   req.traceId = crypto.randomUUID();
   next();
 });
@@ -53,7 +52,6 @@ app.use((req, res, next) => {
   res.on("finish", () => {
     const duration = Date.now() - start;
     if (requestPath.startsWith("/api")) {
-      // @ts-expect-error traceId is attached at runtime
       logger.info({
         msg: "API request completed",
         traceId: req.traceId,
@@ -218,7 +216,6 @@ function isWebSocketMessageRateLimited(key: string) {
   });
 
   app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
-    // @ts-expect-error traceId is attached at runtime
     const traceId = req.traceId;
     logger.error({
       msg: "Server error",
