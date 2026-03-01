@@ -54,6 +54,13 @@ app.use((_req, res, next) => {
   next();
 });
 
+app.use((_req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  next();
+});
+
 app.use((req, _res, next) => {
   req.traceId = crypto.randomUUID();
   next();
@@ -281,8 +288,8 @@ function isWebSocketMessageRateLimited(key: string) {
   const isProduction = process.env.NODE_ENV === "production";
 
   if (isProduction) {
-    // Serve built client output. Vite builds to dist/public.
-    const clientBuildDir = path.resolve(process.cwd(), "dist/public");
+    // Serve built client output.
+    const clientBuildDir = path.resolve(process.cwd(), "dist");
     const indexHtmlPath = path.join(clientBuildDir, "index.html");
 
     if (!fs.existsSync(indexHtmlPath)) {
@@ -291,14 +298,28 @@ function isWebSocketMessageRateLimited(key: string) {
 
     app.use(
       express.static(clientBuildDir, {
+        index: false,
         maxAge: "1y",
         immutable: true,
+        setHeaders: (res, servedPath) => {
+          if (servedPath.endsWith("index.html")) {
+            res.setHeader("Cache-Control", "no-store");
+          }
+        },
       }),
     );
 
-    // SPA fallback (exclude API routes)
-    app.get("*", (req, res, next) => {
-      if (req.path.startsWith("/api")) return next();
+    app.use("/api", (_req, res) => {
+      res.status(404).json({ error: "not_found" });
+    });
+
+    // SPA fallback (must come after static)
+    app.get("*", (req, res) => {
+      if (req.path.startsWith("/api")) {
+        return res.status(404).json({ error: "not_found" });
+      }
+
+      res.setHeader("Cache-Control", "no-store");
       res.sendFile(indexHtmlPath);
     });
   } else {

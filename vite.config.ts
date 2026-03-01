@@ -18,12 +18,15 @@ export default defineConfig({
     dedupe: ["react", "react-dom"],
   },
   build: {
-    minify: "esbuild",
-    outDir: path.resolve(__dirname, "dist/public"),
-    emptyOutDir: true,
     sourcemap: false,
+    minify: "esbuild",
+    outDir: path.resolve(__dirname, "dist"),
+    emptyOutDir: true,
   },
   esbuild: {
-    drop: process.env.NODE_ENV === "production" ? ["console", "debugger"] : [],
+    drop:
+      process.env.NODE_ENV === "production"
+        ? ["console", "debugger"]
+        : [],
   },
 });
