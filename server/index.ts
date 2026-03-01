@@ -7,13 +7,34 @@ import { WebSocketServer } from "ws";
 import { registerRoutes } from "./routes";
 import contactRoute from "./routes/contact";
 import leadRoute from "./routes/lead";
-import { createRateLimiter, securityHeaders } from "./security";
+import { compressionMiddleware, createRateLimiter, securityHeaders } from "./security";
 import { chatMessageSchema } from "./validation";
 import { logger } from "./logger";
 
 const app = express();
 
+app.disable("x-powered-by");
+
+app.use(compressionMiddleware);
 app.use(securityHeaders);
+
+app.use((req, res, next) => {
+  if (
+    process.env.NODE_ENV === "production" &&
+    req.headers["x-forwarded-proto"] !== "https"
+  ) {
+    return res.redirect(301, `https://${req.headers.host}${req.url}`);
+  }
+  next();
+});
+
+app.use((_req, res, next) => {
+  res.setHeader(
+    "Strict-Transport-Security",
+    "max-age=63072000; includeSubDomains; preload",
+  );
+  next();
+});
 
 app.use((req, _res, next) => {
   req.traceId = crypto.randomUUID();
@@ -29,6 +50,10 @@ app.use(
 
 app.use(express.json({ limit: "200kb" }));
 app.use(express.urlencoded({ extended: false, limit: "200kb" }));
+
+app.get("/health", (_req, res) => {
+  res.json({ status: "ok" });
+});
 
 app.use("/api/contact", contactRoute);
 app.use("/api/lead", leadRoute);
@@ -125,6 +150,15 @@ function isWebSocketMessageRateLimited(key: string) {
 =========================== */
 
 (async () => {
+  if (process.env.NODE_ENV === "production") {
+    const required = ["PORT"];
+    required.forEach((key) => {
+      if (!process.env[key]) {
+        throw new Error(`Missing env var: ${key}`);
+      }
+    });
+  }
+
   const server = await registerRoutes(app);
   const chatServer = new WebSocketServer({ noServer: true });
 
@@ -237,7 +271,12 @@ function isWebSocketMessageRateLimited(key: string) {
       throw new Error(`Could not find the build file: ${indexHtmlPath} (run: npm run build)`);
     }
 
-    app.use(express.static(clientBuildDir));
+    app.use(
+      express.static(clientBuildDir, {
+        maxAge: "1y",
+        immutable: true,
+      }),
+    );
 
     // SPA fallback (exclude API routes)
     app.get("*", (req, res, next) => {
