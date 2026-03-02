@@ -18,7 +18,7 @@
     "generate:sitemap": "ts-node scripts/generate-sitemap.ts",
     "preview": "vite preview",
     "lint": "eslint .",
-    "test": "if ls tests/**/*.test.ts* 1> /dev/null 2>&1; then tsx --test tests/**/*.test.ts* --verbose; else echo \"No tests found\"; fi",
+    "test": "tsx --test \"tests/**/*.test.ts\" --verbose",
     "build:server": "esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/server/index.js",
     "clean:cache": "rm -rf node_modules dist .vite client/.vite",
     "audit": "npm audit",
