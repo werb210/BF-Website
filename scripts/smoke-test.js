@@ -4,7 +4,7 @@ try {
   console.log("Running build...");
   execSync("npm run build", { stdio: "inherit" });
   console.log("✅ Build successful");
-} catch (err) {
+} catch {
   console.error("❌ Smoke test failed");
   process.exit(1);
 }

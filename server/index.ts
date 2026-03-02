@@ -275,6 +275,7 @@ function isWebSocketMessageRateLimited(key: string) {
   });
 
   app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
+    void _next;
     const traceId = req.traceId;
     logger.error({
       msg: "Server error",
