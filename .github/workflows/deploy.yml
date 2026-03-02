@@ -1,0 +1,40 @@
+name: Deploy BF Website to Azure
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    needs: ci
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20.11.1
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.11.1
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Build Docker Image
+        run: docker build -t boreal-website:latest .
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: boreal-website
+          images: boreal-website:latest
