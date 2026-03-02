@@ -1,50 +1,37 @@
 module.exports = {
   root: true,
 
-  ignorePatterns: [
-    "node_modules/",
-    "dist/",
-    "vendor/",
-    "coverage/",
-  ],
-
   env: {
+    browser: true,
+    node: true,
     es2022: true,
   },
 
-  overrides: [
-    // Browser code (client)
-    {
-      files: ["client/**/*.{js,ts,tsx}"],
-      env: {
-        browser: true,
-        node: false,
-      },
-      parserOptions: {
-        sourceType: "module",
-      },
-      rules: {
-        "no-undef": "off",
-      },
-    },
+  parser: "@typescript-eslint/parser",
 
-    // Server + Node scripts
+  parserOptions: {
+    ecmaVersion: "latest",
+    sourceType: "module",
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
+
+  plugins: ["@typescript-eslint"],
+
+  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+
+  ignorePatterns: ["node_modules/", "dist/", "vendor/", "coverage/"],
+
+  overrides: [
     {
-      files: [
-        "server/**/*.js",
-        "scripts/**/*.js",
-        "client/scripts/**/*.js",
-      ],
-      env: {
-        node: true,
-        browser: false,
-      },
+      files: ["server/**/*.js", "scripts/**/*.js", "client/scripts/**/*.js"],
       parserOptions: {
         sourceType: "script",
       },
       rules: {
         "@typescript-eslint/no-var-requires": "off",
-        "no-undef": "off",
+        "@typescript-eslint/no-require-imports": "off",
       },
     },
   ],
