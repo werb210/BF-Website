@@ -35,12 +35,7 @@ jobs:
           fi
 
       - name: Lint
-        run: |
-          if npm run | grep -q "lint"; then
-            npm run lint
-          else
-            echo "No lint script found"
-          fi
+        run: npx eslint . --ext .js,.ts,.tsx --ignore-path .gitignore
 
       - name: Run Tests
         run: |
