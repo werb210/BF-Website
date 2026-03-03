@@ -16,14 +16,14 @@ test("credit readiness submission returns session and dedupes by contact", async
     const payload = {
       companyName: "North Star Builders",
       fullName: "Avery Stone",
-      phone: "555-1000",
+      phone: "5551234567",
       email: "avery@example.com",
       industry: "Construction",
-      yearsInBusiness: "6",
+      yearsInBusiness: "Over 3 Years",
       monthlyRevenue: "125000",
       annualRevenue: "1500000",
-      arOutstanding: "300000",
-      existingDebt: "no",
+      arBalance: "300000",
+      collateral: "Equipment" ,
     };
 
     const first = await fetch(`http://127.0.0.1:${port}/api/readiness/submit`, {

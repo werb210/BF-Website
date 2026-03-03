@@ -18,7 +18,7 @@ test("contact form submission dedupes by email and phone", async () => {
       firstName: "Avery",
       lastName: "Stone",
       email: "avery@example.com",
-      phone: "555-1000",
+      phone: "5551234567",
     };
 
     const first = await fetch(`http://127.0.0.1:${port}/api/contact/submit`, {

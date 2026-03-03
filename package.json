@@ -18,7 +18,7 @@
     "generate:sitemap": "ts-node scripts/generate-sitemap.ts",
     "preview": "vite preview",
     "lint": "eslint .",
-    "test": "tsx --test --reporter=verbose",
+    "test": "tsx --test",
     "build:server": "esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/server/index.js",
     "clean:cache": "rm -rf node_modules dist .vite client/.vite",
     "audit": "npm audit",
@@ -26,7 +26,8 @@
     "optimize:images": "node scripts/optimize-images.js",
     "prestart": "node ./scripts/verify-node-version.js",
     "smoke": "node ./scripts/smoke-test.js",
-    "analyze": "vite build --mode analyze"
+    "analyze": "vite build --mode analyze",
+    "typecheck": "npm run check"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

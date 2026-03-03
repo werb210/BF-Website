@@ -3,22 +3,18 @@ import test from "node:test";
 import { spawn } from "node:child_process";
 import { WebSocket } from "ws";
 
-function waitForServerReady(proc: ReturnType<typeof spawn>) {
-  return new Promise<void>((resolve, reject) => {
-    const timeout = setTimeout(() => reject(new Error("Timed out waiting for server start")), 15000);
-
-    proc.stdout.on("data", (chunk) => {
-      if (chunk.toString().includes("serving on port")) {
-        clearTimeout(timeout);
-        resolve();
-      }
-    });
-
-    proc.on("exit", (code) => {
-      clearTimeout(timeout);
-      reject(new Error(`Server exited early with code ${code ?? "unknown"}`));
-    });
-  });
+async function waitForServerReady(port: number) {
+  const deadline = Date.now() + 15000;
+  while (Date.now() < deadline) {
+    try {
+      const response = await fetch(`http://127.0.0.1:${port}/health`);
+      if (response.ok) return;
+    } catch {
+      // keep polling until timeout
+    }
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+  throw new Error("Timed out waiting for server start");
 }
 
 async function stopProcess(proc: ReturnType<typeof spawn>) {
@@ -46,7 +42,7 @@ async function stopProcess(proc: ReturnType<typeof spawn>) {
 
 test("websocket chat endpoint accepts handshake and echoes session-aware response", async () => {
   const port = 4199;
-  const server = spawn("npm", ["run", "dev"], {
+  const server = spawn("npx", ["tsx", "server/index.ts"], {
     env: { ...process.env, PORT: String(port), NODE_ENV: "test" },
     stdio: ["ignore", "pipe", "pipe"],
     detached: true,
@@ -55,10 +51,10 @@ test("websocket chat endpoint accepts handshake and echoes session-aware respons
   let ws: WebSocket | null = null;
 
   try {
-    await waitForServerReady(server);
+    await waitForServerReady(port);
 
     ws = await new Promise<WebSocket>((resolve, reject) => {
-      const socket = new WebSocket(`ws://127.0.0.1:${port}/ws/chat`);
+      const socket = new WebSocket(`ws://127.0.0.1:${port}/ws/chat`, { origin: "http://localhost:5173" });
       socket.once("open", () => resolve(socket));
       socket.once("error", reject);
     });
