@@ -1,74 +1,82 @@
-:root{
-  --max-width:1200px;
-  --section-padding:80px;
+:root {
+  --max-width: 1200px;
+  --section-padding: 80px;
 }
 
-*{
-  box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  font-family:Inter,system-ui,Arial,sans-serif;
-  background:#0a1426;
-  color:#fff;
+body {
+  margin: 0;
+  font-family: Inter, system-ui, Arial, sans-serif;
+  background: #0a1426;
+  color: #ffffff;
 }
 
-.container{
-  max-width:var(--max-width);
-  margin:0 auto;
-  padding:0 24px;
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
-.section{
-  width:100%;
-  padding:var(--section-padding) 0;
+.section {
+  width: 100%;
+  padding: var(--section-padding) 0;
 }
 
-.section-dark{
-  background:#0a1426;
+.section-dark {
+  background: #0a1426;
 }
 
-.section-light{
-  background:#ffffff;
-  color:#111;
+.section-light {
+  background: #ffffff;
+  color: #111111;
 }
 
-.hero{
-  position:relative;
-  min-height:520px;
-  display:flex;
-  align-items:center;
+.hero {
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
 }
 
-.hero-inner{
-  width:100%;
-  max-width:1200px;
-  margin:0 auto;
-  padding:0 24px;
+.hero-inner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
-.faq{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:24px;
-  max-width:800px;
+h1, h2, h3 {
+  margin: 0 0 20px 0;
 }
 
-.faq-item{
-  border-bottom:1px solid rgba(255,255,255,0.2);
-  padding-bottom:16px;
+.faq {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  max-width: 800px;
 }
 
-.maya-widget{
-  position:fixed;
-  bottom:24px;
-  right:24px;
-  width:340px;
-  height:480px;
-  background:#0f1e3a;
-  border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 10px 40px rgba(0,0,0,0.4);
-  z-index:9999;
+.faq-item {
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 16px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.maya-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 340px;
+  height: 480px;
+  background: #0f1e3a;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  z-index: 9999;
 }
