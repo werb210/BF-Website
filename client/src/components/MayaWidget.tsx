@@ -96,7 +96,7 @@ export default function MayaWidget() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-96 bg-white shadow-xl rounded-xl border z-50">
+    <div className="maya-widget bg-white shadow-xl rounded-xl border">
       <div className="p-3 font-bold border-b">Ask Maya</div>
 
       <div className="p-3 h-64 overflow-y-auto text-sm space-y-2">

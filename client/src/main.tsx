@@ -5,6 +5,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { HelmetProvider } from "react-helmet-async";
 import "./index.css";
 import "./styles/globals.css";
+import "./styles/global.css";
 
 // ---- Advanced Tracking Layer ----
 declare global {

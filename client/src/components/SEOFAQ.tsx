@@ -1,5 +1,4 @@
 import { Helmet } from "react-helmet-async";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { FaqItem } from "@/data/faqs";
 
 interface SEOFAQProps {
@@ -16,25 +15,28 @@ export function SEOFAQ({ faqs, title = "Frequently Asked Questions" }: SEOFAQPro
       name: item.question,
       acceptedAnswer: {
         "@type": "Answer",
-        text: item.answer
-      }
-    }))
+        text: item.answer,
+      },
+    })),
   };
 
   return (
-    <section className="mt-10">
+    <section className="section section-dark">
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       </Helmet>
-      <h2 className="text-2xl font-semibold text-primary mb-4">{title}</h2>
-      <Accordion type="single" collapsible className="faq-list w-full">
-        {faqs.map((item, index) => (
-          <AccordionItem key={item.question} value={`faq-${index}`} className="faq-item">
-            <AccordionTrigger>{item.question}</AccordionTrigger>
-            <AccordionContent>{item.answer}</AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <div className="container">
+        <h2 className="section-title">{title}</h2>
+
+        <div className="faq-grid">
+          {faqs.map((faq) => (
+            <div className="faq-item" key={faq.question}>
+              <h3>{faq.question}</h3>
+              <p>{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
