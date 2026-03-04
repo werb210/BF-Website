@@ -33,9 +33,9 @@ export default function FaqPage() {
             Review common questions about financing products, approval timelines, and startup funding support.
           </p>
         </header>
-        <Accordion type="single" collapsible className="w-full rounded-lg border border-border px-6 bg-card">
+        <Accordion type="single" collapsible className="faq-list w-full rounded-lg border border-border px-6 bg-card">
           {FAQS.map((faq) => (
-            <AccordionItem value={faq.question} key={faq.question}>
+            <AccordionItem value={faq.question} key={faq.question} className="faq-item">
               <AccordionTrigger className="text-left text-base">{faq.question}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground text-sm leading-relaxed">{faq.answer}</AccordionContent>
             </AccordionItem>
