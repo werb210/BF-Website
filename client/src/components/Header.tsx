@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import logo from "../../public/images/header_white_transparent.png";
+import logo from "/images/header_white_transparent.png";
 import { APPLY_URL } from "@/config/site";
 import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 
