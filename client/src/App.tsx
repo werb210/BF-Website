@@ -47,7 +47,9 @@ function App() {
       <SeoJsonLd data={organizationSchema} />
       <SeoJsonLd data={financialServiceSchema} />
       <Toaster />
-      <AppRouter />
+      <div className="main-layout">
+        <AppRouter />
+      </div>
       <MayaWidget />
     </TooltipProvider>
   );

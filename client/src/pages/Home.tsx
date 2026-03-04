@@ -105,14 +105,16 @@ export default function Home() {
 
         <div className="section-divider" />
 
-        <section className="mx-auto max-w-7xl px-5 py-10 md:px-6">
-          <h2 className="text-2xl font-bold md:text-3xl">Explore financing options</h2>
-          <p className="mt-3 max-w-3xl text-slate-200">
-            Discover our most requested solutions including a
-            <Link href="/products/line-of-credit" className="mx-1 text-blue-300 underline underline-offset-2">Business Line of Credit</Link>,
-            <Link href="/products/equipment-financing" className="mx-1 text-blue-300 underline underline-offset-2">Equipment Financing</Link>, and learn more
-            <Link href="/how-it-works" className="ml-1 text-blue-300 underline underline-offset-2">about Boreal Financial</Link>.
-          </p>
+        <section>
+          <div className="financing-container">
+            <h2 className="text-2xl font-bold md:text-3xl">Explore financing options</h2>
+            <p className="text-slate-200">
+              Discover our most requested solutions including a
+              <Link href="/products/line-of-credit" className="mx-1 text-blue-300 underline underline-offset-2">Business Line of Credit</Link>,
+              <Link href="/products/equipment-financing" className="mx-1 text-blue-300 underline underline-offset-2">Equipment Financing</Link>, and learn more
+              <Link href="/how-it-works" className="ml-1 text-blue-300 underline underline-offset-2">about Boreal Financial</Link>.
+            </p>
+          </div>
         </section>
 
         <div className="section-divider" />

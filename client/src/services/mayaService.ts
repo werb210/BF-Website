@@ -22,6 +22,10 @@ export async function escalateToFundingSpecialist() {
 }
 
 export async function trackMarketingLead() {
+  if (import.meta.env.DEV) {
+    return { data: { ok: true } };
+  }
+
   return api.post<{ ok: boolean }>("/marketing/track-lead", {
     utm: captureAttribution(),
     timestamp: Date.now(),

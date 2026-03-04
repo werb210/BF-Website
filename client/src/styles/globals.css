@@ -3,3 +3,27 @@
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   margin: 4rem 0;
 }
+
+.financing-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 24px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.financing-container p {
+  line-height: 1.6;
+  max-width: 800px;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.main-layout {
+  padding-bottom: 180px;
+}

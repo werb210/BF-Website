@@ -9,6 +9,7 @@ import { WebSocketServer } from "ws";
 import { registerRoutes } from "./routes";
 import contactRoute from "./routes/contact";
 import leadRoute from "./routes/lead";
+import { registerMarketingRoutes } from "./routes/marketing";
 import { createRateLimiter } from "./security";
 import { chatMessageSchema } from "./validation";
 import { logger } from "./logger";
@@ -82,6 +83,7 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/contact", contactRoute);
 app.use("/api/lead", leadRoute);
+registerMarketingRoutes(app);
 
 process.on("unhandledRejection", (reason) => {
   logger.error({ msg: "Unhandled rejection", reason: String(reason) });
