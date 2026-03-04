@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import { brotliCompressSync } from "zlib";
 import viteCompression from "vite-plugin-compression";
 import { imagetools } from "vite-imagetools";
+import sitemap from "vite-plugin-sitemap";
 
 
 const brotliBundlePlugin: Plugin = {
@@ -43,6 +44,9 @@ export default defineConfig({
   root: path.resolve(__dirname, "client"),
   publicDir: path.resolve(__dirname, "client/public"),
   plugins: [
+    sitemap({
+      hostname: "https://borealfinance.com",
+    }),
     react(),
     imagetools(),
     viteCompression({
