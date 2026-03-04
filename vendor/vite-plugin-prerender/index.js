@@ -17,7 +17,12 @@ export default function prerender(options = {}) {
       }
 
       const indexPath = path.resolve(outDir, "index.html");
-      const indexHtml = await readFile(indexPath, "utf8");
+      let indexHtml;
+      try {
+        indexHtml = await readFile(indexPath, "utf8");
+      } catch {
+        return;
+      }
 
       await Promise.all(
         routes

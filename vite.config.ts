@@ -8,6 +8,7 @@ import viteCompression from "vite-plugin-compression";
 import { imagetools } from "vite-imagetools";
 import sitemap from "vite-plugin-sitemap";
 import prerender from "vite-plugin-prerender";
+import { visualizer } from "rollup-plugin-visualizer";
 
 
 const brotliBundlePlugin: Plugin = {
@@ -63,6 +64,12 @@ export default defineConfig({
     prerender({
       routes: ["/", "/apply", "/business-loans", "/equipment-financing", "/about"],
     }),
+    visualizer({
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+      filename: "dist/bundle-analysis.html",
+    }),
     brotliBundlePlugin,
   ],
   resolve: {
@@ -84,6 +91,7 @@ export default defineConfig({
         manualChunks: {
           react: ["react", "react-dom"],
           router: ["react-router-dom"],
+          vendor: ["framer-motion", "recharts", "zod"],
         },
       },
     },

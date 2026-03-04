@@ -136,7 +136,8 @@
     "vite": "^5.1.4",
     "vite-imagetools": "file:vendor/vite-imagetools",
     "vite-plugin-compression": "file:vendor/vite-plugin-compression",
-    "vite-plugin-prerender": "file:vendor/vite-plugin-prerender"
+    "vite-plugin-prerender": "file:vendor/vite-plugin-prerender",
+    "rollup-plugin-visualizer": "file:vendor/rollup-plugin-visualizer"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
