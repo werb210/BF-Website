@@ -1,5 +1,5 @@
-import { AppRouter as Router } from "@/router/AppRouter";
-import FloatingChat from "@/components/FloatingChat";
+import { AppRouter as Router } from "@/router/AppRouter"
+import FloatingChat from "./components/FloatingChat"
 
 function App() {
   return (
@@ -7,7 +7,7 @@ function App() {
       <Router />
       <FloatingChat />
     </>
-  );
+  )
 }
 
-export default App;
+export default App
