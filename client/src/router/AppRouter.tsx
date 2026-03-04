@@ -66,9 +66,12 @@ export function AppRouter() {
           <Switch>
           <Route path="/" component={Home} />
           <Route path="/how-it-works" component={HowItWorks} />
+          <Route path="/about" component={HowItWorks} />
 
           <Route path="/products" component={Products} />
+          <Route path="/business-loans" component={Products} />
           <Route path="/products/media-financing" component={MediaFinancing} />
+          <Route path="/equipment-financing">{() => <ProductDetail slug="equipment-financing" />}</Route>
           <Route path="/products/:slug">{(params) => <ProductDetail slug={params.slug} />}</Route>
 
           <Route path="/industries" component={Industries} />
