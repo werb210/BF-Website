@@ -2,7 +2,8 @@
   "include": [
     "client/src/**/*",
     "shared/**/*",
-    "server/**/*"
+    "server/**/*",
+    "src/types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",
