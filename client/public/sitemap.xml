@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://yourdomain.com/</loc></url>
-  <url><loc>https://yourdomain.com/how-it-works</loc></url>
-  <url><loc>https://yourdomain.com/products</loc></url>
-  <url><loc>https://yourdomain.com/products/media-financing</loc></url>
-  <url><loc>https://yourdomain.com/industries</loc></url>
-  <url><loc>https://yourdomain.com/product-comparison</loc></url>
-  <url><loc>https://yourdomain.com/compare</loc></url>
-  <url><loc>https://yourdomain.com/credit-readiness</loc></url>
-  <url><loc>https://yourdomain.com/credit-results</loc></url>
-  <url><loc>https://yourdomain.com/podcasts</loc></url>
-  <url><loc>https://yourdomain.com/contact</loc></url>
-  <url><loc>https://yourdomain.com/apply</loc></url>
-  <url><loc>https://yourdomain.com/lender-login</loc></url>
+
+<url>
+<loc>https://borealfinancial.com/</loc>
+<priority>1.0</priority>
+</url>
+
 </urlset>
