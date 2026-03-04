@@ -13,6 +13,10 @@
   gap: 24px;
 }
 
+.financing-container h2 {
+  margin-bottom: 12px;
+}
+
 .financing-container p {
   line-height: 1.6;
   max-width: 800px;
@@ -22,6 +26,10 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.faq-item {
+  display: block;
 }
 
 .main-layout {

@@ -27,9 +27,9 @@ export function SEOFAQ({ faqs, title = "Frequently Asked Questions" }: SEOFAQPro
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       </Helmet>
       <h2 className="text-2xl font-semibold text-primary mb-4">{title}</h2>
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion type="single" collapsible className="faq-list w-full">
         {faqs.map((item, index) => (
-          <AccordionItem key={item.question} value={`faq-${index}`}>
+          <AccordionItem key={item.question} value={`faq-${index}`} className="faq-item">
             <AccordionTrigger>{item.question}</AccordionTrigger>
             <AccordionContent>{item.answer}</AccordionContent>
           </AccordionItem>
