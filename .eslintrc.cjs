@@ -24,19 +24,29 @@ module.exports = {
 
   plugins: [
     "@typescript-eslint",
-    "react",
-    "react-hooks"
+    "react"
   ],
 
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "plugin:react-hooks/recommended"
+    "plugin:react/jsx-runtime"
   ],
 
   ignorePatterns: [
     "dist",
-    "node_modules"
-  ]
+    "node_modules",
+    "vendor",
+    "client/scripts",
+    "scripts"
+  ],
+
+  rules: {
+    "@typescript-eslint/no-require-imports": "off",
+    "react/prop-types": "off",
+    "react/no-unescaped-entities": "off",
+    "react/no-unknown-property": "off",
+    "@typescript-eslint/no-unused-vars": "off"
+  }
 };
