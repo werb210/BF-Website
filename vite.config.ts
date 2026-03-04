@@ -19,6 +19,8 @@ export default defineConfig({
   },
   build: {
     sourcemap: false,
+    target: "es2020",
+    chunkSizeWarningLimit: 1200,
     minify: "esbuild",
     outDir: path.resolve(__dirname, "dist"),
     emptyOutDir: true,
