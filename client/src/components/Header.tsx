@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import logo from "/images/header_white_transparent.png";
-import { APPLY_URL } from "@/config/site";
-import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 
 const navItems = [
   { href: "/products", label: "Products" },
@@ -15,14 +13,12 @@ const navItems = [
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [location] = useLocation();
-  const readinessSessionToken = getReadinessSessionToken();
-  const applyHref = buildApplyUrl(APPLY_URL, readinessSessionToken);
 
   return (
     <header className="site-header w-full border-b border-white/10 bg-[#0B1320]/95 backdrop-blur">
       <div className="container flex min-h-20 items-center justify-between gap-4 py-3">
         <Link href="/" className="flex items-center gap-3 sm:gap-4" onClick={() => setOpen(false)}>
-          <img src={logo} alt="Boreal Financial" width={512} height={128} className="h-12 w-auto object-contain sm:h-14" loading="lazy" decoding="async" />
+          <img src={logo} alt="Boreal Financial" width={512} height={128} className="h-10 w-auto object-contain md:h-12" loading="lazy" decoding="async" />
           <span className="text-base font-semibold tracking-wide text-white sm:text-xl">Boreal Financial</span>
         </Link>
 
@@ -32,7 +28,12 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          <a href={applyHref} className="rounded-full bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-500">
+          <a
+            href="https://client.boreal.financial"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-500"
+          >
             Apply Now
           </a>
         </nav>
@@ -58,7 +59,13 @@ export default function Header() {
                   {item.label}
                 </Link>
               ))}
-              <a href={applyHref} className="mt-2 inline-flex justify-center rounded-full bg-blue-600 px-5 py-3 font-medium text-white" onClick={() => setOpen(false)}>
+              <a
+                href="https://client.boreal.financial"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex justify-center rounded-full bg-blue-600 px-5 py-3 font-medium text-white"
+                onClick={() => setOpen(false)}
+              >
                 Apply Now
               </a>
             </nav>

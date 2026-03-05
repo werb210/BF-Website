@@ -6,8 +6,6 @@ import { industries } from "@/data/industries";
 import { products } from "@/data/products";
 import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 import MarketplaceSection from "@/components/MarketplaceSection";
-import HorizontalScroller from "@/components/HorizontalScroller";
-import FAQ from "@/components/FAQ";
 import { trackConversion } from "@/main";
 
 const primaryHeroImage = "/images/16x9 Concierge Private Banking Hero Image.jpeg";
@@ -67,7 +65,7 @@ export default function Home() {
             }}
           />
 
-          <div className="absolute inset-0 bg-black/70" />
+          <div className="absolute inset-0 bg-black/25 pointer-events-none" />
 
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-white">
             <p className="mb-4 text-sm uppercase tracking-widest text-white/60">Boutique Capital Advisory</p>
@@ -106,10 +104,6 @@ export default function Home() {
 
         <div className="section-divider" />
 
-        <FAQ />
-
-        <div className="section-divider" />
-
         <section className="authority-block py-12">
           <div className="mx-auto max-w-7xl px-5 md:px-6">
             <h2 className="text-3xl font-bold md:text-4xl">Institutional-Grade Structuring. Not Rate Shopping.</h2>
@@ -127,10 +121,10 @@ export default function Home() {
 
         <section className="mx-auto max-w-7xl px-5 py-12 md:px-6">
           <h2 className="text-3xl font-bold md:text-4xl">Industries</h2>
-          <div className="mt-4">
-            <HorizontalScroller>
+          <div className="mt-4 overflow-x-auto pb-4">
+            <div className="flex min-w-max gap-6 px-2">
               {orderedIndustries.map((industry) => (
-                <Link key={industry.slug} href={`/industries/${industry.slug}`} className="scroll-card group relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
+                <Link key={industry.slug} href={`/industries/${industry.slug}`} className="group relative w-[320px] flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
                   <img src={industry.image} alt={industry.name} width={1200} height={520} className="h-52 w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy" decoding="async" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/25" />
                   <div className="absolute bottom-0 p-4">
@@ -139,7 +133,7 @@ export default function Home() {
                   </div>
                 </Link>
               ))}
-            </HorizontalScroller>
+            </div>
           </div>
         </section>
 
@@ -147,10 +141,10 @@ export default function Home() {
 
         <section className="mx-auto max-w-7xl px-5 py-12 md:px-6">
           <h2 className="text-3xl font-bold md:text-4xl">Products</h2>
-          <div className="mt-4">
-            <HorizontalScroller>
+          <div className="mt-4 overflow-x-auto pb-4">
+            <div className="flex min-w-max gap-6 px-2">
               {orderedProducts.map((product) => (
-                <article key={product.slug} className="scroll-card relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
+                <article key={product.slug} className="relative w-[320px] flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
                   <img src={product.image} alt={product.name} width={1200} height={560} className="h-56 w-full object-cover" loading="lazy" decoding="async" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20" />
                   <div className="absolute inset-0 flex flex-col justify-end p-4">
@@ -160,7 +154,7 @@ export default function Home() {
                   </div>
                 </article>
               ))}
-            </HorizontalScroller>
+            </div>
           </div>
         </section>
       </main>
