@@ -21,7 +21,7 @@ const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
 const MediaFinancing = lazy(() => import("@/pages/products/MediaFinancing"));
 const Apply = lazy(() => import("@/pages/Apply"));
 const SystemStatus = lazy(() => import("@/pages/SystemStatus"));
-const FaqPage = lazy(() => import("@/pages/FaqPage"));
+const FAQ = lazy(() => import("@/pages/FAQ"));
 
 function AnalyticsListener() {
   const [location] = useLocation();
@@ -86,7 +86,7 @@ export function AppRouter() {
           <Route path="/apply/:rest*" component={Apply} />
           <Route path="/lender-login" component={PartnerLogin} />
           <Route path="/system-status" component={SystemStatus} />
-          <Route path="/faq" component={FaqPage} />
+          <Route path="/faq" component={FAQ} />
           <Route path="*" component={NotFound} />
           </Switch>
         </Suspense>
