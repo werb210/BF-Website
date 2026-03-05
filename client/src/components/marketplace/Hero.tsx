@@ -10,7 +10,7 @@ export function Hero() {
         backgroundPosition: "center",
       }}
     >
-      <div className="absolute inset-0 bg-black/60" />
+      <div className="absolute inset-0 bg-black/40 pointer-events-none" />
       <div className="container hero-inner relative">
         <div className="hero-left grid gap-5">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">Boreal Marketplace</p>
