@@ -29,9 +29,8 @@ function splitName(name: string) {
   return { firstName, lastName };
 }
 
-function isValidEmail(email: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-}
+const isValidEmail = (email: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 export default function ContactForm() {
   const [formData, setFormData] = useState<ContactFormData>(initialForm);
@@ -50,7 +49,12 @@ export default function ContactForm() {
       return;
     }
 
-    if (!isValidEmail(formData.email)) {
+    if (!formData.email.trim()) {
+      setError("Email is required");
+      return;
+    }
+
+    if (!isValidEmail(formData.email.trim())) {
       setError("Email must be valid");
       return;
     }

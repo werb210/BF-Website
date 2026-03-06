@@ -3,29 +3,21 @@ import path from "node:path";
 import { SitemapStream, streamToPromise } from "./sitemap-lib";
 
 const BASE_URL = process.env.VITE_SITE_URL ?? "https://borealfinancial.ca";
-const outputPaths = [
-  path.resolve(process.cwd(), "public/sitemap.xml"),
-  path.resolve(process.cwd(), "client/public/sitemap.xml"),
-];
+const outputPath = path.resolve(process.cwd(), "public/sitemap.xml");
 
 const routes = [
   "/",
   "/contact",
-  "/products",
-  "/how-it-works",
-  "/industries",
   "/privacy",
   "/terms",
+  "/work-with-us",
   "/working-capital",
-  "/equipment-financing",
   "/line-of-credit",
-  "/purchase-order-financing",
   "/term-loans",
-  "/industries/transportation",
+  "/purchase-order-financing",
   "/industries/construction",
-  "/industries/retail",
-  "/industries/healthcare",
   "/industries/manufacturing",
+  "/industries/logistics",
 ];
 
 async function run() {
@@ -36,12 +28,10 @@ async function run() {
 
   const xml = (await streamToPromise(sitemap)).toString();
 
-  outputPaths.forEach((outputPath) => {
-    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-    fs.writeFileSync(outputPath, xml, "utf8");
-  });
+  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+  fs.writeFileSync(outputPath, xml, "utf8");
 
-  console.log(`Sitemap generated for ${routes.length} routes.`);
+  console.log(`Sitemap generated for ${routes.length} routes at ${outputPath}.`);
 }
 
 void run();

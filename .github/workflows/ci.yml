@@ -23,31 +23,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Verify Node Version
-        run: node -v
+      - name: Static checks
+        run: npm run check
 
-      - name: Type Check
-        run: |
-          if [ -f "tsconfig.json" ]; then
-            npx tsc --noEmit
-          else
-            echo "No TypeScript config found"
-          fi
+      - name: Generate sitemap
+        run: npm run generate:sitemap
 
-      - name: Lint
-        run: npx eslint . --ext .js,.ts,.tsx --ignore-path .gitignore
-
-      - name: Run Tests
+      - name: Run tests
         run: npm test
 
       - name: Build
-        run: |
-          if npm run | grep -q "build"; then
-            npm run build
-          else
-            echo "No build script found"
-          fi
-
-      - name: Production Audit (report only)
-        run: |
-          npm audit --omit=dev || true
+        run: npm run build

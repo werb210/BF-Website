@@ -68,6 +68,7 @@ export function AppRouter() {
           <Route path="/" component={Home} />
           <Route path="/how-it-works" component={HowItWorks} />
           <Route path="/about" component={HowItWorks} />
+          <Route path="/work-with-us" component={HowItWorks} />
 
           <Route path="/products" component={Products} />
           <Route path="/business-loans" component={Products} />
@@ -76,6 +77,9 @@ export function AppRouter() {
           <Route path="/products/:slug">{(params) => <ProductDetail slug={params.slug} />}</Route>
 
           <Route path="/industries" component={Industries} />
+          <Route path="/industries/construction">{() => <IndustryDetail slug="construction" />}</Route>
+          <Route path="/industries/manufacturing">{() => <IndustryDetail slug="manufacturing" />}</Route>
+          <Route path="/industries/logistics">{() => <IndustryDetail slug="transportation" />}</Route>
           <Route path="/industries/:slug">{(params) => <IndustryDetail slug={params.slug} />}</Route>
 
           <Route path="/product-comparison" component={Compare} />
