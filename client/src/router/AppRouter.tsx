@@ -1,112 +1,36 @@
-import { Suspense, lazy, useEffect } from "react";
-import { Route, Switch, useLocation } from "wouter";
-import Header from "@/components/Header";
-import Footer from "@/components/layout/Footer";
-import { initGA, trackPageView } from "@/analytics/ga";
-import { scrollToTop } from "@/utils/scrollToTop";
+import { Routes, Route } from "react-router-dom"
 
-const Home = lazy(() => import("@/pages/Home"));
-const HowItWorks = lazy(() => import("@/pages/HowItWorks"));
-const Industries = lazy(() => import("@/pages/Industries"));
-const IndustryDetail = lazy(() => import("@/pages/IndustryDetail"));
-const Contact = lazy(() => import("@/pages/Contact"));
-const PartnerLogin = lazy(() => import("@/pages/PartnerLogin"));
-const NotFound = lazy(() => import("@/pages/NotFound"));
-const Compare = lazy(() => import("@/pages/Compare"));
-const CreditReadiness = lazy(() => import("@/pages/CreditReadiness"));
-const CreditResults = lazy(() => import("@/pages/CreditResults"));
-const Podcasts = lazy(() => import("@/pages/Podcasts"));
-const Products = lazy(() => import("@/pages/Products"));
-const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
-const MediaFinancing = lazy(() => import("@/pages/products/MediaFinancing"));
-const Apply = lazy(() => import("@/pages/Apply"));
-const SystemStatus = lazy(() => import("@/pages/SystemStatus"));
-const FAQ = lazy(() => import("@/pages/FAQ"));
-const Privacy = lazy(() => import("@/pages/privacy"));
-const Terms = lazy(() => import("@/pages/terms"));
+import Home from "../pages/Home"
+import Contact from "../pages/Contact"
+import Compare from "../pages/Compare"
+import CreditReadiness from "../pages/CreditReadiness"
+import CreditResults from "../pages/CreditResults"
+import Podcasts from "../pages/Podcasts"
 
-function AnalyticsListener() {
-  const [location] = useLocation();
-
-  useEffect(() => {
-    initGA();
-  }, []);
-
-  useEffect(() => {
-    trackPageView(location);
-    scrollToTop();
-  }, [location]);
-
-  return null;
-}
-
-
-function PrefetchRoutes() {
-  useEffect(() => {
-    const prefetchLink = document.createElement("link");
-    prefetchLink.rel = "prefetch";
-    prefetchLink.href = "/apply";
-    document.head.appendChild(prefetchLink);
-
-    return () => {
-      document.head.removeChild(prefetchLink);
-    };
-  }, []);
-
-  return null;
-}
+import IndustryDetail from "../pages/industries/IndustryDetail"
 
 export function AppRouter() {
   return (
-    <div className="min-h-screen bg-[#020817] text-white">
-      <AnalyticsListener />
-      <PrefetchRoutes />
-      <Header />
-      <main id="main-content">
-        <Suspense fallback={<div className="px-4 py-8">Loading...</div>}>
-          <Switch>
-          <Route path="/" component={Home} />
-          <Route path="/how-it-works" component={HowItWorks} />
-          <Route path="/about" component={HowItWorks} />
-          <Route path="/work-with-us" component={HowItWorks} />
+    <Routes>
+      <Route path="/" element={<Home />} />
 
-          <Route path="/products" component={Products} />
-          <Route path="/business-loans" component={Products} />
-          <Route path="/products/media-financing" component={MediaFinancing} />
-          <Route path="/equipment-financing">{() => <ProductDetail slug="equipment-financing" />}</Route>
-          <Route path="/products/:slug">{(params) => <ProductDetail slug={params.slug} />}</Route>
+      <Route path="/industries/construction" element={<IndustryDetail slug="construction" />} />
+      <Route path="/industries/manufacturing" element={<IndustryDetail slug="manufacturing" />} />
+      <Route path="/industries/logistics" element={<IndustryDetail slug="logistics" />} />
 
-          <Route path="/industries" component={Industries} />
-          <Route path="/industries/construction">{() => <IndustryDetail slug="construction" />}</Route>
-          <Route path="/industries/manufacturing">{() => <IndustryDetail slug="manufacturing" />}</Route>
-          <Route path="/industries/logistics">{() => <IndustryDetail slug="logistics" />}</Route>
-          <Route path="/industries/:slug">{(params) => <IndustryDetail slug={params.slug} />}</Route>
+      <Route path="/industries/:slug" element={<IndustryDetail />} />
 
-          <Route path="/product-comparison" component={Compare} />
-          <Route path="/compare" component={Compare} />
-          <Route path="/credit-readiness" component={CreditReadiness} />
-          <Route path="/credit-results" component={CreditResults} />
-          <Route path="/podcasts" component={Podcasts} />
-          <Route path="/contact" component={Contact} />
-          <Route path="/apply" component={Apply} />
-          <Route path="/apply/:rest*" component={Apply} />
-          <Route path="/lender-login" component={PartnerLogin} />
-          <Route path="/system-status" component={SystemStatus} />
-          <Route path="/faq" component={FAQ} />
-          <Route path="/privacy" component={Privacy} />
-          <Route path="/terms" component={Terms} />
+      <Route path="/product-comparison" element={<Compare />} />
+      <Route path="/compare" element={<Compare />} />
 
-          <Route path="/working-capital">{() => <ProductDetail slug="line-of-credit" />}</Route>
-          <Route path="/term-loans">{() => <ProductDetail slug="term-loans" />}</Route>
-          <Route path="/line-of-credit">{() => <ProductDetail slug="line-of-credit" />}</Route>
-          <Route path="/factoring" component={Products} />
-          <Route path="/purchase-order-financing">{() => <ProductDetail slug="purchase-order-financing" />}</Route>
+      <Route path="/credit-readiness" element={<CreditReadiness />} />
+      <Route path="/credit-results" element={<CreditResults />} />
 
-          <Route path="*" component={NotFound} />
-          </Switch>
-        </Suspense>
-      </main>
-      <Footer />
-    </div>
-  );
+      <Route path="/podcasts" element={<Podcasts />} />
+
+      <Route path="/contact" element={<Contact />} />
+    </Routes>
+  )
 }
+
+export default AppRouter
