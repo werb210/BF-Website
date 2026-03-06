@@ -1,17 +1,23 @@
 import { useEffect } from "react"
 
-export default function Meta({ title, description }: { title: string; description: string }) {
+interface Props {
+  title: string
+  description: string
+}
+
+export default function Meta({ title, description }: Props) {
   useEffect(() => {
     document.title = title
 
-    let meta = document.querySelector("meta[name='description']")
-    if (!meta) {
-      meta = document.createElement("meta")
-      meta.setAttribute("name", "description")
-      document.head.appendChild(meta)
+    let tag = document.querySelector("meta[name='description']")
+
+    if (!tag) {
+      tag = document.createElement("meta")
+      tag.setAttribute("name", "description")
+      document.head.appendChild(tag)
     }
 
-    meta.setAttribute("content", description)
+    tag.setAttribute("content", description)
   }, [title, description])
 
   return null
