@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import logo from "/images/header_white_transparent.png";
+import { APPLY_URL } from "@/config/site";
 
 const navItems = [
   { href: "/products", label: "Products" },
@@ -29,7 +30,7 @@ export default function Header() {
             </Link>
           ))}
           <a
-            href="https://apply.borealfinancial.com"
+            href={APPLY_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-full bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-500"
@@ -60,7 +61,7 @@ export default function Header() {
                 </Link>
               ))}
               <a
-                href="https://apply.borealfinancial.com"
+                href={APPLY_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 inline-flex justify-center rounded-full bg-blue-600 px-5 py-3 font-medium text-white"

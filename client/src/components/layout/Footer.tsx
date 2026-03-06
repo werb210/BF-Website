@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { APPLY_URL } from "@/config/site";
 
 export default function Footer() {
   return (
@@ -23,7 +24,7 @@ export default function Footer() {
         <div>
           <h4 className="text-white mb-4">Contact</h4>
           <ul className="space-y-2">
-            <li><a href="https://apply.borealfinancial.com" target="_blank" rel="noopener noreferrer" className="block hover:text-white">Apply Now</a></li>
+            <li><a href={APPLY_URL} target="_blank" rel="noopener noreferrer" className="block hover:text-white">Apply Now</a></li>
             <li><Link href="/credit-readiness" className="block hover:text-white">Check Your Credit Readiness</Link></li>
             <li><Link href="/contact" className="block hover:text-white">Contact</Link></li>
           </ul>
