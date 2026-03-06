@@ -92,10 +92,11 @@ export function AppRouter() {
           <Route path="/privacy" component={Privacy} />
           <Route path="/terms" component={Terms} />
 
-          <Route path="/term-loans" component={Products} />
-          <Route path="/line-of-credit" component={Products} />
+          <Route path="/working-capital">{() => <ProductDetail slug="line-of-credit" />}</Route>
+          <Route path="/term-loans">{() => <ProductDetail slug="term-loans" />}</Route>
+          <Route path="/line-of-credit">{() => <ProductDetail slug="line-of-credit" />}</Route>
           <Route path="/factoring" component={Products} />
-          <Route path="/purchase-order-financing" component={Products} />
+          <Route path="/purchase-order-financing">{() => <ProductDetail slug="purchase-order-financing" />}</Route>
 
           <Route path="*" component={NotFound} />
           </Switch>

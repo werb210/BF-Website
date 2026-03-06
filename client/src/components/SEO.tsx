@@ -27,7 +27,7 @@ function formatTitle(title: string) {
 }
 
 export default function SEO({ title, description, canonical, url, noindex }: Props) {
-  const canonicalUrl = normalizeHref(canonical ?? url ?? (typeof window !== "undefined" ? window.location.href : undefined));
+  const canonicalUrl = normalizeHref(canonical ?? url ?? (typeof window !== "undefined" ? `${SITE_URL}${window.location.pathname}${window.location.search}` : SITE_URL));
   const fullTitle = formatTitle(title);
 
   return (

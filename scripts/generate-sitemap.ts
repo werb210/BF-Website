@@ -10,20 +10,22 @@ const outputPaths = [
 
 const routes = [
   "/",
+  "/contact",
   "/products",
   "/how-it-works",
   "/industries",
-  "/industries/construction",
-  "/industries/distribution",
-  "/industries/healthcare",
-  "/industries/logistics",
-  "/industries/manufacturing",
-  "/industries/media",
-  "/contact",
-  "/podcasts",
-  "/apply",
   "/privacy",
   "/terms",
+  "/working-capital",
+  "/equipment-financing",
+  "/line-of-credit",
+  "/purchase-order-financing",
+  "/term-loans",
+  "/industries/transportation",
+  "/industries/construction",
+  "/industries/retail",
+  "/industries/healthcare",
+  "/industries/manufacturing",
 ];
 
 async function run() {
