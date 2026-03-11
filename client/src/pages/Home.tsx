@@ -121,9 +121,9 @@ export default function Home() {
 
         <section className="mx-auto max-w-7xl px-5 py-12 md:px-6">
           <h2 className="text-3xl font-bold md:text-4xl">Industries</h2>
-          <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {orderedIndustries.map((industry) => (
-              <Link key={industry.slug} href={`/industries/${industry.slug}`} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
+          <div className="mt-4 flex overflow-x-auto gap-6 pb-4 scrollbar-hide">
+            {orderedIndustries.slice(0, 3).map((industry) => (
+              <Link key={industry.slug} href={`/industries/${industry.slug}`} className="group relative min-w-[320px] flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
                 <img src={industry.image} alt={industry.name} width={1200} height={520} className="h-52 w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy" decoding="async" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/25" />
                 <div className="absolute bottom-0 p-4">
