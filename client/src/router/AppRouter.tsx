@@ -6,6 +6,9 @@ import Compare from "../pages/Compare"
 import CreditReadiness from "../pages/CreditReadiness"
 import CreditResults from "../pages/CreditResults"
 import Podcasts from "../pages/Podcasts"
+import HowItWorks from "../pages/HowItWorks"
+import Products from "../pages/Products"
+import Industries from "../pages/Industries"
 import MainLayout from "@/layouts/MainLayout"
 
 import IndustryDetail from "../pages/industries/IndustryDetail"
@@ -29,6 +32,9 @@ export function AppRouter() {
         <Route path="/credit-results" element={<CreditResults />} />
 
         <Route path="/podcasts" element={<Podcasts />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/industries" element={<Industries />} />
 
         <Route path="/contact" element={<Contact />} />
       </Routes>

@@ -1,5 +1,4 @@
 import { Link } from "wouter";
-import { APPLY_URL } from "@/config/site";
 
 export default function Footer() {
   return (
@@ -13,9 +12,9 @@ export default function Footer() {
         <div>
           <h4 className="text-white mb-4">Explore</h4>
           <ul className="space-y-2">
-            <li><a href="/products">Products</a></li>
-            <li><a href="/industries">Industries</a></li>
-            <li><Link href="/faq" className="block hover:text-white">FAQ</Link></li>
+            <li><Link href="/how-it-works">How It Works</Link></li>
+            <li><Link href="/products">Products</Link></li>
+            <li><Link href="/industries">Industries</Link></li>
             <li><Link href="/privacy" className="block hover:text-white">Privacy Policy</Link></li>
             <li><Link href="/terms" className="block hover:text-white">Terms of Use</Link></li>
           </ul>
@@ -24,9 +23,10 @@ export default function Footer() {
         <div>
           <h4 className="text-white mb-4">Contact</h4>
           <ul className="space-y-2">
-            <li><a href={APPLY_URL} target="_blank" rel="noopener noreferrer" className="block hover:text-white">Apply Now</a></li>
-            <li><Link href="/credit-readiness" className="block hover:text-white">Check Your Credit Readiness</Link></li>
-            <li><Link href="/contact" className="block hover:text-white">Contact</Link></li>
+            <li><a href="/apply">Apply Now</a></li>
+            <li><a href="/credit-readiness">Check your Credit Readiness</a></li>
+            <li><a href="https://staff.boreal.financial" target="_blank">Staff Login</a></li>
+            <li><a href="https://staff.boreal.financial/lender-login" target="_blank">Lender Login</a></li>
           </ul>
         </div>
       </div>

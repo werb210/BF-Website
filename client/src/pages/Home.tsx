@@ -19,13 +19,6 @@ const orderedIndustries = [
   ...industries.filter((industry) => !featuredIndustrySlugs.includes(industry.slug)),
 ];
 
-const featuredProductSlugs = ["loc", "term-loan", "equipment-financing"];
-const orderedProducts = [
-  ...featuredProductSlugs
-    .map((slug) => products.find((product) => product.slug === slug))
-    .filter((product): product is NonNullable<typeof product> => Boolean(product)),
-  ...products.filter((product) => !featuredProductSlugs.includes(product.slug)),
-];
 
 export default function Home() {
   const readinessToken = getReadinessSessionToken();
@@ -121,16 +114,18 @@ export default function Home() {
 
         <section className="mx-auto max-w-7xl px-5 py-12 md:px-6">
           <h2 className="text-3xl font-bold md:text-4xl">Industries</h2>
-          <div className="mt-4 flex overflow-x-auto gap-6 pb-4 scrollbar-hide">
-            {orderedIndustries.slice(0, 3).map((industry) => (
-              <Link key={industry.slug} href={`/industries/${industry.slug}`} className="group relative min-w-[320px] flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
-                <img src={industry.image} alt={industry.name} width={1200} height={520} className="h-52 w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy" decoding="async" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/25" />
-                <div className="absolute bottom-0 p-4">
-                  <h3 className="text-xl font-bold">{industry.name}</h3>
-                  <p className="mt-1 text-sm text-slate-200">{industry.description}</p>
-                </div>
-              </Link>
+          <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide">
+            {orderedIndustries.map((industry) => (
+              <div key={industry.slug} className="min-w-[320px] flex-shrink-0">
+                <Link href={`/industries/${industry.slug}`} className="group relative block overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
+                  <img src={industry.image} alt={industry.name} width={1200} height={520} className="h-52 w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy" decoding="async" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/25" />
+                  <div className="absolute bottom-0 p-4">
+                    <h3 className="text-xl font-bold">{industry.name}</h3>
+                    <p className="mt-1 text-sm text-slate-200">{industry.description}</p>
+                  </div>
+                </Link>
+              </div>
             ))}
           </div>
         </section>
@@ -139,10 +134,10 @@ export default function Home() {
 
         <section className="mx-auto max-w-7xl px-5 py-12 md:px-6">
           <h2 className="text-3xl font-bold md:text-4xl">Products</h2>
-          <div className="mt-4 overflow-x-auto pb-4">
-            <div className="flex min-w-max gap-6 px-2">
-              {orderedProducts.map((product) => (
-                <article key={product.slug} className="relative w-[320px] flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
+          <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide">
+            {products.map((product) => (
+              <div key={product.slug} className="min-w-[320px] flex-shrink-0">
+                <article className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
                   <img src={product.image} alt={product.name} width={1200} height={560} className="h-56 w-full object-cover" loading="lazy" decoding="async" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20" />
                   <div className="absolute inset-0 flex flex-col justify-end p-4">
@@ -151,8 +146,8 @@ export default function Home() {
                     <Link href={`/products/${product.slug}`} className="mt-3 inline-flex w-fit rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold">Learn More</Link>
                   </div>
                 </article>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </section>
       </main>
