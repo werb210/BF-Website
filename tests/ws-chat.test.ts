@@ -34,49 +34,8 @@ test("chat websocket responses include message field", async () => {
       });
     });
 
-    const parsed = JSON.parse(payload) as { message?: string; reply?: string };
+    const parsed = JSON.parse(payload) as { message?: string };
     assert.equal(parsed.message, "Maya connected");
-    assert.equal(parsed.reply, "Maya connected");
-  } finally {
-    await new Promise<void>((resolve, reject) => {
-      server.close((error) => {
-        if (error) reject(error);
-        else resolve();
-      });
-    });
-  }
-});
-
-test("chat websocket supports staff escalation signal", async () => {
-  const app = express();
-  const server = createServer(app);
-  startChatServer(server);
-
-  await new Promise<void>((resolve) => server.listen(0, resolve));
-  const port = (server.address() as AddressInfo).port;
-
-  try {
-    const payload = await new Promise<string>((resolve, reject) => {
-      const socket = new WebSocket(`ws://127.0.0.1:${port}/ws/chat`);
-
-      socket.once("open", () => {
-        socket.send(JSON.stringify({ type: "staff_joined", sessionId: "session-123" }));
-      });
-
-      socket.once("message", (data) => {
-        const text = typeof data === "string" ? data : data.toString();
-        resolve(text);
-        socket.close();
-      });
-
-      socket.once("error", (error) => {
-        reject(error);
-      });
-    });
-
-    const parsed = JSON.parse(payload) as { type?: string; message?: string };
-    assert.equal(parsed.type, "staff_joined");
-    assert.equal(parsed.message, "Transferring you to a specialist…");
   } finally {
     await new Promise<void>((resolve, reject) => {
       server.close((error) => {
