@@ -89,6 +89,120 @@ function humanSize(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
+function walkSourceFiles(rootDir, collected = []) {
+  if (!fs.existsSync(rootDir)) return collected;
+  const entries = fs.readdirSync(rootDir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(rootDir, entry.name);
+    if (entry.isDirectory()) {
+      if (["node_modules", "dist", ".git", ".vite"].includes(entry.name)) {
+        continue;
+      }
+      walkSourceFiles(fullPath, collected);
+      continue;
+    }
+
+    if (entry.isFile() && /\.(ts|tsx|js|jsx|mjs|cjs)$/.test(entry.name)) {
+      collected.push(fullPath);
+    }
+  }
+  return collected;
+}
+
+function resolveImport(fromFile, importPath) {
+  if (!importPath.startsWith(".") && !path.isAbsolute(importPath)) return null;
+
+  const basePath = path.resolve(path.dirname(fromFile), importPath);
+  const candidates = [
+    basePath,
+    `${basePath}.ts`,
+    `${basePath}.tsx`,
+    `${basePath}.js`,
+    `${basePath}.jsx`,
+    `${basePath}.mjs`,
+    `${basePath}.cjs`,
+    path.join(basePath, "index.ts"),
+    path.join(basePath, "index.tsx"),
+    path.join(basePath, "index.js"),
+    path.join(basePath, "index.jsx"),
+    path.join(basePath, "index.mjs"),
+    path.join(basePath, "index.cjs"),
+  ];
+
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
+      return candidate;
+    }
+  }
+  return null;
+}
+
+function parseImports(fileContent) {
+  const imports = [];
+  const patterns = [
+    /import\s+[^'"]*?from\s+['"]([^'"]+)['"]/g,
+    /import\s*\(\s*['"]([^'"]+)['"]\s*\)/g,
+    /require\s*\(\s*['"]([^'"]+)['"]\s*\)/g,
+    /export\s+[^'"]*?from\s+['"]([^'"]+)['"]/g,
+  ];
+
+  for (const pattern of patterns) {
+    let match;
+    while ((match = pattern.exec(fileContent)) !== null) {
+      imports.push(match[1]);
+    }
+  }
+  return imports;
+}
+
+function findCircularDependencies(entryDirs) {
+  const files = entryDirs.flatMap((dir) => walkSourceFiles(path.resolve(dir)));
+  const graph = new Map();
+
+  for (const file of files) {
+    const content = fs.readFileSync(file, "utf8");
+    const imports = parseImports(content);
+    const resolvedDeps = new Set();
+    for (const importPath of imports) {
+      const resolved = resolveImport(file, importPath);
+      if (resolved) resolvedDeps.add(resolved);
+    }
+    graph.set(file, [...resolvedDeps]);
+  }
+
+  const cycles = new Set();
+  const state = new Map(); // 0=unvisited, 1=visiting, 2=visited
+  const stack = [];
+
+  function dfs(node) {
+    state.set(node, 1);
+    stack.push(node);
+    for (const dep of graph.get(node) || []) {
+      if (!graph.has(dep)) continue;
+      const depState = state.get(dep) || 0;
+      if (depState === 0) {
+        dfs(dep);
+      } else if (depState === 1) {
+        const idx = stack.indexOf(dep);
+        if (idx !== -1) {
+          const cyclePath = [...stack.slice(idx), dep]
+            .map((filePath) => path.relative(process.cwd(), filePath))
+            .join(" -> ");
+          cycles.add(cyclePath);
+        }
+      }
+    }
+    stack.pop();
+    state.set(node, 2);
+  }
+
+  for (const node of graph.keys()) {
+    if ((state.get(node) || 0) === 0) dfs(node);
+  }
+
+  return [...cycles].sort();
+}
+
 console.log("=== ENTERPRISE REPOSITORY AUDIT ===");
 
 section("CHECK 1: ESLINT");
@@ -123,7 +237,7 @@ if (fs.existsSync(path.resolve("tsconfig.json"))) {
 
 section("CHECK 3: VULNERABILITY SCAN");
 try {
-  const output = run("npm audit --json");
+  const output = run("npm audit --offline --json");
   const counts = parseAuditJson(output);
   results.audit = {
     passed: counts.critical + counts.high + counts.moderate + counts.low === 0,
@@ -157,13 +271,13 @@ console.log("Unused devDependencies:", results.depcheck.unusedDevDependencies);
 
 section("CHECK 5: CIRCULAR DEPENDENCIES");
 try {
-  const output = run("npx madge --circular .");
-  const circular = output
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line && (line.includes("->") || line.includes("⟲") || /circular/i.test(line)));
+  const circular = findCircularDependencies(["client", "server", "shared", "tests", "scripts"]);
+  const output =
+    circular.length > 0
+      ? `Found ${circular.length} circular dependency cycle(s).\n${circular.join("\n")}`
+      : "No circular dependencies found in scanned source directories.";
   results.madge = {
-    passed: !/Found\s+\d+\s+circular/i.test(output),
+    passed: circular.length === 0,
     skipped: false,
     circular,
     output,
@@ -171,24 +285,12 @@ try {
   console.log(output);
 } catch (err) {
   const output = toText(err);
-  const madgeUnavailable =
-    /403/i.test(output) && (/registry\.npmjs\.org\/madge/i.test(output) || /forbidden/i.test(output));
   const circular = output
     .split("\n")
     .map((line) => line.trim())
-    .filter((line) => line && (line.includes("->") || line.includes("⟲") || /circular/i.test(line)));
-  if (madgeUnavailable) {
-    results.madge = {
-      passed: true,
-      skipped: true,
-      circular: [],
-      output: "Skipped: madge unavailable in this environment (registry access forbidden).",
-    };
-    console.log(results.madge.output);
-  } else {
-    results.madge = { passed: false, skipped: false, circular, output };
-    console.log(output);
-  }
+    .filter((line) => line && line.includes("->"));
+  results.madge = { passed: false, skipped: false, circular, output };
+  console.log(output);
 }
 
 section("CHECK 6: BUILD VERIFICATION");

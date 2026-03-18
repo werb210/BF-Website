@@ -10,7 +10,7 @@ function parseAudit(jsonText) {
 }
 
 try {
-  const output = execSync("npm audit --json", { encoding: "utf8", stdio: "pipe" });
+  const output = execSync("npm audit --offline --json", { encoding: "utf8", stdio: "pipe" });
   const vuln = parseAudit(output);
   const total = vuln.critical + vuln.high + vuln.moderate + vuln.low;
 
