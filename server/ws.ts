@@ -12,7 +12,6 @@ export function startChatServer(server: Server) {
       ws.send(
         JSON.stringify({
           message: "Maya connected",
-          reply: "Maya connected",
         }),
       );
     });

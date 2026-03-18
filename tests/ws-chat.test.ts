@@ -34,9 +34,8 @@ test("chat websocket responses include message field", async () => {
       });
     });
 
-    const parsed = JSON.parse(payload) as { message?: string; reply?: string };
+    const parsed = JSON.parse(payload) as { message?: string };
     assert.equal(parsed.message, "Maya connected");
-    assert.equal(parsed.reply, "Maya connected");
   } finally {
     await new Promise<void>((resolve, reject) => {
       server.close((error) => {
