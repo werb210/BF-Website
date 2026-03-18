@@ -11,10 +11,7 @@ router.post("/message", (req, res) => {
 });
 
 router.post("/escalate", (_req, res) => {
-  res.json({
-    status: "ok",
-    message: "Escalation received",
-  });
+  res.status(202).json({ ok: true });
 });
 
 export default router;
