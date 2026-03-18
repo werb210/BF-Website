@@ -217,7 +217,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/support/event", (req, res) => {
+  const handleSupportEvent = (req: Request, res: Response) => {
     const parsed = supportEventSchema.safeParse(req.body);
     if (!parsed.success) {
       res.status(400).json({ error: "Invalid request payload" });
@@ -227,7 +227,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const { event, source } = parsed.data;
     logger.info({ msg: "Support event", traceId: getTraceId(req), event, source: source ?? "website" });
     res.status(202).json({ ok: true });
-  });
+  };
+
+  app.post("/api/support/event", handleSupportEvent);
+  app.post("/api/support/track", handleSupportEvent);
 
   app.post("/api/crm/web-leads", async (req, res) => {
     try {
