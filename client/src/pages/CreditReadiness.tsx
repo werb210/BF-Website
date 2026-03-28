@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { estimateCommissionValue, trackConversion, trackEvent, trackLeadProfile } from "@/main";
 import { useLocation } from "wouter";
+import { apiUrl } from "@/config/api";
 
 type ReadinessForm = {
   organization: string;
@@ -62,7 +63,7 @@ export default function CreditReadiness() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const response = await fetch("/api/public/readiness", {
+    const response = await fetch(apiUrl("/api/public/readiness"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
