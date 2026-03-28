@@ -28,7 +28,10 @@
     "prestart": "node ./scripts/verify-node-version.js",
     "smoke": "node ./scripts/smoke-test.js",
     "analyze": "vite build --mode analyze",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "repo:guard": "node scripts/repo-guard.js",
+    "repo:size": "du -sh .git .",
+    "prepare-hooks": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

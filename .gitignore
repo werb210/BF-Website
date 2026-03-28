@@ -1,5 +1,9 @@
-node_modules
-dist
+node_modules/
+dist/
+build/
+.vite/
+.next/
+out/
 .DS_Store
 server/public
 vite.config.ts.*

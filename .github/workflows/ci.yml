@@ -3,6 +3,7 @@ name: BF Website CI
 on:
   push:
     branches: [ main ]
+  pull_request:
 
 jobs:
   ci:
@@ -16,6 +17,7 @@ jobs:
           node-version: 20
 
       - run: npm ci
+      - run: npm run repo:guard
       - run: npm run check
       - run: npm run generate:sitemap
       - run: npm test
