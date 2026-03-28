@@ -17,6 +17,14 @@ jobs:
           node-version: 20
 
       - run: npm ci
+      - name: Enforce .git size budget
+        run: |
+          CURRENT_SIZE=$(du -sm .git | cut -f1)
+
+          if [ "$CURRENT_SIZE" -gt 120 ]; then
+            echo "FAIL: repo too large"
+            exit 1
+          fi
       - run: npm run repo:guard
       - run: npm run check
       - run: npm run generate:sitemap
