@@ -11,9 +11,21 @@ export function setReadinessSessionToken(token: string) {
 }
 
 export function buildApplyUrl(baseUrl: string, readinessSessionToken?: string | null) {
-  if (!readinessSessionToken) return baseUrl;
-  const url = new URL(baseUrl);
-  url.searchParams.set("sessionId", readinessSessionToken);
-  url.searchParams.set("readinessSession", readinessSessionToken);
-  return url.toString();
+  const canUseWindowOrigin = typeof window !== "undefined";
+  const resolvedBaseUrl = baseUrl.startsWith("http")
+    ? baseUrl
+    : `${canUseWindowOrigin ? window.location.origin : "https://borealfinancial.com"}${baseUrl.startsWith("/") ? "" : "/"}${baseUrl}`;
+
+  const url = new URL(resolvedBaseUrl);
+
+  if (readinessSessionToken) {
+    url.searchParams.set("sessionId", readinessSessionToken);
+    url.searchParams.set("readinessSession", readinessSessionToken);
+  }
+
+  if (baseUrl.startsWith("http")) {
+    return url.toString();
+  }
+
+  return `${url.pathname}${url.search}${url.hash}`;
 }

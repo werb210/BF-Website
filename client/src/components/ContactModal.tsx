@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { trackEvent } from "@/utils/analytics";
+import { api } from "@/lib/api";
 
 type ContactModalProps = {
   open: boolean;
@@ -7,32 +8,62 @@ type ContactModalProps = {
 };
 
 type ContactForm = {
-  companyName: string;
-  fullName: string;
+  businessName: string;
+  name: string;
   email: string;
-  mobilePhone: string;
+  phone: string;
 };
 
 const initialForm: ContactForm = {
-  companyName: "",
-  fullName: "",
+  businessName: "",
+  name: "",
   email: "",
-  mobilePhone: "",
+  phone: "",
 };
 
 export default function ContactModal({ open, onClose }: ContactModalProps) {
   const [form, setForm] = useState<ContactForm>(initialForm);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const submit = () => {
-    if (!form.companyName || !form.fullName || !form.email || !form.mobilePhone) {
-      alert("All fields required");
+  const submit = async () => {
+    if (!form.businessName || !form.name || !form.email || !form.phone) {
+      setErrorMessage("All fields are required.");
       return;
     }
 
-    trackEvent("contact_submit", { category: "conversion" });
-    alert("Submitted");
-    setForm(initialForm);
-    onClose();
+    setSubmitting(true);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+
+    try {
+      await api.post("/api/crm/createLead", {
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        businessName: form.businessName.trim(),
+      });
+
+      window.localStorage.setItem(
+        "prefill_data",
+        JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          businessName: form.businessName.trim(),
+        }),
+      );
+
+      trackEvent("contact_submit", { category: "conversion" });
+      setSuccessMessage("Submitted successfully.");
+      setForm(initialForm);
+      onClose();
+    } catch {
+      setErrorMessage("Unable to submit right now. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (!open) return null;
@@ -42,15 +73,17 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
       <div className="w-full max-w-md rounded-xl bg-white p-8">
         <h2 className="mb-4 text-2xl font-bold">Contact Us</h2>
 
-        <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); submit(); }}>
-          <input className="w-full rounded border p-2" placeholder="Company Name" required value={form.companyName} onChange={(e) => setForm({ ...form, companyName: e.target.value })} />
-          <input className="w-full rounded border p-2" placeholder="Full Name" required value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} />
+        <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); void submit(); }}>
+          <input className="w-full rounded border p-2" placeholder="Company Name" required value={form.businessName} onChange={(e) => setForm({ ...form, businessName: e.target.value })} />
+          <input className="w-full rounded border p-2" placeholder="Full Name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
           <input className="w-full rounded border p-2" type="email" placeholder="Email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-          <input className="w-full rounded border p-2" type="tel" placeholder="Mobile Phone" required value={form.mobilePhone} onChange={(e) => setForm({ ...form, mobilePhone: e.target.value })} />
-          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+          <input className="w-full rounded border p-2" type="tel" placeholder="Mobile Phone" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+          <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2">
             <button onClick={onClose} type="button" className="w-full rounded border border-gray-300 px-4 py-2">Cancel</button>
-            <button type="submit" className="w-full rounded bg-slate-900 px-4 py-2 text-white">Submit</button>
+            <button type="submit" disabled={submitting} className="w-full rounded bg-slate-900 px-4 py-2 text-white disabled:opacity-70">{submitting ? "Submitting..." : "Submit"}</button>
           </div>
+          {successMessage ? <p className="text-sm text-emerald-700">{successMessage}</p> : null}
+          {errorMessage ? <p className="text-sm text-red-700">{errorMessage}</p> : null}
         </form>
       </div>
     </div>

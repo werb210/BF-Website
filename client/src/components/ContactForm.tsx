@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { safeFetch } from "@/lib/safeFetch";
+import { api } from "@/lib/api";
 import { trackEvent } from "@/utils/analytics";
 
 type ContactFormData = {
@@ -20,14 +20,6 @@ const initialForm: ContactFormData = {
   website: "",
 };
 
-function splitName(name: string) {
-  const trimmed = name.trim();
-  if (!trimmed) return { firstName: "", lastName: "" };
-  const parts = trimmed.split(/\s+/);
-  const firstName = parts.shift() ?? "";
-  const lastName = parts.join(" ") || "N/A";
-  return { firstName, lastName };
-}
 
 const isValidEmail = (email: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -70,21 +62,20 @@ export default function ContactForm() {
 
     setSubmitting(true);
 
-    const { firstName, lastName } = splitName(formData.name);
+    const businessName = formData.companyName.trim();
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const phone = formData.mobilePhone.trim();
 
     try {
-      await safeFetch("/api/contact/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          company: formData.companyName,
-          firstName,
-          lastName,
-          email: formData.email,
-          phone: formData.mobilePhone,
-          message: formData.message,
-        }),
+      await api.post("/api/crm/createLead", {
+        name,
+        email,
+        phone,
+        businessName,
       });
+
+      window.localStorage.setItem("prefill_data", JSON.stringify({ name, email, phone, businessName }));
 
       trackEvent("contact_form_submitted", {
         source: "contact_page",

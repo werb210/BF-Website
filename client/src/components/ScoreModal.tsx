@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { trackEvent } from "@/utils/analytics";
-import { apiUrl } from "@/config/api";
+import { api } from "@/lib/api";
 
 type ScoreModalProps = {
   open: boolean;
@@ -8,6 +8,8 @@ type ScoreModalProps = {
 };
 
 type ScoreForm = {
+  name: string;
+  businessName: string;
   revenue: string;
   years: string;
   industry: string;
@@ -17,6 +19,8 @@ type ScoreForm = {
 };
 
 const initialState: ScoreForm = {
+  name: "",
+  businessName: "",
   revenue: "",
   years: "",
   industry: "",
@@ -27,41 +31,42 @@ const initialState: ScoreForm = {
 
 export default function ScoreModal({ open, onClose }: ScoreModalProps) {
   const [state, setState] = useState<ScoreForm>(initialState);
-  const [result, setResult] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const submit = async () => {
-    if (!state.email || !state.phone) {
-      alert("Email & phone required");
+    if (!state.name || !state.businessName || !state.email || !state.phone) {
+      setErrorMessage("Name, business name, email, and phone are required.");
       return;
     }
 
     try {
       setSubmitting(true);
-      const utm = {
-        utm_source: localStorage.getItem("utm_source"),
-        utm_medium: localStorage.getItem("utm_medium"),
-        utm_campaign: localStorage.getItem("utm_campaign"),
-      };
+      setErrorMessage(null);
+      setSuccessMessage(null);
 
-      const response = await fetch(apiUrl("/api/lead"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...state, utm }),
+      const { name, email, phone, businessName } = state;
+
+      await api.post("/api/crm/createLead", {
+        name,
+        email,
+        phone,
+        businessName,
       });
 
-      const body = await response.json();
-      if (!response.ok) {
-        throw new Error(body?.error ?? "Unable to score");
-      }
+      window.localStorage.setItem("prefill_data", JSON.stringify({ name, email, phone, businessName }));
 
-      setResult(body.score ?? null);
-      trackEvent("capital_score_submit", { score: body.score ?? null, ...utm });
+      trackEvent("capital_score_submit", {
+        source: "score_modal",
+      });
+
+      setSuccessMessage("Thanks! Your information was submitted successfully.");
     } catch (error) {
       if (import.meta.env.DEV) {
         console.error(error);
       }
-      alert("Unable to submit right now.");
+      setErrorMessage("Unable to submit right now.");
     } finally {
       setSubmitting(false);
     }
@@ -83,16 +88,17 @@ export default function ScoreModal({ open, onClose }: ScoreModalProps) {
           />
         ))}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
           <button className="rounded border border-gray-300 px-4 py-2" onClick={onClose} disabled={submitting}>
             Cancel
           </button>
           <button className="rounded bg-green-600 px-4 py-2 text-white" onClick={submit} disabled={submitting}>
-            {submitting ? "Scoring..." : "Score Me"}
+            {submitting ? "Submitting..." : "Submit"}
           </button>
         </div>
 
-        {result !== null && <p className="mt-4 text-sm font-semibold">Your Score: {result}/100</p>}
+        {successMessage ? <p className="mt-4 text-sm font-semibold text-emerald-700">{successMessage}</p> : null}
+        {errorMessage ? <p className="mt-4 text-sm font-semibold text-red-700">{errorMessage}</p> : null}
       </div>
     </div>
   );
