@@ -1,4 +1,4 @@
-name: build
+name: website-build
 
 on:
   push:
@@ -12,11 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify files exist
-        run: |
-          test -d node_modules || echo "WARNING: node_modules missing"
-          test -f package-lock.json || echo "WARNING: lockfile missing"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      - name: Build (no install)
-        run: |
-          npm run build || echo "build skipped (no deps in CI)"
+      - run: npm ci
+      - run: npm run build
