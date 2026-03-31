@@ -1,17 +1,22 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
-import { safeFetch } from "@/lib/safeFetch";
+import { apiRequest } from "@/lib/api";
 
-export async function apiRequest(
+export async function apiMutationRequest(
   method: string,
   url: string,
   data?: unknown | undefined,
-): Promise<Response> {
-  return await safeFetch(url, {
+): Promise<unknown> {
+  const result = await apiRequest(url, {
     method,
-    headers: data ? { "Content-Type": "application/json" } : {},
-    body: data ? JSON.stringify(data) : undefined,
+    body: data,
     credentials: "include",
   });
+
+  if (!result.success) {
+    throw new Error(result.message);
+  }
+
+  return result.data;
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
@@ -22,22 +27,17 @@ export const getQueryFn: <T>(options: {
   async ({ queryKey }) => {
     const url = queryKey.join("/") as string;
 
-    if (unauthorizedBehavior === "returnNull") {
-      const res = await fetch(url, { credentials: "include" });
-      if (res.status === 401) {
-        return null;
+    const result = await apiRequest<T>(url, { method: "GET", credentials: "include" });
+
+    if (!result.success) {
+      if (unauthorizedBehavior === "returnNull" && result.status === 401) {
+        return null as T;
       }
 
-      if (!res.ok) {
-        const text = await res.text().catch(() => "");
-        throw new Error(`HTTP ${res.status}: ${text}`);
-      }
-
-      return await res.json();
+      throw new Error(result.message);
     }
 
-    const res = await safeFetch(url, { credentials: "include" });
-    return await res.json();
+    return result.data;
   };
 
 export const queryClient = new QueryClient({

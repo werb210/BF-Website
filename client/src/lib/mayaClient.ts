@@ -1,3 +1,5 @@
+import { apiRequest } from "@/lib/api";
+
 const mayaEnabled = import.meta.env.VITE_MAYA_ENABLED === "true";
 const mayaApiBase = (import.meta.env.VITE_MAYA_API_BASE ?? "").trim();
 
@@ -13,21 +15,16 @@ export function getMayaApiBase() {
   return normalizeBaseUrl(mayaApiBase);
 }
 
-export async function checkMayaHealth(signal?: AbortSignal): Promise<boolean> {
+export async function checkMayaHealth(_signal?: AbortSignal): Promise<boolean> {
   if (!isMayaConfigured()) {
     return false;
   }
 
-  try {
-    const response = await fetch(`${getMayaApiBase()}/health`, {
-      method: "GET",
-      signal,
-    });
+  const response = await apiRequest(`${getMayaApiBase()}/health`, {
+    method: "GET",
+  });
 
-    return response.ok;
-  } catch {
-    return false;
-  }
+  return response.success;
 }
 
 export function buildMayaWebSocketUrl(path: string) {

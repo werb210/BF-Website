@@ -1,137 +1,67 @@
-import { FormEvent, useEffect, useState } from "react";
-import { formatRateRange } from "@/core/rateFormatter";
-import {
-  escalateToFundingSpecialist,
-  fetchFaq,
-  joinStartupWaitlist,
-  sendMessage,
-  trackMarketingLead,
-  type MayaWebsiteResponse,
-} from "@/services/mayaService";
+import { useState } from "react";
+import { sendMayaMessage } from "@/api/maya";
 
-type ChatMessage = {
-  role: "user" | "assistant";
-  content: string;
+type MayaMessage = {
+  role: "user" | "maya";
+  text: string;
 };
 
-function StartupWaitlistForm() {
-  const [email, setEmail] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!email.trim()) return;
-
-    await joinStartupWaitlist({
-      email,
-      companyName,
-    });
-
-    setSubmitted(true);
-    setEmail("");
-    setCompanyName("");
-  }
-
-  if (submitted) {
-    return <p className="text-xs text-green-700 mt-2">Thanks — you have been added to the startup waitlist.</p>;
-  }
-
-  return (
-    <form className="mt-2 space-y-2" onSubmit={(event) => void handleSubmit(event)}>
-      <input
-        className="w-full border rounded p-2 text-xs"
-        placeholder="Work email"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-      />
-      <input
-        className="w-full border rounded p-2 text-xs"
-        placeholder="Company name (optional)"
-        value={companyName}
-        onChange={(event) => setCompanyName(event.target.value)}
-      />
-      <button type="submit" className="w-full bg-slate-900 text-white rounded p-2 text-xs">
-        Join Startup Waitlist
-      </button>
-    </form>
-  );
-}
-
 export default function MayaWidget() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [response, setResponse] = useState<MayaWebsiteResponse | null>(null);
-  const [faq, setFaq] = useState<Array<{ question: string; answer: string }>>([]);
+  const [messages, setMessages] = useState<MayaMessage[]>([]);
+  const [isSending, setIsSending] = useState(false);
 
-  useEffect(() => {
-    fetch("/health").catch(() => null);
-    void trackMarketingLead();
-    void fetchFaq().then((result) => setFaq(result.data.faqs)).catch(() => setFaq([]));
-  }, []);
+  async function send() {
+    const trimmedInput = input.trim();
+    if (!trimmedInput || isSending) return;
 
-  async function handleSend() {
-    if (!input.trim()) return;
-
-    const userInput = input;
     setInput("");
-    setMessages((prev) => [...prev, { role: "user", content: userInput }]);
+    setIsSending(true);
+    setMessages((prev) => [...prev, { role: "user", text: trimmedInput }]);
 
-    const res = await sendMessage(userInput);
-    setResponse(res.data);
+    const result = await sendMayaMessage(trimmedInput);
 
-    const assistantReply = res.data.min_rate !== undefined && res.data.max_rate !== undefined
-      ? formatRateRange(res.data.min_rate, res.data.max_rate)
-      : res.data.reply;
+    if (!result.success) {
+      setMessages((prev) => [
+        ...prev,
+        { role: "maya", text: result.message || "Maya is unavailable right now. Please try again." },
+      ]);
+      setIsSending(false);
+      return;
+    }
 
-    setMessages((prev) => [...prev, { role: "assistant", content: assistantReply }]);
-  }
-
-  async function handleEscalation() {
-    await escalateToFundingSpecialist();
-    setMessages((prev) => [
-      ...prev,
-      { role: "assistant", content: "A funding specialist has been notified and will follow up shortly." },
-    ]);
+    const reply = result.data?.reply || result.data?.data?.reply || "Thanks — Maya received your message.";
+    setMessages((prev) => [...prev, { role: "maya", text: reply }]);
+    setIsSending(false);
   }
 
   return (
-    <div className="maya-widget bg-white shadow-xl rounded-xl border">
-      <div className="p-3 font-bold border-b">Ask Maya</div>
+    <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}>
+      {!open && <button onClick={() => setOpen(true)}>Chat with Maya</button>}
 
-      <div className="p-3 h-64 overflow-y-auto text-sm space-y-2">
-        {messages.map((m, i) => (
-          <div key={`${m.role}-${i}`} className={m.role === "assistant" ? "text-slate-700" : "text-slate-900"}>
-            {m.content}
+      {open && (
+        <div style={{ width: 320, height: 420, border: "1px solid #ccc", background: "#fff", borderRadius: 8 }}>
+          <div style={{ height: 320, overflow: "auto", padding: 8 }}>
+            {messages.map((m, i) => (
+              <div key={`${m.role}-${i}`}><b>{m.role}:</b> {m.text}</div>
+            ))}
           </div>
-        ))}
 
-        {response?.startup_unavailable && <StartupWaitlistForm />}
-      </div>
-
-      <div className="flex border-t">
-        <input
-          className="flex-1 p-2 text-sm"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="How can Maya help?"
-        />
-        <button onClick={() => void handleSend()} className="px-3">
-          Send
-        </button>
-      </div>
-
-      <div className="p-2 border-t space-y-2">
-        <button onClick={() => void handleEscalation()} className="w-full text-xs p-2 border rounded">
-          Speak With A Funding Specialist
-        </button>
-
-        <p className="text-xs text-gray-500 mt-2">
-          Maya provides general information and qualification guidance only. Final approvals are subject to lender review.
-        </p>
-
-        {faq.length > 0 && <p className="text-[11px] text-slate-500">Dynamic FAQ loaded ({faq.length} items).</p>}
-      </div>
+          <div style={{ display: "flex", gap: 8, padding: 8 }}>
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask Maya..."
+              style={{ flex: 1 }}
+            />
+            <button onClick={() => void send()} disabled={isSending}>{isSending ? "..." : "Send"}</button>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "0 8px 8px" }}>
+            <button onClick={() => setOpen(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

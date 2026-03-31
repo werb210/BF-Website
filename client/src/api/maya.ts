@@ -1,10 +1,15 @@
-import { apiRequest } from "@/lib/api";
+import { apiRequest, type ApiResult } from "@/lib/api";
 
-export async function sendMayaMessage(message: string) {
-  const res = await apiRequest("/maya/chat", {
+type MayaChatResponse = {
+  reply?: string;
+  data?: {
+    reply?: string;
+  };
+};
+
+export async function sendMayaMessage(message: string): Promise<ApiResult<MayaChatResponse>> {
+  return apiRequest<MayaChatResponse>("/maya/chat", {
     method: "POST",
     body: { message },
   });
-
-  return res?.data || res;
 }

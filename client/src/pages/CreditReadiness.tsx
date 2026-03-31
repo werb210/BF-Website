@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { estimateCommissionValue, trackConversion, trackEvent, trackLeadProfile } from "@/main";
 import { useLocation } from "wouter";
-import { apiUrl } from "@/config/api";
+import { apiRequest } from "@/lib/api";
 
 type ReadinessForm = {
   organization: string;
@@ -61,10 +61,9 @@ export default function CreditReadiness() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const response = await fetch(apiUrl("/api/public/readiness"), {
+    const response = await apiRequest<{ score?: number; tier?: "green" | "yellow" | "red" }>("/api/public/readiness", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+      body: {
         companyName: form.organization,
         fullName: form.fullName,
         email: form.email,
@@ -75,10 +74,10 @@ export default function CreditReadiness() {
         monthlyRevenue: form.monthlyRevenue,
         arBalance: form.accountsReceivable,
         collateral: form.availableCollateral,
-      }),
+      },
     });
 
-    if (!response.ok) {
+    if (!response.success) {
       return;
     }
 
@@ -94,7 +93,7 @@ export default function CreditReadiness() {
       capital_range: form.annualRevenue,
     });
 
-    const body = await response.json() as { score?: number; tier?: "green" | "yellow" | "red" };
+    const body = response.data || {};
 
     const calculatedStrength: "strong" | "moderate" | "weak" = body.tier === "green" ? "strong" : body.tier === "yellow" ? "moderate" : "weak";
     trackLeadProfile({
