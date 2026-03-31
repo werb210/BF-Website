@@ -26,7 +26,7 @@ test("public lead intake rejects non-JSON requests", async () => {
     });
 
     assert.equal(response.status, 400);
-    assert.equal(await response.text(), "INVALID CONTENT TYPE");
+    assert.deepEqual(await response.json(), { error: "INVALID_CONTENT_TYPE" });
   } finally {
     server.close();
   }

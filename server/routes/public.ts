@@ -9,24 +9,33 @@ const publicLeadLimiter = createRateLimiter({ windowMs: 60 * 1000, max: 10 });
 
 router.post("/lead", publicLeadLimiter, async (req, res) => {
   if (!req.is("application/json")) {
-    return res.status(400).send("INVALID CONTENT TYPE");
+    return res.status(400).json({ error: "INVALID_CONTENT_TYPE" });
   }
 
   const parsed = publicLeadIntakeSchema.safeParse(req.body);
   if (!parsed.success) {
-    return res.status(400).json({ error: "missing_fields" });
+    return res.status(400).json({ error: "INVALID_PAYLOAD" });
   }
 
   const { email, phone, requestedAmount, productType, businessName } = parsed.data;
 
   try {
-    const { lead } = await storage.createOrGetWebLead({
+    const result = await storage.createOrGetWebLead({
       companyName: businessName || "Website Lead",
       firstName: "Website",
       lastName: "Lead",
       email,
       phone,
     });
+
+    if (!result) {
+      return res.status(500).json({ error: "EMPTY_RESPONSE" });
+    }
+
+    const { lead } = result;
+    if (!lead || !lead.id) {
+      throw new Error("LEAD_CREATION_FAILED");
+    }
 
     logger.info({
       msg: "[PUBLIC LEAD]",
@@ -52,7 +61,7 @@ router.post("/lead", publicLeadLimiter, async (req, res) => {
       traceId: getTraceId(req),
       error: error instanceof Error ? error.message : String(error),
     });
-    return res.status(500).json({ error: "internal_error" });
+    return res.status(500).json({ error: "INTERNAL_ERROR" });
   }
 });
 
