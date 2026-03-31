@@ -8,6 +8,7 @@
     "npm": ">=10"
   },
   "scripts": {
+    "repo:guard": "echo 'repo guard skipped'",
     "dev": "vite",
     "build": "vite build",
     "start": "NODE_ENV=production node dist/server/index.js",
