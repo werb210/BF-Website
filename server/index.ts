@@ -82,10 +82,11 @@ app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
+// Keep public intake routes mounted before all other API route groups.
+app.use("/api/public", publicRoutes);
 app.use("/api/contact", contactRoute);
 app.use("/api/lead", leadRoute);
 app.use("/api/maya", mayaRoutes);
-app.use("/api/public", publicRoutes);
 registerMarketingRoutes(app);
 
 process.on("unhandledRejection", (reason) => {

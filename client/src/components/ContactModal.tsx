@@ -41,6 +41,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
         businessName: form.businessName,
         email: form.email,
         phone: form.phone,
+        productType: "general",
       });
       setForm(initialForm);
       onClose();

@@ -57,9 +57,9 @@ export const publicLeadScoreSchema = z.object({
 export const publicLeadIntakeSchema = z.object({
   email: z.string().trim().email().max(254),
   phone: phoneField,
-  requestedAmount: z.string().trim().max(100).optional(),
-  productType: z.string().trim().max(100).optional(),
-  businessName: z.string().trim().max(100).optional(),
+  requestedAmount: z.number().finite().positive().optional(),
+  productType: z.string().trim().min(1).max(100),
+  businessName: z.string().trim().min(1).max(100),
 }).strict();
 
 
