@@ -1,7 +1,12 @@
 import { API_BASE_URL } from "@/config/api";
+import { ApiClientError, apiRequest as apiClientRequest, type ApiResponse } from "@/lib/apiClient";
 
 type ApiSuccess<T> = { success: true; data: T };
 type ApiFailure = { success: false; message: string; status?: number };
+
+type ApiRequestOptions = Omit<RequestInit, "body"> & {
+  body?: unknown;
+};
 
 export type ApiResult<T> = ApiSuccess<T> | ApiFailure;
 
@@ -16,7 +21,7 @@ function buildUrl(path: string): string {
   return `${API_BASE_URL}${normalizedPath}`;
 }
 
-export async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<ApiResult<T>> {
+export async function apiRequest<T>(path: string, options: ApiRequestOptions = {}): Promise<ApiResult<T>> {
   const timeoutMs = typeof options.keepalive === "boolean" && options.keepalive ? 0 : DEFAULT_TIMEOUT_MS;
   const timeoutController = new AbortController();
   const userSignal = options.signal;
@@ -43,57 +48,31 @@ export async function apiRequest<T>(path: string, options: RequestInit = {}): Pr
   }
 
   try {
-    const isFormData = options.body instanceof FormData;
-    const headers = new Headers(options.headers || {});
-
-    if (!isFormData) {
-      if (!headers.has("Content-Type")) {
-        headers.set("Content-Type", "application/json");
-      }
-      if (!headers.has("Accept")) {
-        headers.set("Accept", "application/json");
-      }
-    }
-
-    const body =
-      options.body && !isFormData && typeof options.body !== "string"
-        ? JSON.stringify(options.body)
-        : options.body;
-
-    const response = await window.fetch(buildUrl(path), {
+    const response = await apiClientRequest<ApiResponse<T>>(buildUrl(path), {
       ...options,
-      headers,
-      body,
       signal: timeoutController.signal,
       credentials: options.credentials ?? "include",
     });
 
-    const responseText = await response.text();
-    let parsed: T | { message?: string; error?: string } | null = null;
+    const isFailure = response?.success === false;
 
-    if (responseText) {
-      try {
-        parsed = JSON.parse(responseText);
-      } catch {
-        parsed = null;
-      }
-    }
-
-    if (!response.ok) {
-      const parsedMessage =
-        parsed && typeof parsed === "object" && !Array.isArray(parsed)
-          ? (parsed.message ?? parsed.error)
-          : undefined;
-
+    if (isFailure) {
       return {
         success: false,
-        message: parsedMessage || `Request failed with status ${response.status}`,
-        status: response.status,
+        message: response.message || response.error || "Request failed",
       };
     }
 
-    return { success: true, data: parsed as T };
+    return { success: true, data: (response?.data ?? response) as T };
   } catch (error) {
+    if (error instanceof ApiClientError) {
+      const payload = error.payload as ApiResponse<T> | undefined;
+      return {
+        success: false,
+        message: payload?.message || payload?.error || error.message,
+        status: error.status,
+      };
+    }
     if (didTimeout) {
       return { success: false, message: "timeout" };
     }

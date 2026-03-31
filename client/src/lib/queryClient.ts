@@ -1,6 +1,11 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/api";
 
+export async function fetcher<T>(url: string): Promise<T> {
+  const res = await fetch(url);
+  return res.json() as Promise<T>;
+}
+
 export async function apiMutationRequest(
   method: string,
   url: string,
@@ -20,17 +25,17 @@ export async function apiMutationRequest(
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
-export const getQueryFn: <T>(options: {
+
+export function getQueryFn<T>(options: {
   on401: UnauthorizedBehavior;
-}) => QueryFunction<T> =
-  ({ on401: unauthorizedBehavior }) =>
-  async ({ queryKey }) => {
+}): QueryFunction<T> {
+  return async ({ queryKey }) => {
     const url = queryKey.join("/") as string;
 
     const result = await apiRequest<T>(url, { method: "GET", credentials: "include" });
 
     if (!result.success) {
-      if (unauthorizedBehavior === "returnNull" && result.status === 401) {
+      if (options.on401 === "returnNull" && result.status === 401) {
         return null as T;
       }
 
@@ -39,6 +44,7 @@ export const getQueryFn: <T>(options: {
 
     return result.data;
   };
+}
 
 export const queryClient = new QueryClient({
   defaultOptions: {
