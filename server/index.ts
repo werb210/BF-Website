@@ -4,7 +4,6 @@ import path from "node:path";
 import compression from "compression";
 import express, { type NextFunction, type Request, type Response } from "express";
 import helmet from "helmet";
-
 import { registerRoutes } from "./routes";
 import contactRoute from "./routes/contact";
 import leadRoute from "./routes/lead";
@@ -14,10 +13,28 @@ import { registerMarketingRoutes } from "./routes/marketing";
 import { createRateLimiter } from "./security";
 import { logger } from "./logger";
 import { startChatServer } from "./ws";
+import { authMiddleware } from "./middleware/auth";
 
 const app = express();
 
 app.disable("x-powered-by");
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+  }
+  res.setHeader("Access-Control-Allow-Credentials", "false");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+
+  next();
+});
 
 app.use(compression());
 app.use(
@@ -68,6 +85,21 @@ app.use((req, _res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+  if (!req.path.startsWith("/")) {
+    return res.status(400).json({ error: "INVALID_PATH" });
+  }
+
+  console.log("[REQ]", req.method, req.path);
+  console.log("[AUTH]", Boolean(req.headers.authorization));
+
+  res.on("finish", () => {
+    console.log("[STATUS]", res.statusCode);
+  });
+
+  next();
+});
+
 app.use(
   createRateLimiter({
     windowMs: 15 * 60 * 1000,
@@ -75,8 +107,8 @@ app.use(
   }),
 );
 
-app.use(express.json({ limit: "200kb" }));
-app.use(express.urlencoded({ extended: false, limit: "200kb" }));
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 
 app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
@@ -84,6 +116,7 @@ app.get("/health", (_req, res) => {
 
 // Keep public intake routes mounted before all other API route groups.
 app.use("/api/public", publicRoutes);
+app.use("/api", authMiddleware);
 app.use("/api/contact", contactRoute);
 app.use("/api/lead", leadRoute);
 app.use("/api/maya", mayaRoutes);
@@ -128,7 +161,7 @@ app.use((req, res, next) => {
 
 (async () => {
   if (process.env.NODE_ENV === "production") {
-    const required = ["PORT"];
+    const required = ["PORT", "JWT_SECRET"];
     required.forEach((key) => {
       if (!process.env[key]) {
         throw new Error(`Missing required env var: ${key}`);
@@ -147,7 +180,7 @@ app.use((req, res, next) => {
       error: err instanceof Error ? err.message : "Unknown",
       stack: err instanceof Error ? err.stack : undefined,
     });
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "INTERNAL_ERROR" });
   });
 
   const isProduction = process.env.NODE_ENV === "production";
