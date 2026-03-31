@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { trackEvent } from "@/utils/analytics";
-import { api } from "@/lib/api";
+import { redirectToClientApply } from "@/utils/handoff";
 
 type ContactModalProps = {
   open: boolean;
@@ -24,7 +24,6 @@ const initialForm: ContactForm = {
 export default function ContactModal({ open, onClose }: ContactModalProps) {
   const [form, setForm] = useState<ContactForm>(initialForm);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const submit = async () => {
@@ -35,32 +34,19 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
 
     setSubmitting(true);
     setErrorMessage(null);
-    setSuccessMessage(null);
 
     try {
-      await api.post("/api/crm/createLead", {
-        name: form.name.trim(),
-        email: form.email.trim(),
-        phone: form.phone.trim(),
-        businessName: form.businessName.trim(),
-      });
-
-      window.localStorage.setItem(
-        "prefill_data",
-        JSON.stringify({
-          name: form.name.trim(),
-          email: form.email.trim(),
-          phone: form.phone.trim(),
-          businessName: form.businessName.trim(),
-        }),
-      );
-
       trackEvent("contact_submit", { category: "conversion" });
-      setSuccessMessage("Submitted successfully.");
+      redirectToClientApply({
+        businessName: form.businessName,
+        email: form.email,
+        phone: form.phone,
+      });
       setForm(initialForm);
       onClose();
-    } catch {
-      setErrorMessage("Unable to submit right now. Please try again.");
+    } catch (err) {
+      console.error("[FORM ERROR]", err);
+      setErrorMessage("Unable to continue right now. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -80,9 +66,8 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
           <input className="w-full rounded border p-2" type="tel" placeholder="Mobile Phone" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
           <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2">
             <button onClick={onClose} type="button" className="w-full rounded border border-gray-300 px-4 py-2">Cancel</button>
-            <button type="submit" disabled={submitting} className="w-full rounded bg-slate-900 px-4 py-2 text-white disabled:opacity-70">{submitting ? "Submitting..." : "Submit"}</button>
+            <button type="submit" disabled={submitting} className="w-full rounded bg-slate-900 px-4 py-2 text-white disabled:opacity-70">{submitting ? "Continuing..." : "Continue"}</button>
           </div>
-          {successMessage ? <p className="text-sm text-emerald-700">{successMessage}</p> : null}
           {errorMessage ? <p className="text-sm text-red-700">{errorMessage}</p> : null}
         </form>
       </div>

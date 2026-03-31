@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { trackEvent } from "@/utils/analytics";
-import { api } from "@/lib/api";
+import { redirectToClientApply } from "@/utils/handoff";
 
 type ScoreModalProps = {
   open: boolean;
@@ -32,7 +32,6 @@ const initialState: ScoreForm = {
 export default function ScoreModal({ open, onClose }: ScoreModalProps) {
   const [state, setState] = useState<ScoreForm>(initialState);
   const [submitting, setSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const submit = async () => {
@@ -44,29 +43,22 @@ export default function ScoreModal({ open, onClose }: ScoreModalProps) {
     try {
       setSubmitting(true);
       setErrorMessage(null);
-      setSuccessMessage(null);
-
-      const { name, email, phone, businessName } = state;
-
-      await api.post("/api/crm/createLead", {
-        name,
-        email,
-        phone,
-        businessName,
-      });
-
-      window.localStorage.setItem("prefill_data", JSON.stringify({ name, email, phone, businessName }));
 
       trackEvent("capital_score_submit", {
         source: "score_modal",
       });
 
-      setSuccessMessage("Thanks! Your information was submitted successfully.");
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        console.error(error);
-      }
-      setErrorMessage("Unable to submit right now.");
+      redirectToClientApply({
+        businessName: state.businessName,
+        email: state.email,
+        phone: state.phone,
+        requestedAmount: state.amount,
+        productType: state.industry,
+      });
+      onClose();
+    } catch (err) {
+      console.error("[FORM ERROR]", err);
+      setErrorMessage("Unable to continue right now.");
     } finally {
       setSubmitting(false);
     }
@@ -93,11 +85,10 @@ export default function ScoreModal({ open, onClose }: ScoreModalProps) {
             Cancel
           </button>
           <button className="rounded bg-green-600 px-4 py-2 text-white" onClick={submit} disabled={submitting}>
-            {submitting ? "Submitting..." : "Submit"}
+            {submitting ? "Continuing..." : "Continue"}
           </button>
         </div>
 
-        {successMessage ? <p className="mt-4 text-sm font-semibold text-emerald-700">{successMessage}</p> : null}
         {errorMessage ? <p className="mt-4 text-sm font-semibold text-red-700">{errorMessage}</p> : null}
       </div>
     </div>

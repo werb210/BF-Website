@@ -2,24 +2,16 @@ import { useEffect } from "react";
 import { APPLY_URL } from "@/config/site";
 import { estimateCommissionValue, trackEvent, trackConversion, trackLeadProfile } from "@/main";
 
-const CREDIT_RESULT_STORAGE_KEY = "boreal_credit_readiness_result";
-
 function loadResult() {
-  const stored = sessionStorage.getItem(CREDIT_RESULT_STORAGE_KEY);
-  if (!stored) {
-    return { score: 72, tier: "yellow" as const, capitalRange: "" };
-  }
+  const params = new URLSearchParams(window.location.search);
+  const scoreParam = Number(params.get("score"));
+  const tierParam = params.get("tier");
 
-  try {
-    const parsed = JSON.parse(stored) as { score?: number; tier?: "green" | "yellow" | "red"; capitalRange?: string };
-    if (typeof parsed.score === "number" && parsed.tier) {
-      return { score: Math.max(0, Math.min(100, parsed.score)), tier: parsed.tier, capitalRange: parsed.capitalRange ?? "" };
-    }
-  } catch {
-    // ignore malformed payloads
-  }
+  const score = Number.isFinite(scoreParam) ? Math.max(0, Math.min(100, scoreParam)) : 72;
+  const tier = tierParam === "green" || tierParam === "yellow" || tierParam === "red" ? tierParam : "yellow";
+  const capitalRange = params.get("capitalRange") ?? "";
 
-  return { score: 72, tier: "yellow" as const, capitalRange: "" };
+  return { score, tier, capitalRange };
 }
 
 export default function CreditResults() {

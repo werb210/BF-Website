@@ -23,7 +23,7 @@ export const trackEvent = (eventName: string, payload: Record<string, unknown> =
 };
 
 // ---- Attribution Layer ----
-const ATTRIBUTION_KEY = "boreal_attribution";
+let attributionData: Record<string, unknown> = {};
 
 export const captureAttribution = () => {
   if (typeof window === "undefined") {
@@ -42,8 +42,8 @@ export const captureAttribution = () => {
     first_visit_timestamp: Date.now(),
   };
 
-  if (!localStorage.getItem(ATTRIBUTION_KEY)) {
-    localStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(attribution));
+  if (Object.keys(attributionData).length === 0) {
+    attributionData = attribution;
   }
 };
 
@@ -52,8 +52,7 @@ export const getAttribution = () => {
     return {};
   }
 
-  const stored = localStorage.getItem(ATTRIBUTION_KEY);
-  return stored ? JSON.parse(stored) : {};
+  return attributionData;
 };
 
 // ---- Session Quality Scoring ----

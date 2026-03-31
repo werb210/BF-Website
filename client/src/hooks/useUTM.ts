@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { trackEvent } from "@/main";
 
 export function useUTMCapture() {
   useEffect(() => {
@@ -10,9 +11,11 @@ export function useUTMCapture() {
     const utmSource = params.get("utm_source");
 
     if (utmSource) {
-      localStorage.setItem("utm_source", utmSource);
-      localStorage.setItem("utm_medium", params.get("utm_medium") ?? "");
-      localStorage.setItem("utm_campaign", params.get("utm_campaign") ?? "");
+      trackEvent("utm_captured", {
+        utm_source: utmSource,
+        utm_medium: params.get("utm_medium") ?? "",
+        utm_campaign: params.get("utm_campaign") ?? "",
+      });
     }
   }, []);
 }

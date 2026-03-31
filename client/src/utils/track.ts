@@ -1,17 +1,3 @@
-import { apiUrl } from "@/config/api";
-
-export function track(event: string, metadata?: unknown) {
-  const send = async () => {
-    try {
-      await fetch(apiUrl("/api/support/track"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ event, metadata }),
-      });
-    } catch {
-      // best-effort tracking
-    }
-  };
-
-  void send();
+export function track(_event: string, _metadata?: unknown) {
+  // no-op: website does not call non-public API tracking routes
 }

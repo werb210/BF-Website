@@ -1,14 +1,16 @@
+const variantCache = new Map<string, "A" | "B">();
+
 export function getVariant(key: string): "A" | "B" {
   if (typeof window === "undefined") {
     return "A";
   }
 
-  const stored = localStorage.getItem(key);
-  if (stored === "A" || stored === "B") {
-    return stored;
+  const cached = variantCache.get(key);
+  if (cached) {
+    return cached;
   }
 
   const variant: "A" | "B" = Math.random() > 0.5 ? "A" : "B";
-  localStorage.setItem(key, variant);
+  variantCache.set(key, variant);
   return variant;
 }

@@ -1,4 +1,4 @@
-export const API_BASE_URL = "https://server.boreal.financial";
+export const API_BASE_URL = "https://boreal-staff-server.azurewebsites.net";
 
 export function apiUrl(path: string): string {
   if (!path.startsWith("/")) {

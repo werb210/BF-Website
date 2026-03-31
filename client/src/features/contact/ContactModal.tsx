@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { api } from "@/lib/api";
+import { redirectToClientApply } from "@/utils/handoff";
 
 export default function ContactModal() {
   const [submitted, setSubmitted] = useState(false);
@@ -10,7 +10,6 @@ export default function ContactModal() {
     e.preventDefault();
 
     const form = new FormData(e.currentTarget);
-    const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
     const phone = String(form.get("phone") ?? "").trim();
     const businessName = String(form.get("businessName") ?? "").trim();
@@ -19,23 +18,21 @@ export default function ContactModal() {
     setErrorMessage(null);
 
     try {
-      await api.post("/api/crm/createLead", {
-        name,
+      redirectToClientApply({
+        businessName,
         email,
         phone,
-        businessName,
       });
-
-      window.localStorage.setItem("prefill_data", JSON.stringify({ name, email, phone, businessName }));
       setSubmitted(true);
-    } catch {
-      setErrorMessage("Unable to submit right now. Please try again.");
+    } catch (err) {
+      console.error("[FORM ERROR]", err);
+      setErrorMessage("Unable to continue right now. Please try again.");
     } finally {
       setSubmitting(false);
     }
   }
 
-  if (submitted) return <div>Thank you. We’ll contact you shortly.</div>;
+  if (submitted) return <div>Redirecting you to the client application...</div>;
 
   return (
     <form onSubmit={(e) => void submit(e)} className="space-y-4">
@@ -44,7 +41,7 @@ export default function ContactModal() {
       <input className="w-full rounded border p-2" name="email" type="email" placeholder="Email" required />
       <input className="w-full rounded border p-2" name="phone" type="tel" placeholder="Mobile Phone" required />
       <button className="rounded bg-slate-900 px-4 py-2 font-medium text-white disabled:opacity-70" disabled={submitting} type="submit">
-        {submitting ? "Submitting..." : "Submit"}
+        {submitting ? "Continuing..." : "Continue"}
       </button>
       {errorMessage ? <p className="text-sm text-red-700">{errorMessage}</p> : null}
     </form>

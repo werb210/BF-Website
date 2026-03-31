@@ -1,5 +1,4 @@
 import { useState, type FormEvent } from "react";
-import { apiUrl } from "@/config/api";
 
 type Readiness = "Strong" | "Moderate" | "Needs Structuring";
 
@@ -18,7 +17,7 @@ export default function ReadinessModal() {
     return "Needs Structuring";
   }
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const result = calculate({
@@ -28,16 +27,6 @@ export default function ReadinessModal() {
       credit: Number(form.get("credit")),
     });
     setScore(result);
-
-    try {
-      await fetch(apiUrl("/api/support/event"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ event: "readiness_score_completed", source: "website" }),
-      });
-    } catch {
-      // best-effort analytics event
-    }
   }
 
   return (

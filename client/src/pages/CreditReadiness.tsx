@@ -44,8 +44,6 @@ const initialForm: ReadinessForm = {
   availableCollateral: "",
 };
 
-const CREDIT_RESULT_STORAGE_KEY = "boreal_credit_readiness_result";
-
 export default function CreditReadiness() {
   const [, navigate] = useLocation();
   const [form, setForm] = useState<ReadinessForm>(initialForm);
@@ -97,9 +95,6 @@ export default function CreditReadiness() {
     });
 
     const body = await response.json() as { score?: number; tier?: "green" | "yellow" | "red" };
-    if (typeof body.score === "number" && body.tier) {
-      sessionStorage.setItem(CREDIT_RESULT_STORAGE_KEY, JSON.stringify({ score: body.score, tier: body.tier, capitalRange: form.annualRevenue }));
-    }
 
     const calculatedStrength: "strong" | "moderate" | "weak" = body.tier === "green" ? "strong" : body.tier === "yellow" ? "moderate" : "weak";
     trackLeadProfile({
@@ -109,7 +104,12 @@ export default function CreditReadiness() {
       collateral_type: form.availableCollateral,
     });
 
-    navigate("/credit-results");
+    const nextParams = new URLSearchParams();
+    if (typeof body.score === "number") nextParams.set("score", String(body.score));
+    if (body.tier) nextParams.set("tier", body.tier);
+    if (form.annualRevenue) nextParams.set("capitalRange", form.annualRevenue);
+
+    navigate(`/credit-results${nextParams.toString() ? `?${nextParams.toString()}` : ""}`);
   }
 
   return (
