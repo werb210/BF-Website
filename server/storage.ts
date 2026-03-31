@@ -34,6 +34,7 @@ export interface IStorage {
   createCapitalReadinessLead(lead: Omit<CapitalReadinessLead, "id" | "sessionToken" | "createdAt">): Promise<CapitalReadinessLead>;
   findCapitalReadinessLeadByContact(email: string, phone: string): Promise<CapitalReadinessLead | undefined>;
   createOrGetWebLead(lead: Omit<WebLead, "id" | "createdAt">): Promise<{ lead: WebLead; deduped: boolean }>;
+  findWebLeadById(id: string): Promise<WebLead | undefined>;
 }
 
 function normalize(value: string) {
@@ -95,6 +96,10 @@ export class MemStorage implements IStorage {
     const record: WebLead = { ...lead, id, createdAt };
     this.webLeads.set(id, record);
     return { lead: record, deduped: false };
+  }
+
+  async findWebLeadById(id: string): Promise<WebLead | undefined> {
+    return this.webLeads.get(id);
   }
 }
 

@@ -22,6 +22,7 @@ export default function ContactModal() {
         businessName,
         email,
         phone,
+        productType: "general",
       });
       setSubmitted(true);
     } catch (err) {

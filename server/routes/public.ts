@@ -2,10 +2,16 @@ import { Router } from "express";
 import { storage } from "../storage";
 import { publicLeadIntakeSchema } from "../validation";
 import { getTraceId, logger } from "../logger";
+import { createRateLimiter } from "../security";
 
 const router = Router();
+const publicLeadLimiter = createRateLimiter({ windowMs: 60 * 1000, max: 10 });
 
-router.post("/lead", async (req, res) => {
+router.post("/lead", publicLeadLimiter, async (req, res) => {
+  if (!req.is("application/json")) {
+    return res.status(400).send("INVALID CONTENT TYPE");
+  }
+
   const parsed = publicLeadIntakeSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ error: "missing_fields" });
@@ -20,6 +26,14 @@ router.post("/lead", async (req, res) => {
       lastName: "Lead",
       email,
       phone,
+    });
+
+    logger.info({
+      msg: "[PUBLIC LEAD]",
+      traceId: getTraceId(req),
+      email,
+      ip: req.ip,
+      timestamp: Date.now(),
     });
 
     logger.info({

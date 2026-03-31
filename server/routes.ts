@@ -268,6 +268,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  app.get("/api/application/from-lead", async (req, res) => {
+    const leadId = typeof req.query.leadId === "string" ? req.query.leadId.trim() : "";
+    if (!leadId) {
+      return res.status(400).json({ error: "[INVALID LEAD]" });
+    }
+
+    const lead = await storage.findWebLeadById(leadId);
+    if (!lead) {
+      return res.status(404).json({ error: "[INVALID LEAD]" });
+    }
+
+    return res.status(200).json({ leadId: lead.id });
+  });
+
   app.post("/api/chat", (req, res) => {
     const parsed = chatMessageSchema.safeParse(req.body);
     if (!parsed.success) {

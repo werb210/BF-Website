@@ -23,6 +23,7 @@ export default function LeadCaptureModal({ onDone }: { onDone?: () => void }) {
         businessName,
         email,
         phone,
+        productType: "general",
       });
 
       setSuccessMessage("Redirecting you to the application...");

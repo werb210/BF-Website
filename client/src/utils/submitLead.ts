@@ -3,9 +3,9 @@ import { API_BASE_URL } from "@/config/api";
 export type WebsiteLeadPayload = {
   email: string;
   phone: string;
-  requestedAmount?: string;
-  productType?: string;
-  businessName?: string;
+  requestedAmount?: number;
+  productType: string;
+  businessName: string;
 };
 
 export async function submitLead(data: WebsiteLeadPayload): Promise<{ leadId: string }> {
@@ -18,8 +18,13 @@ export async function submitLead(data: WebsiteLeadPayload): Promise<{ leadId: st
   });
 
   if (!response.ok) {
-    throw new Error("LEAD SUBMISSION FAILED");
+    throw new Error("[LEAD SUBMIT FAILED]");
   }
 
-  return (await response.json()) as { leadId: string };
+  const payload = (await response.json()) as { leadId?: string };
+  if (!payload.leadId) {
+    throw new Error("[HANDOFF FAILED]");
+  }
+
+  return { leadId: payload.leadId };
 }

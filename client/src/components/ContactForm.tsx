@@ -74,6 +74,7 @@ export default function ContactForm() {
         businessName,
         email,
         phone,
+        productType: "general",
       });
 
       setFormData(initialForm);

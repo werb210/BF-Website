@@ -6,7 +6,7 @@ export type HandoffPayload = {
   email: string;
   phone: string;
   requestedAmount?: string;
-  productType?: string;
+  productType: string;
 };
 
 export async function redirectToClientApply(payload: HandoffPayload) {
@@ -18,13 +18,20 @@ export async function redirectToClientApply(payload: HandoffPayload) {
     throw new Error("MISSING REQUIRED FIELDS");
   }
 
+  const normalizedRequestedAmount = payload.requestedAmount?.trim();
+  const parsedRequestedAmount = normalizedRequestedAmount ? Number(normalizedRequestedAmount) : undefined;
+
   const { leadId } = await submitLead({
     businessName,
     email,
     phone,
-    requestedAmount: payload.requestedAmount?.trim() ?? "",
-    productType: payload.productType?.trim() ?? "",
+    requestedAmount: Number.isFinite(parsedRequestedAmount) ? parsedRequestedAmount : undefined,
+    productType: payload.productType.trim(),
   });
+
+  if (!leadId) {
+    throw new Error("[HANDOFF FAILED]");
+  }
 
   window.location.href = `${APPLY_URL}?leadId=${encodeURIComponent(leadId)}`;
 }
