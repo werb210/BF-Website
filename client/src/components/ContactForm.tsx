@@ -70,7 +70,7 @@ export default function ContactForm() {
         company: formData.companyName,
       });
 
-      redirectToClientApply({
+      await redirectToClientApply({
         businessName,
         email,
         phone,

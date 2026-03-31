@@ -9,6 +9,7 @@ import { registerRoutes } from "./routes";
 import contactRoute from "./routes/contact";
 import leadRoute from "./routes/lead";
 import mayaRoutes from "./routes/maya";
+import publicRoutes from "./routes/public";
 import { registerMarketingRoutes } from "./routes/marketing";
 import { createRateLimiter } from "./security";
 import { logger } from "./logger";
@@ -84,6 +85,7 @@ app.get("/health", (_req, res) => {
 app.use("/api/contact", contactRoute);
 app.use("/api/lead", leadRoute);
 app.use("/api/maya", mayaRoutes);
+app.use("/api/public", publicRoutes);
 registerMarketingRoutes(app);
 
 process.on("unhandledRejection", (reason) => {

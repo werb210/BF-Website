@@ -19,7 +19,7 @@ export default function LeadCaptureModal({ onDone }: { onDone?: () => void }) {
     setSubmitting(true);
 
     try {
-      redirectToClientApply({
+      await redirectToClientApply({
         businessName,
         email,
         phone,

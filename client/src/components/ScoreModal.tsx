@@ -48,7 +48,7 @@ export default function ScoreModal({ open, onClose }: ScoreModalProps) {
         source: "score_modal",
       });
 
-      redirectToClientApply({
+      await redirectToClientApply({
         businessName: state.businessName,
         email: state.email,
         phone: state.phone,

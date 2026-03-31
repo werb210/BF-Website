@@ -37,7 +37,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
 
     try {
       trackEvent("contact_submit", { category: "conversion" });
-      redirectToClientApply({
+      await redirectToClientApply({
         businessName: form.businessName,
         email: form.email,
         phone: form.phone,

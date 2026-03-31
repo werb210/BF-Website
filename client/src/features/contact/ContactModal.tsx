@@ -18,7 +18,7 @@ export default function ContactModal() {
     setErrorMessage(null);
 
     try {
-      redirectToClientApply({
+      await redirectToClientApply({
         businessName,
         email,
         phone,

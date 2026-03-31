@@ -1,4 +1,5 @@
 import { APPLY_URL } from "@/config/site";
+import { submitLead } from "@/utils/submitLead";
 
 export type HandoffPayload = {
   businessName: string;
@@ -8,7 +9,7 @@ export type HandoffPayload = {
   productType?: string;
 };
 
-export function redirectToClientApply(payload: HandoffPayload) {
+export async function redirectToClientApply(payload: HandoffPayload) {
   const businessName = payload.businessName.trim();
   const email = payload.email.trim();
   const phone = payload.phone.trim();
@@ -17,13 +18,13 @@ export function redirectToClientApply(payload: HandoffPayload) {
     throw new Error("MISSING REQUIRED FIELDS");
   }
 
-  const normalizedPayload: Record<string, string> = {
+  const { leadId } = await submitLead({
     businessName,
     email,
     phone,
     requestedAmount: payload.requestedAmount?.trim() ?? "",
     productType: payload.productType?.trim() ?? "",
-  };
+  });
 
-  window.location.href = `${APPLY_URL}?${new URLSearchParams(normalizedPayload).toString()}`;
+  window.location.href = `${APPLY_URL}?leadId=${encodeURIComponent(leadId)}`;
 }
