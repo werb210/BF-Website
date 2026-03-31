@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { submitLead } from "@/api/lead";
 
 export default function LeadForm() {
@@ -7,22 +7,41 @@ export default function LeadForm() {
     email: "",
     phone: "",
   });
+  const [status, setStatus] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  async function handleSubmit() {
-    await submitLead(form);
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (submitting) return;
 
-    // redirect to client app with prefill
+    setSubmitting(true);
+    setStatus(null);
+    setError(null);
+
+    const result = await submitLead(form);
+
+    if (!result.success) {
+      setError(result.message || "Unable to submit lead right now.");
+      setSubmitting(false);
+      return;
+    }
+
+    setStatus("Lead submitted successfully.");
+
     const query = new URLSearchParams(form).toString();
     window.location.href = `https://client.boreal.financial/apply?${query}`;
   }
 
   return (
-    <div>
-      <input placeholder="Name" onChange={(e)=>setForm({...form, name: e.target.value})} />
-      <input placeholder="Email" onChange={(e)=>setForm({...form, email: e.target.value})} />
-      <input placeholder="Phone" onChange={(e)=>setForm({...form, phone: e.target.value})} />
+    <form onSubmit={(event) => void handleSubmit(event)}>
+      <input placeholder="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+      <input placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+      <input placeholder="Phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
 
-      <button onClick={handleSubmit}>Apply Now</button>
-    </div>
+      <button type="submit" disabled={submitting}>{submitting ? "Submitting..." : "Apply Now"}</button>
+      {status ? <p>{status}</p> : null}
+      {error ? <p>{error}</p> : null}
+    </form>
   );
 }

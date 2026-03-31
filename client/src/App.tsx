@@ -1,6 +1,6 @@
 import { AppRouter as Router } from "@/router/AppRouter"
 import FloatingChat from "./components/FloatingChat"
-import MayaWidget from "@/components/maya/MayaWidget"
+import MayaWidget from "@/components/MayaWidget"
 import LeadForm from "@/components/LeadForm"
 
 function App() {

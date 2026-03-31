@@ -1,16 +1,11 @@
+import { apiRequest } from "@/lib/api";
+
 export async function safeFetch(url: string, options: RequestInit = {}) {
-  const res = await fetch(url, options)
+  const result = await apiRequest<unknown>(url, options);
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => "")
-    throw new Error(`HTTP ${res.status}: ${text}`)
+  if (!result.success) {
+    throw new Error(result.message);
   }
 
-  const contentType = res.headers.get("content-type") || ""
-
-  if (contentType.includes("application/json")) {
-    return res.json()
-  }
-
-  return res.text()
+  return result.data;
 }

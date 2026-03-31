@@ -2,6 +2,7 @@ import { FormEvent, useMemo, useState } from "react";
 import { trackEvent } from "@/utils/analytics";
 import { saveLead, clearLead, getLead } from "@/lib/leadStorage";
 import { redirectToClientApply } from "@/utils/handoff";
+import { apiRequest } from "@/lib/api";
 
 type ContactFormData = {
   companyName: string;
@@ -124,11 +125,10 @@ export default function ContactForm() {
       console.error("[FORM ERROR]", err);
       setError("Unable to continue right now. Please try again.");
 
-      void fetch("/api/fallback-email", {
+      void apiRequest("/api/fallback-email", {
         method: "POST",
-        body: JSON.stringify(createLeadData(formData)),
-        headers: { "Content-Type": "application/json" },
-      }).catch(() => undefined);
+        body: createLeadData(formData),
+      });
     } finally {
       setSubmitting(false);
     }

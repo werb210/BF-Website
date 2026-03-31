@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/config/api";
+import { apiRequest } from "@/lib/api";
 
 export type WebsiteLeadPayload = {
   email: string;
@@ -9,22 +9,14 @@ export type WebsiteLeadPayload = {
 };
 
 export async function submitLead(data: WebsiteLeadPayload): Promise<{ leadId: string }> {
-  const response = await fetch(`${API_BASE_URL}/api/public/lead`, {
+  const result = await apiRequest<{ leadId?: string }>("/api/public/lead", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
+    body: data,
   });
 
-  if (!response.ok) {
-    throw new Error("[LEAD SUBMIT FAILED]");
+  if (!result.success || !result.data?.leadId) {
+    throw new Error(result.success ? "[HANDOFF FAILED]" : result.message || "[LEAD SUBMIT FAILED]");
   }
 
-  const payload = (await response.json()) as { leadId?: string };
-  if (!payload.leadId) {
-    throw new Error("[HANDOFF FAILED]");
-  }
-
-  return { leadId: payload.leadId };
+  return { leadId: result.data.leadId };
 }

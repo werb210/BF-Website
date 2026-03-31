@@ -1,23 +1,16 @@
-import { API_BASE_URL } from "@/config/api";
+import { apiRequest } from "@/lib/api";
 
 async function request<T>(method: "GET" | "POST", url: string, body?: unknown): Promise<{ data: T }> {
-  const response = await fetch(`${API_BASE_URL}/api${url}`, {
+  const response = await apiRequest<T>(`/api${url}`, {
     method,
-    headers: body ? { "Content-Type": "application/json" } : {},
-    body: body ? JSON.stringify(body) : undefined,
+    body,
   });
 
-  if (!response.ok) {
-    const text = await response.text().catch(() => "");
-    throw new Error(`HTTP ${response.status}: ${text}`);
+  if (!response.success) {
+    throw new Error(response.message);
   }
 
-  if (response.status === 204) {
-    return { data: undefined as T };
-  }
-
-  const data = (await response.json()) as T;
-  return { data };
+  return { data: response.data };
 }
 
 const api = {
