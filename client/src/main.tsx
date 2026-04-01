@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./styles/global.css";
 import { retryLeadSubmission } from "@/lib/retryLead";
 import { submitLead } from "@/utils/submitLead";
-import { apiRequest } from "@/api/request";
+import { apiRequest, isDegradedApiResponse } from "@/api/request";
 
 // ---- Advanced Tracking Layer ----
 function parsePendingLeadData(data: Record<string, unknown>) {
@@ -286,10 +286,20 @@ function TrackingProvider() {
     };
   }, []);
 
-  return <App />;
+  return (
+    <>
+      {degradedMode ? (
+        <div role="status" className="bg-amber-500 px-4 py-2 text-sm font-medium text-black">
+          System temporarily unavailable
+        </div>
+      ) : null}
+      <App />
+    </>
+  );
 }
 
 let started = false;
+let degradedMode = false;
 
 async function bootstrap() {
   if (started) {
@@ -297,7 +307,11 @@ async function bootstrap() {
   }
 
   started = true;
-  await apiRequest("/health");
+  const result = await apiRequest("/health");
+  if (isDegradedApiResponse(result)) {
+    degradedMode = true;
+    console.warn("Website started in degraded backend mode.");
+  }
 }
 
 await bootstrap();

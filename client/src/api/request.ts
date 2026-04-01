@@ -1,10 +1,40 @@
 import { getApiBaseUrl } from "@/config/envGuard";
 
+export type DegradedApiResponse = {
+  degraded: true;
+  error: string;
+};
+
+type ApiEnvelope<T> =
+  | { status: "ok"; data: T }
+  | { status: "error"; error?: string | { message?: string } };
+
 export function normalize(base: string, path: string) {
   return `${base.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 }
 
-export async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
+export function isDegradedApiResponse(value: unknown): value is DegradedApiResponse {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "degraded" in value &&
+    (value as { degraded?: unknown }).degraded === true
+  );
+}
+
+function extractErrorMessage(error: ApiEnvelope<unknown>["error"]) {
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (typeof error === "object" && error !== null && typeof error.message === "string") {
+    return error.message;
+  }
+
+  return "API_ERROR";
+}
+
+export async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<T | DegradedApiResponse> {
   const base = getApiBaseUrl();
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10000);
@@ -30,18 +60,22 @@ export async function apiRequest<T>(path: string, options: RequestInit = {}): Pr
       throw new Error("INVALID_API_SHAPE");
     }
 
-    const status = (json as { status?: unknown }).status;
+    const payload = json as ApiEnvelope<T>;
+    const status = payload.status;
 
     if (status === "error") {
-      const message = (json as { error?: { message?: unknown } }).error?.message;
-      throw new Error(typeof message === "string" ? message : "API_ERROR");
+      const message = extractErrorMessage(payload.error);
+      if (message === "DB_NOT_READY") {
+        return { degraded: true, error: message };
+      }
+      throw new Error(message);
     }
 
     if (status !== "ok") {
       throw new Error("UNKNOWN_STATUS");
     }
 
-    return (json as { data: T }).data;
+    return payload.data;
   } finally {
     clearTimeout(timeout);
   }
