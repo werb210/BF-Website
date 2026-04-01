@@ -28,7 +28,7 @@ This project can run as a containerized Node.js app or as a code-based deploymen
 5. **Restart and verify:** Use the `/api/health` endpoint to confirm readiness: `https://<app-name>.azurewebsites.net/api/health`.
 
 ## Code-based App Service deployment
-If you deploy without a custom container, Azure App Service will run `npm install`, `npm run build`, and then `npm start` by default. Ensure the following settings are present in your App Service configuration:
+If you deploy without a custom container, Azure App Service will run `npm ci --no-audit --no-fund`, `npm run build`, and then `npm start` by default. Ensure the following settings are present in your App Service configuration:
 
 - `PORT` set to the inbound port (App Service typically sets this automatically).
 - `NODE_ENV=production`.
