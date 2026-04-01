@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./styles/global.css";
 import { retryLeadSubmission } from "@/lib/retryLead";
 import { submitLead } from "@/utils/submitLead";
-import { bootstrap as bootstrapApi } from "@/api/request";
+import { apiRequest } from "@/api/request";
 
 // ---- Advanced Tracking Layer ----
 function parsePendingLeadData(data: Record<string, unknown>) {
@@ -297,7 +297,7 @@ async function bootstrap() {
   }
 
   started = true;
-  await bootstrapApi();
+  await apiRequest("/health");
 }
 
 await bootstrap();

@@ -1,7 +1,11 @@
 import { buildWebSocketUrl } from "./buildWebSocketUrl";
 
 export function createSafeWebSocket(path: string) {
-  return new WebSocket(buildWebSocketUrl(path));
+  try {
+    return new WebSocket(buildWebSocketUrl(path));
+  } catch {
+    throw new Error("SOCKET_INIT_FAILED");
+  }
 }
 
 let socket: WebSocket | null = null;
@@ -11,8 +15,12 @@ export function getChatSocket(): WebSocket {
     return socket;
   }
 
-  socket = new WebSocket(buildWebSocketUrl("/ws/chat"));
-  return socket;
+  try {
+    socket = new WebSocket(buildWebSocketUrl("/ws/chat"));
+    return socket;
+  } catch {
+    throw new Error("SOCKET_INIT_FAILED");
+  }
 }
 
 export function clearChatSocket() {

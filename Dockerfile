@@ -1,14 +1,12 @@
 FROM node:20-alpine AS build
 WORKDIR /app
-ENV npm_config_registry=https://registry.npmjs.org/
-ENV NPM_CONFIG_REGISTRY=https://registry.npmjs.org/
 COPY package*.json ./
+COPY .npmrc ./
 RUN npm config set registry https://registry.npmjs.org/
-RUN npm config delete proxy || true
-RUN npm config delete https-proxy || true
-RUN npm config set strict-ssl false
-RUN npm ci --no-audit --no-fund
+RUN rm -rf node_modules package-lock.json
 RUN npm cache clean --force
+RUN npm install --package-lock-only
+RUN npm ci --no-audit --no-fund
 COPY . .
 RUN npm run build
 
@@ -17,13 +15,12 @@ WORKDIR /app
 RUN apk add --no-cache curl
 ENV NODE_ENV=production
 ENV PORT=8080
-ENV npm_config_registry=https://registry.npmjs.org/
-ENV NPM_CONFIG_REGISTRY=https://registry.npmjs.org/
 COPY package*.json ./
+COPY .npmrc ./
 RUN npm config set registry https://registry.npmjs.org/
-RUN npm config delete proxy || true
-RUN npm config delete https-proxy || true
-RUN npm config set strict-ssl false
+RUN rm -rf node_modules package-lock.json
+RUN npm cache clean --force
+RUN npm install --package-lock-only
 RUN npm ci --no-audit --no-fund --omit=dev
 RUN npm cache clean --force
 COPY --from=build /app/dist ./dist
