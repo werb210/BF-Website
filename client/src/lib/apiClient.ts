@@ -1,74 +1,38 @@
-export type ApiResponse<T> =
-  | { success: true; data: T }
-  | { success: false; error: string };
+const API_BASE = process.env.SERVER_URL;
 
-if (!import.meta.env.VITE_API_URL) {
-  throw new Error("MISSING_API_URL");
+if (!API_BASE) {
+  throw new Error("Missing SERVER_URL");
 }
 
-const BASE_URL = import.meta.env.VITE_API_URL.trim().replace(/\/+$/, "");
-
-function buildUrl(path: string) {
-  if (!path.startsWith("/api/")) {
-    throw new Error(`Invalid API path: ${path}`);
-  }
-
-  return `${BASE_URL}${path}`;
-}
-
-export async function apiPost<T>(path: string, payload?: unknown): Promise<T> {
-  console.log("LEAD SUBMIT:", payload);
-
-  const res = await fetch(buildUrl(path), {
-    method: "POST",
+export async function apiRequest(path: string, options: RequestInit = {}) {
+  const res = await fetch(`${API_BASE}${path}`, {
     headers: {
       "Content-Type": "application/json",
+      ...(options.headers || {}),
     },
-    body: payload ? JSON.stringify(payload) : undefined,
+    ...options,
   });
 
+  if (res.status === 401) {
+    throw new Error("auth_expired");
+  }
+
   if (!res.ok) {
-    throw new Error("HTTP_ERROR");
+    const text = await res.text();
+    console.error("API_ERROR", { path, status: res.status, body: text });
+    throw new Error(`API request failed: ${res.status}`);
   }
 
-  let json: ApiResponse<T>;
-  try {
-    json = (await res.json()) as ApiResponse<T>;
-  } catch (error) {
-    console.error("API_PARSE_ERROR:", error);
-    throw new Error(`Invalid API response for ${path}`);
-  }
-
-  if (!json.success) {
-    throw new Error(json.error);
-  }
-
-  return json.data;
+  return res.json();
 }
 
 export async function apiGet<T>(path: string): Promise<T> {
-  const res = await fetch(buildUrl(path), {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  return apiRequest(path, { method: "GET" }) as Promise<T>;
+}
 
-  if (!res.ok) {
-    throw new Error("HTTP_ERROR");
-  }
-
-  let json: ApiResponse<T>;
-  try {
-    json = (await res.json()) as ApiResponse<T>;
-  } catch (error) {
-    console.error("API_PARSE_ERROR:", error);
-    throw new Error(`Invalid API response for ${path}`);
-  }
-
-  if (!json.success) {
-    throw new Error(json.error);
-  }
-
-  return json.data;
+export async function apiPost<T>(path: string, payload?: unknown): Promise<T> {
+  return apiRequest(path, {
+    method: "POST",
+    body: payload ? JSON.stringify(payload) : undefined,
+  }) as Promise<T>;
 }
