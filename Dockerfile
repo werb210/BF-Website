@@ -8,6 +8,7 @@ RUN npm config delete proxy || true
 RUN npm config delete https-proxy || true
 RUN npm config set strict-ssl false
 RUN npm ci --no-audit --no-fund
+RUN npm cache clean --force
 COPY . .
 RUN npm run build
 
@@ -24,6 +25,7 @@ RUN npm config delete proxy || true
 RUN npm config delete https-proxy || true
 RUN npm config set strict-ssl false
 RUN npm ci --no-audit --no-fund --omit=dev
+RUN npm cache clean --force
 COPY --from=build /app/dist ./dist
 EXPOSE 8080
 HEALTHCHECK CMD curl --fail http://127.0.0.1:8080/api/health || exit 1

@@ -6,27 +6,13 @@ export function createSafeWebSocket(path: string) {
 
 let socket: WebSocket | null = null;
 
-export function getChatSocket(): WebSocket | null {
-  try {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      return socket;
-    }
-
-    socket = new WebSocket(buildWebSocketUrl("/ws/chat"));
-
-    socket.onerror = () => {
-      if (import.meta.env.DEV) {
-        console.warn("WebSocket failed — chat disabled.");
-      }
-    };
-
+export function getChatSocket(): WebSocket {
+  if (socket && socket.readyState === WebSocket.OPEN) {
     return socket;
-  } catch (err) {
-    if (import.meta.env.DEV) {
-      console.warn("WebSocket init error:", err);
-    }
-    return null;
   }
+
+  socket = new WebSocket(buildWebSocketUrl("/ws/chat"));
+  return socket;
 }
 
 export function clearChatSocket() {

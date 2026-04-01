@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./styles/global.css";
 import { retryLeadSubmission } from "@/lib/retryLead";
 import { submitLead } from "@/utils/submitLead";
+import { bootstrap as bootstrapApi } from "@/api/request";
 
 // ---- Advanced Tracking Layer ----
 function parsePendingLeadData(data: Record<string, unknown>) {
@@ -288,20 +289,18 @@ function TrackingProvider() {
   return <App />;
 }
 
-async function assertBackend() {
-  const apiUrl = import.meta.env.VITE_API_URL;
+let started = false;
 
-  if (!apiUrl) {
-    throw new Error("VITE_API_URL is required");
+async function bootstrap() {
+  if (started) {
+    throw new Error("DOUBLE_BOOTSTRAP");
   }
 
-  const res = await fetch(`${apiUrl}/health`);
-  if (!res.ok) {
-    throw new Error("Backend not reachable");
-  }
+  started = true;
+  await bootstrapApi();
 }
 
-await assertBackend();
+await bootstrap();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
