@@ -10,6 +10,9 @@ export default defineConfig({
       "@shared": path.resolve(__dirname, "shared"),
     },
   },
+  optimizeDeps: {
+    exclude: ["react-router-dom"],
+  },
   build: {
     outDir: "dist",
   },
