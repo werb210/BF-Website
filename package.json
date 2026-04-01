@@ -29,7 +29,7 @@
     "validate:no-express": "! rg -n \"express|app.listen\" src",
     "validate:no-express:strict": "! rg -n \"express|app.listen\" src client",
     "preview:ci": "vite preview --port 4173 & sleep 3 && curl -f http://localhost:4173",
-    "install:safe": "npm install --registry=https://registry.npmjs.org/"
+    "preinstall": "npm config set registry https://registry.npmjs.org/"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
