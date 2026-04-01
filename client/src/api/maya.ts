@@ -1,10 +1,10 @@
 import { apiPost } from "@/lib/apiClient";
 
 const mayaEnabled = import.meta.env.VITE_MAYA_ENABLED === "true";
-const mayaApiBase = (import.meta.env.VITE_MAYA_API_BASE ?? "").trim().replace(/\/+$/, "");
+const mayaWsBase = (import.meta.env.VITE_MAYA_WS_BASE ?? "").trim().replace(/\/+$/, "");
 
 export function isMayaConfigured() {
-  return mayaEnabled && Boolean(mayaApiBase);
+  return mayaEnabled && Boolean(mayaWsBase);
 }
 
 export function buildMayaWebSocketUrl(path: string) {
@@ -13,31 +13,13 @@ export function buildMayaWebSocketUrl(path: string) {
   }
 
   const pathWithSlash = path.startsWith("/") ? path : `/${path}`;
-  const wsBase = mayaApiBase.replace(/^http:/i, "ws:").replace(/^https:/i, "wss:");
-  return `${wsBase}${pathWithSlash}`;
+  return `${mayaWsBase}${pathWithSlash}`;
 }
 
 export async function checkMayaHealth(_signal?: AbortSignal): Promise<boolean> {
-  try {
-    const res = await apiPost<{ reply?: string }>("/api/maya/message", { message: "__healthcheck__" });
-    if (typeof res !== "object" || res == null) {
-      console.error("MAYA_ERROR:", "Invalid healthcheck response shape");
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error("MAYA_ERROR:", error);
-    return false;
-  }
+  return isMayaConfigured();
 }
 
 export async function sendMayaMessage(message: string) {
-  try {
-    const res = await apiPost<{ reply?: string }>("/api/maya/message", { message });
-    return res;
-  } catch (error) {
-    console.error("MAYA_ERROR:", error);
-    throw error;
-  }
+  return apiPost<{ reply?: string }>("maya-message", { message });
 }

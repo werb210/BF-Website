@@ -7,7 +7,7 @@ export async function submitLead(payload: WebsiteLeadPayload) {
   }
 
   try {
-    return await apiPost<{ leadId: string }>("/api/lead", payload);
+    return await apiPost<{ leadId: string }>("lead", payload);
   } catch (err) {
     console.error("LEAD_SUBMIT_ERROR:", err);
     alert("Submission failed");

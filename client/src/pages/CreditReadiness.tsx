@@ -78,7 +78,7 @@ export default function CreditReadiness() {
     let body: { score?: number; tier?: "green" | "yellow" | "red" };
 
     try {
-      body = await apiPost<{ score?: number; tier?: "green" | "yellow" | "red" }>("/api/lead", payload);
+      body = await apiPost<{ score?: number; tier?: "green" | "yellow" | "red" }>("lead", payload);
     } catch (err) {
       console.error("WEBSITE ERROR:", err);
       alert(err instanceof Error ? err.message : "Unable to submit readiness form.");
