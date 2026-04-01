@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "engines": {
-    "node": "20.x"
+    "node": ">=20 <21",
+    "npm": ">=10"
   },
   "scripts": {
     "repo:guard": "echo 'repo guard skipped'",
@@ -33,7 +34,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "3.10.0",
-    "@jridgewell/trace-mapping": "0.3.25",
+    "@jridgewell/trace-mapping": "0.3.18",
     "@neondatabase/serverless": "0.10.4",
     "@radix-ui/react-accordion": "1.2.4",
     "@radix-ui/react-alert-dialog": "1.1.7",
@@ -136,5 +137,8 @@
     "vite-plugin-prerender": "file:vendor/vite-plugin-prerender",
     "vite-plugin-sitemap": "0.8.2"
   },
-  "engineStrict": true
+  "engineStrict": true,
+  "overrides": {
+    "@jridgewell/trace-mapping": "0.3.18"
+  }
 }
