@@ -21,7 +21,8 @@ export async function checkMayaHealth(_signal?: AbortSignal): Promise<boolean> {
   try {
     await apiGet<{ healthy: boolean }>("/api/maya/health");
     return true;
-  } catch {
+  } catch (error) {
+    console.error("MAYA HEALTH ERROR:", error);
     return false;
   }
 }
