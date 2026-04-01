@@ -2,11 +2,11 @@ export type ApiResponse<T> =
   | { success: true; data: T }
   | { success: false; error: string };
 
-const BASE_URL = import.meta.env.VITE_API_URL?.trim().replace(/\/+$/, "");
-
-if (!BASE_URL) {
+if (!import.meta.env.VITE_API_URL) {
   throw new Error("MISSING_API_URL");
 }
+
+const BASE_URL = import.meta.env.VITE_API_URL.trim().replace(/\/+$/, "");
 
 function buildUrl(path: string) {
   if (!path.startsWith("/api/")) {
@@ -17,9 +17,7 @@ function buildUrl(path: string) {
 }
 
 export async function apiPost<T>(path: string, payload?: unknown): Promise<T> {
-  if (path === "/api/lead") {
-    console.log("LEAD SUBMIT:", payload);
-  }
+  console.log("LEAD SUBMIT:", payload);
 
   const res = await fetch(buildUrl(path), {
     method: "POST",
@@ -29,7 +27,9 @@ export async function apiPost<T>(path: string, payload?: unknown): Promise<T> {
     body: payload ? JSON.stringify(payload) : undefined,
   });
 
-  if (!res.ok) throw new Error("HTTP_ERROR");
+  if (!res.ok) {
+    throw new Error("HTTP_ERROR");
+  }
 
   let json: ApiResponse<T>;
   try {
@@ -38,7 +38,9 @@ export async function apiPost<T>(path: string, payload?: unknown): Promise<T> {
     throw new Error(`Invalid API response for ${path}`);
   }
 
-  if (!json.success) throw new Error(json.error);
+  if (!json.success) {
+    throw new Error(json.error);
+  }
 
   return json.data;
 }
@@ -51,7 +53,9 @@ export async function apiGet<T>(path: string): Promise<T> {
     },
   });
 
-  if (!res.ok) throw new Error("HTTP_ERROR");
+  if (!res.ok) {
+    throw new Error("HTTP_ERROR");
+  }
 
   let json: ApiResponse<T>;
   try {
@@ -60,7 +64,9 @@ export async function apiGet<T>(path: string): Promise<T> {
     throw new Error(`Invalid API response for ${path}`);
   }
 
-  if (!json.success) throw new Error(json.error);
+  if (!json.success) {
+    throw new Error(json.error);
+  }
 
   return json.data;
 }
