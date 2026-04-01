@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from "@/lib/apiClient";
+import { apiPost } from "@/lib/apiClient";
 
 const mayaEnabled = import.meta.env.VITE_MAYA_ENABLED === "true";
 const mayaApiBase = (import.meta.env.VITE_MAYA_API_BASE ?? "").trim().replace(/\/+$/, "");
@@ -19,9 +19,9 @@ export function buildMayaWebSocketUrl(path: string) {
 
 export async function checkMayaHealth(_signal?: AbortSignal): Promise<boolean> {
   try {
-    const res = await apiGet<{ healthy: boolean }>("/api/maya/health");
-    if (!res.healthy) {
-      console.error("MAYA_ERROR:", "Unhealthy response from /api/maya/health");
+    const res = await apiPost<{ reply?: string }>("/api/maya/message", { message: "__healthcheck__" });
+    if (typeof res !== "object" || res == null) {
+      console.error("MAYA_ERROR:", "Invalid healthcheck response shape");
       return false;
     }
 

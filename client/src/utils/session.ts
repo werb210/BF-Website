@@ -6,6 +6,6 @@ export function setReadinessSessionToken(_token: string) {
   return;
 }
 
-export function buildApplyUrl(baseUrl: string, _readinessSessionToken?: string | null) {
-  return baseUrl;
+export function buildApplyUrl(applyUrl: string, _readinessSessionToken?: string | null) {
+  return applyUrl;
 }

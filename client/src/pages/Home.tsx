@@ -9,7 +9,7 @@ import MarketplaceSection from "@/components/MarketplaceSection";
 import { trackConversion } from "@/main";
 
 const primaryHeroImage = "/images/16x9 Concierge Private Banking Hero Image.jpeg";
-const fallbackHeroImage = "/images/An image of two groups of business people shaking hands over a meeting table celebrating signing a deal to merge.jpeg.webp";
+const backupHeroImage = "/images/An image of two groups of business people shaking hands over a meeting table celebrating signing a deal to merge.jpeg.webp";
 
 const featuredIndustrySlugs = ["construction", "manufacturing", "transportation"];
 const orderedIndustries = [
@@ -28,7 +28,7 @@ export default function Home() {
   useEffect(() => {
     const image = new Image();
     image.src = primaryHeroImage;
-    image.onerror = () => setHeroImage(fallbackHeroImage);
+    image.onerror = () => setHeroImage(backupHeroImage);
   }, []);
 
   return (

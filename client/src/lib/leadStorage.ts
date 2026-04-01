@@ -29,7 +29,8 @@ export function saveLead(lead: PendingLead) {
 
   try {
     resolveStorage().setItem(STORAGE_KEY, serialized);
-  } catch {
+  } catch (error) {
+    console.error("LEAD_STORAGE_WRITE_ERROR:", error);
     resolveFallbackStorage().setItem(STORAGE_KEY, serialized);
   }
 }
@@ -52,7 +53,8 @@ export function getLead(): PendingLead | null {
     }
 
     return parsed;
-  } catch {
+  } catch (error) {
+    console.error("LEAD_STORAGE_READ_ERROR:", error);
     return null;
   }
 }
@@ -60,13 +62,13 @@ export function getLead(): PendingLead | null {
 export function clearLead() {
   try {
     resolveStorage().removeItem(STORAGE_KEY);
-  } catch {
-    // no-op
+  } catch (error) {
+    console.error("LEAD_STORAGE_CLEAR_ERROR:", error);
   }
 
   try {
     resolveFallbackStorage().removeItem(STORAGE_KEY);
-  } catch {
-    // no-op
+  } catch (error) {
+    console.error("LEAD_SESSION_CLEAR_ERROR:", error);
   }
 }

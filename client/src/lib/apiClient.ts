@@ -34,7 +34,8 @@ export async function apiPost<T>(path: string, payload?: unknown): Promise<T> {
   let json: ApiResponse<T>;
   try {
     json = (await res.json()) as ApiResponse<T>;
-  } catch {
+  } catch (error) {
+    console.error("API_PARSE_ERROR:", error);
     throw new Error(`Invalid API response for ${path}`);
   }
 
@@ -60,7 +61,8 @@ export async function apiGet<T>(path: string): Promise<T> {
   let json: ApiResponse<T>;
   try {
     json = (await res.json()) as ApiResponse<T>;
-  } catch {
+  } catch (error) {
+    console.error("API_PARSE_ERROR:", error);
     throw new Error(`Invalid API response for ${path}`);
   }
 

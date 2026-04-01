@@ -7,7 +7,8 @@ export async function retryLeadSubmission(sendFn: (data: Record<string, unknown>
   try {
     await sendFn(lead.data);
     clearLead();
-  } catch {
+  } catch (error) {
+    console.error("LEAD_RETRY_ERROR:", error);
     lead.retryCount += 1;
     saveLead(lead);
   }

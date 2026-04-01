@@ -10,7 +10,8 @@ let validatedApiBaseUrl: string;
 
 try {
   validatedApiBaseUrl = new URL(normalizedApiBaseUrl).toString().replace(/\/+$/, "");
-} catch {
+} catch (error) {
+  console.error("API_CONFIG_ERROR:", error);
   throw new Error(`Invalid VITE_API_URL value: ${rawApiBaseUrl}`);
 }
 

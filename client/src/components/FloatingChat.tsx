@@ -126,8 +126,9 @@ export default function FloatingChat() {
         if (systemMessage) {
           setMessages((prev) => [...prev, { id: `${Date.now()}-system`, from: "system", message: systemMessage }]);
         }
-      } catch {
-        setMessages((prev) => [...prev, { id: `${Date.now()}-fallback`, from: "system", message: "Message received." }]);
+      } catch (error) {
+        console.error("MAYA_ERROR:", error);
+        setMessages((prev) => [...prev, { id: `${Date.now()}-system`, from: "system", message: "Message received." }]);
       }
     };
 
