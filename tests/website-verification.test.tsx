@@ -8,6 +8,7 @@ import ProductComparison from "../client/src/components/ProductComparison";
 import IndustryDetail from "../client/src/pages/IndustryDetail";
 import ProductDetail from "../client/src/pages/ProductDetail";
 import FloatingChat from "../client/src/components/FloatingChat";
+import { ErrorBoundary } from "../client/src/components/ErrorBoundary";
 import { industries } from "../client/src/data/industries";
 import { products } from "../client/src/data/products";
 
@@ -138,4 +139,31 @@ test("product comparison sections are present and no empty state copy renders", 
   const html = renderToStaticMarkup(<ProductComparison />);
   assert.match(html, /Product/);
   assert.doesNotMatch(html, /No products available/i);
+});
+
+test("error boundary returns fallback UI after runtime error", () => {
+  const boundary = new ErrorBoundary({ children: <div>App content</div> });
+  boundary.state = ErrorBoundary.getDerivedStateFromError();
+  const html = renderToStaticMarkup(boundary.render());
+  assert.match(html, /System error/);
+});
+
+test("error boundary logs runtime errors", () => {
+  const boundary = new ErrorBoundary({ children: <div>App content</div> });
+  const originalConsoleError = console.error;
+  const calls: unknown[][] = [];
+
+  console.error = (...args: unknown[]) => {
+    calls.push(args);
+  };
+
+  try {
+    const error = new Error("boom");
+    boundary.componentDidCatch(error);
+  } finally {
+    console.error = originalConsoleError;
+  }
+
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0][0] instanceof Error, true);
 });

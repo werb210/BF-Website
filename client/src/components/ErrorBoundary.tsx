@@ -16,20 +16,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error) {
-    if (import.meta.env.DEV) {
-      console.error("Unhandled UI error", error);
-    }
+    console.error(error);
   }
 
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-[#020817] px-6 py-16 text-white">
-          <div className="mx-auto max-w-xl rounded-2xl border border-white/20 bg-[#08132a] p-6 text-center">
-            <h1 className="text-2xl font-semibold">Something went wrong</h1>
-            <p className="mt-3 text-slate-300">Please refresh the page to continue.</p>
-          </div>
-        </div>
+        <div>System error</div>
       );
     }
 
