@@ -301,6 +301,12 @@ function TrackingProvider() {
 let started = false;
 let degradedMode = false;
 
+function showBanner(message: string) {
+  if (message) {
+    degradedMode = true;
+  }
+}
+
 async function bootstrap() {
   if (started) {
     throw new Error("DOUBLE_BOOTSTRAP");
@@ -309,8 +315,9 @@ async function bootstrap() {
   started = true;
   const result = await apiRequest("/health");
   if (isDegradedApiResponse(result)) {
-    degradedMode = true;
+    showBanner("System temporarily unavailable");
     console.warn("Website started in degraded backend mode.");
+    return;
   }
 }
 
