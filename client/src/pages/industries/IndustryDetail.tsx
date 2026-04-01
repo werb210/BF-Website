@@ -1,4 +1,4 @@
-import { useParams } from "@/router"
+import { useParams } from "react-router-dom"
 
 interface Props {
   slug?: string

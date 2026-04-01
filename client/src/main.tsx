@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { HelmetProvider } from "react-helmet-async";
-import { BrowserRouter } from "./router";
+import { BrowserRouter } from "react-router-dom";
 import "./styles/global.css";
 import { retryLeadSubmission } from "@/lib/retryLead";
 import { submitLead } from "@/utils/submitLead";

@@ -10,10 +10,8 @@ export default defineConfig({
       "@shared": path.resolve(__dirname, "shared"),
     },
   },
-  optimizeDeps: {
-    exclude: ["react-router-dom"],
-  },
   build: {
+    target: "es2020",
     outDir: "dist",
   },
 });
