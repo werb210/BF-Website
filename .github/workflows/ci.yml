@@ -24,19 +24,24 @@ jobs:
       - name: Force npm registry
         run: |
           npm config set registry https://registry.npmjs.org/
-          npm config set strict-ssl true
+          npm config delete @jridgewell:registry || true
 
       - name: Verify registry
         run: npm run verify:registry
 
-      - name: Clean and generate lockfile
-        run: |
-          rm -rf node_modules package-lock.json
-          npm cache clean --force
-          npm install --package-lock-only
+      - name: Clean npm cache
+        run: npm cache clean --force
 
-      - name: Install dependencies
-        run: npm ci --no-audit --no-fund
+      - name: Install
+        run: |
+          set -e
+          npm ci
+
+      - name: Verify install
+        run: test -d node_modules || exit 1
+
+      - name: Verify dependency tree
+        run: npm ls
 
       - name: Verify no raw fetch usage
         run: npm run verify:no-raw-fetch
