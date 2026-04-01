@@ -139,6 +139,7 @@
   },
   "engineStrict": true,
   "overrides": {
-    "@jridgewell/trace-mapping": "0.3.18"
+    "@jridgewell/trace-mapping": "0.3.18",
+    "@jridgewell/sourcemap-codec": "1.4.14"
   }
 }
