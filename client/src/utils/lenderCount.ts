@@ -1,10 +1,10 @@
-import { apiRequest } from "@/lib/api";
+import { apiGet } from "@/lib/apiClient";
 
 export async function fetchLenderCount(): Promise<number> {
-  const result = await apiRequest<{ count?: number }>("/api/public/lender-count", { method: "GET" });
-  if (!result.success) {
+  try {
+    const result = await apiGet<{ count?: number }>("/api/public/lender-count");
+    return result.count || 0;
+  } catch {
     return 0;
   }
-
-  return result.data?.count || 0;
 }

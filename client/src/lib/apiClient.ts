@@ -1,60 +1,41 @@
-export type ApiResponse<T> = {
-  success?: boolean;
-  data?: T;
-  message?: string;
-  error?: string;
-};
+export type ApiResponse<T> =
+  | { success: true; data: T }
+  | { success: false; error: string };
 
-type ApiRequestOptions = Omit<RequestInit, "body"> & {
-  method?: string;
-  body?: unknown;
-};
+const BASE_URL = import.meta.env.VITE_API_URL || "";
 
-export class ApiClientError<TPayload = unknown> extends Error {
-  status: number;
-  payload: TPayload;
-
-  constructor(status: number, payload: TPayload) {
-    super(`Request failed with status ${status}`);
-    this.name = "ApiClientError";
-    this.status = status;
-    this.payload = payload;
+function buildUrl(path: string) {
+  if (!path.startsWith("/api/")) {
+    throw new Error(`Invalid API path: ${path}`);
   }
+  return `${BASE_URL}${path}`;
 }
 
-export async function apiRequest<T>(
-  url: string,
-  options: ApiRequestOptions = {},
-): Promise<T> {
-  const isFormData = options.body instanceof FormData;
-  const headers = new Headers(options.headers || {});
-
-  if (!isFormData && !headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
-  }
-
-  const serializedBody: BodyInit | null | undefined =
-    options.body === undefined
-      ? undefined
-      : options.body === null
-        ? null
-        : isFormData || typeof options.body === "string"
-          ? (options.body as BodyInit)
-          : JSON.stringify(options.body);
-
-  const res = await fetch(url, {
-    ...options,
-    method: options.method || "GET",
-    headers,
-    body: serializedBody,
+export async function apiPost<T>(path: string, body?: unknown): Promise<T> {
+  const res = await fetch(buildUrl(path), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: body ? JSON.stringify(body) : undefined,
   });
 
-  const text = await res.text();
-  const parsed = text ? (JSON.parse(text) as T) : ({} as T);
+  const json: ApiResponse<T> = await res.json();
 
-  if (!res.ok) {
-    throw new ApiClientError(res.status, parsed);
-  }
+  if (!json.success) throw new Error(json.error);
+  return json.data;
+}
 
-  return parsed;
+export async function apiGet<T>(path: string): Promise<T> {
+  const res = await fetch(buildUrl(path), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const json: ApiResponse<T> = await res.json();
+
+  if (!json.success) throw new Error(json.error);
+  return json.data;
 }

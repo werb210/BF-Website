@@ -1,9 +1,9 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import { apiGet, apiPost } from "@/lib/apiClient";
 import { apiRequest } from "@/lib/api";
 
 export async function fetcher<T>(url: string): Promise<T> {
-  const res = await fetch(url);
-  return res.json() as Promise<T>;
+  return apiGet<T>(url);
 }
 
 export async function apiMutationRequest(
@@ -11,17 +11,11 @@ export async function apiMutationRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<unknown> {
-  const result = await apiRequest(url, {
-    method,
-    body: data,
-    credentials: "include",
-  });
-
-  if (!result.success) {
-    throw new Error(result.message);
+  if (method.toUpperCase() !== "POST") {
+    throw new Error(`Unsupported method: ${method}`);
   }
 
-  return result.data;
+  return apiPost(url, data);
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
@@ -32,14 +26,14 @@ export function getQueryFn<T>(options: {
   return async ({ queryKey }) => {
     const url = queryKey.join("/") as string;
 
-    const result = await apiRequest<T>(url, { method: "GET", credentials: "include" });
+    const result = await apiRequest<T>(url, { method: "GET" });
 
     if (!result.success) {
       if (options.on401 === "returnNull" && result.status === 401) {
         return null as T;
       }
 
-      throw new Error(result.message);
+      throw new Error(result.error);
     }
 
     return result.data;

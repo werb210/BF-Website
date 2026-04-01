@@ -5,8 +5,8 @@ export type HandoffPayload = {
   businessName: string;
   email: string;
   phone: string;
-  requestedAmount?: string;
   productType: string;
+  requestedAmount?: string;
 };
 
 export async function redirectToClientApply(payload: HandoffPayload) {
@@ -18,14 +18,12 @@ export async function redirectToClientApply(payload: HandoffPayload) {
     throw new Error("MISSING REQUIRED FIELDS");
   }
 
-  const normalizedRequestedAmount = payload.requestedAmount?.trim();
-  const parsedRequestedAmount = normalizedRequestedAmount ? Number(normalizedRequestedAmount) : undefined;
 
   const { leadId } = await submitLead({
+    name: businessName,
     businessName,
     email,
     phone,
-    requestedAmount: Number.isFinite(parsedRequestedAmount) ? parsedRequestedAmount : undefined,
     productType: payload.productType.trim(),
   });
 

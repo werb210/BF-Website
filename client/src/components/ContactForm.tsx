@@ -2,7 +2,7 @@ import { FormEvent, useMemo, useState } from "react";
 import { trackEvent } from "@/utils/analytics";
 import { saveLead, clearLead, getLead } from "@/lib/leadStorage";
 import { redirectToClientApply } from "@/utils/handoff";
-import { apiRequest } from "@/lib/api";
+import { submitLead } from "@/utils/submitLead";
 
 type ContactFormData = {
   companyName: string;
@@ -111,6 +111,15 @@ export default function ContactForm() {
         company: formData.companyName,
       });
 
+      await submitLead({
+        name: formData.name.trim(),
+        email,
+        phone,
+        businessName,
+        productType: "general",
+        message: formData.message.trim(),
+      });
+
       await redirectToClientApply({
         businessName,
         email,
@@ -122,13 +131,9 @@ export default function ContactForm() {
       setLeadSavedMessage(null);
       setFormData(initialForm);
     } catch (err) {
-      console.error("[FORM ERROR]", err);
+      console.error("WEBSITE ERROR:", err);
+      alert(err instanceof Error ? err.message : "Unable to continue right now. Please try again.");
       setError("Unable to continue right now. Please try again.");
-
-      void apiRequest("/api/fallback-email", {
-        method: "POST",
-        body: createLeadData(formData),
-      });
     } finally {
       setSubmitting(false);
     }

@@ -1,96 +1,33 @@
-import { API_BASE_URL } from "@/config/api";
-import { ApiClientError, apiRequest as apiClientRequest, type ApiResponse } from "@/lib/apiClient";
+import { apiGet, apiPost } from "@/lib/apiClient";
 
-type ApiSuccess<T> = { success: true; data: T };
-type ApiFailure = { success: false; message: string; status?: number };
+export type ApiResult<T> =
+  | { success: true; data: T }
+  | { success: false; error: string; status?: number };
 
-type ApiRequestOptions = Omit<RequestInit, "body"> & {
+type ApiRequestOptions = Omit<RequestInit, "body" | "method"> & {
+  method?: string;
   body?: unknown;
 };
 
-export type ApiResult<T> = ApiSuccess<T> | ApiFailure;
-
-const DEFAULT_TIMEOUT_MS = 10_000;
-
-function buildUrl(path: string): string {
-  if (/^https?:\/\//i.test(path)) {
-    return path;
-  }
-
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  return `${API_BASE_URL}${normalizedPath}`;
-}
-
 export async function apiRequest<T>(path: string, options: ApiRequestOptions = {}): Promise<ApiResult<T>> {
-  const timeoutMs = typeof options.keepalive === "boolean" && options.keepalive ? 0 : DEFAULT_TIMEOUT_MS;
-  const timeoutController = new AbortController();
-  const userSignal = options.signal;
-
-  let timeoutId: ReturnType<typeof setTimeout> | undefined;
-  let didTimeout = false;
-
-  const handleUserAbort = () => {
-    timeoutController.abort();
-  };
-
-  if (userSignal) {
-    if (userSignal.aborted) {
-      return { success: false, message: "aborted" };
-    }
-    userSignal.addEventListener("abort", handleUserAbort, { once: true });
-  }
-
-  if (timeoutMs > 0) {
-    timeoutId = setTimeout(() => {
-      didTimeout = true;
-      timeoutController.abort();
-    }, timeoutMs);
-  }
+  const method = (options.method || "GET").toUpperCase();
 
   try {
-    const response = await apiClientRequest<ApiResponse<T>>(buildUrl(path), {
-      ...options,
-      signal: timeoutController.signal,
-      credentials: options.credentials ?? "include",
-    });
-
-    const isFailure = response?.success === false;
-
-    if (isFailure) {
-      return {
-        success: false,
-        message: response.message || response.error || "Request failed",
-      };
+    if (method === "GET") {
+      const data = await apiGet<T>(path);
+      return { success: true, data };
     }
 
-    return { success: true, data: (response?.data ?? response) as T };
+    if (method === "POST") {
+      const data = await apiPost<T>(path, options.body);
+      return { success: true, data };
+    }
+
+    return { success: false, error: `Unsupported method: ${method}` };
   } catch (error) {
-    if (error instanceof ApiClientError) {
-      const payload = error.payload as ApiResponse<T> | undefined;
-      return {
-        success: false,
-        message: payload?.message || payload?.error || error.message,
-        status: error.status,
-      };
-    }
-    if (didTimeout) {
-      return { success: false, message: "timeout" };
-    }
-
-    if (error instanceof DOMException && error.name === "AbortError") {
-      return { success: false, message: "aborted" };
-    }
-
     return {
       success: false,
-      message: error instanceof Error ? error.message : "Request failed",
+      error: error instanceof Error ? error.message : "Request failed",
     };
-  } finally {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    if (userSignal) {
-      userSignal.removeEventListener("abort", handleUserAbort);
-    }
   }
 }

@@ -57,8 +57,10 @@ export default function ScoreModal({ open, onClose }: ScoreModalProps) {
       });
       onClose();
     } catch (err) {
-      console.error("[FORM ERROR]", err);
-      setErrorMessage("Unable to continue right now.");
+      console.error("WEBSITE ERROR:", err);
+      const message = err instanceof Error ? err.message : "Unable to continue right now.";
+      alert(message);
+      setErrorMessage(message);
     } finally {
       setSubmitting(false);
     }

@@ -19,6 +19,7 @@ function parsePendingLeadData(data: Record<string, unknown>) {
   }
 
   return {
+    name: businessName,
     email,
     phone,
     businessName,

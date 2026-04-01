@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { estimateCommissionValue, trackConversion, trackEvent, trackLeadProfile } from "@/main";
 import { useLocation } from "wouter";
-import { apiRequest } from "@/lib/api";
+import { apiPost } from "@/lib/apiClient";
 
 type ReadinessForm = {
   organization: string;
@@ -61,23 +61,27 @@ export default function CreditReadiness() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const response = await apiRequest<{ score?: number; tier?: "green" | "yellow" | "red" }>("/api/public/readiness", {
-      method: "POST",
-      body: {
-        companyName: form.organization,
-        fullName: form.fullName,
-        email: form.email,
-        phone: form.phone,
-        industry: form.industry,
-        yearsInBusiness: form.yearsInBusiness,
-        annualRevenue: form.annualRevenue,
-        monthlyRevenue: form.monthlyRevenue,
-        arBalance: form.accountsReceivable,
-        collateral: form.availableCollateral,
-      },
-    });
+    const payload = {
+      companyName: form.organization,
+      revenue: form.annualRevenue,
+      fundingAmount: form.accountsReceivable,
+      productType: "credit-readiness",
+      fullName: form.fullName,
+      email: form.email,
+      phone: form.phone,
+      industry: form.industry,
+      yearsInBusiness: form.yearsInBusiness,
+      monthlyRevenue: form.monthlyRevenue,
+      collateral: form.availableCollateral,
+    };
 
-    if (!response.success) {
+    let body: { score?: number; tier?: "green" | "yellow" | "red" };
+
+    try {
+      body = await apiPost<{ score?: number; tier?: "green" | "yellow" | "red" }>("/api/lead", payload);
+    } catch (err) {
+      console.error("WEBSITE ERROR:", err);
+      alert(err instanceof Error ? err.message : "Unable to submit readiness form.");
       return;
     }
 
@@ -92,8 +96,6 @@ export default function CreditReadiness() {
       estimated_commission_value: estimatedValue,
       capital_range: form.annualRevenue,
     });
-
-    const body = response.data || {};
 
     const calculatedStrength: "strong" | "moderate" | "weak" = body.tier === "green" ? "strong" : body.tier === "yellow" ? "moderate" : "weak";
     trackLeadProfile({

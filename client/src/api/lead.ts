@@ -1,12 +1,6 @@
-import { apiRequest, type ApiResult } from "@/lib/api";
+import { apiPost } from "@/lib/apiClient";
+import { WebsiteLeadPayload } from "@/types/lead";
 
-type LeadResponse = {
-  leadId?: string;
-};
-
-export async function submitLead(data: Record<string, unknown>): Promise<ApiResult<LeadResponse>> {
-  return apiRequest<LeadResponse>("/leads", {
-    method: "POST",
-    body: data,
-  });
+export async function submitLead(data: WebsiteLeadPayload) {
+  return apiPost<{ leadId: string }>("/api/lead", data);
 }

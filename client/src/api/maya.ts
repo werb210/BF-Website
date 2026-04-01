@@ -1,14 +1,7 @@
-import { apiRequest, type ApiResult } from "@/lib/api";
+import { apiGet, apiPost } from "@/lib/apiClient";
 
 const mayaEnabled = import.meta.env.VITE_MAYA_ENABLED === "true";
 const mayaApiBase = (import.meta.env.VITE_MAYA_API_BASE ?? "").trim().replace(/\/+$/, "");
-
-type MayaChatResponse = {
-  reply?: string;
-  data?: {
-    reply?: string;
-  };
-};
 
 export function isMayaConfigured() {
   return mayaEnabled && Boolean(mayaApiBase);
@@ -25,20 +18,14 @@ export function buildMayaWebSocketUrl(path: string) {
 }
 
 export async function checkMayaHealth(_signal?: AbortSignal): Promise<boolean> {
-  if (!isMayaConfigured()) {
+  try {
+    await apiGet<{ healthy: boolean }>("/api/maya/health");
+    return true;
+  } catch {
     return false;
   }
-
-  const response = await apiRequest(`${mayaApiBase}/health`, {
-    method: "GET",
-  });
-
-  return response.success;
 }
 
-export async function sendMayaMessage(message: string): Promise<ApiResult<MayaChatResponse>> {
-  return apiRequest<MayaChatResponse>("/maya/chat", {
-    method: "POST",
-    body: { message },
-  });
+export async function sendMayaMessage(message: string) {
+  return apiPost<{ reply?: string }>("/api/maya/message", { message });
 }

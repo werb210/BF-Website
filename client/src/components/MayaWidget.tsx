@@ -20,20 +20,18 @@ export default function MayaWidget() {
     setIsSending(true);
     setMessages((prev) => [...prev, { role: "user", text: trimmedInput }]);
 
-    const result = await sendMayaMessage(trimmedInput);
-
-    if (!result.success) {
-      setMessages((prev) => [
-        ...prev,
-        { role: "maya", text: result.message || "Maya is unavailable right now. Please try again." },
-      ]);
+    try {
+      const result = await sendMayaMessage(trimmedInput);
+      const reply = result.reply || "Thanks — Maya received your message.";
+      setMessages((prev) => [...prev, { role: "maya", text: reply }]);
+    } catch (err) {
+      console.error("WEBSITE ERROR:", err);
+      const message = err instanceof Error ? err.message : "Maya is unavailable right now. Please try again.";
+      alert(message);
+      setMessages((prev) => [...prev, { role: "maya", text: message }]);
+    } finally {
       setIsSending(false);
-      return;
     }
-
-    const reply = result.data?.reply || result.data?.data?.reply || "Thanks — Maya received your message.";
-    setMessages((prev) => [...prev, { role: "maya", text: reply }]);
-    setIsSending(false);
   }
 
   return (
