@@ -6,12 +6,12 @@ on:
       - '**'
   pull_request:
 
+env:
+  NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      npm_config_registry: https://registry.npmjs.org/
-      NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,13 +20,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: https://registry.npmjs.org/
-
-      - name: Hard reset npm config
-        run: |
-          npm config delete @jridgewell:registry || true
-          npm config delete //registry.npmjs.org/:_authToken || true
-          npm config set registry https://registry.npmjs.org/
+          cache: 'npm'
 
       - name: Verify registry
         run: npm run verify:registry
@@ -34,9 +28,8 @@ jobs:
       - name: Clean npm cache
         run: npm cache clean --force
 
-      - name: Install deps (retry)
-        run: |
-          npm ci --prefer-online --no-audit --progress=false || (sleep 3 && npm ci --prefer-online --no-audit --progress=false)
+      - name: Install deps
+        run: npm ci
 
       - name: Validate install
         run: |
