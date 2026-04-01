@@ -19,14 +19,25 @@ export function buildMayaWebSocketUrl(path: string) {
 
 export async function checkMayaHealth(_signal?: AbortSignal): Promise<boolean> {
   try {
-    await apiGet<{ healthy: boolean }>("/api/maya/health");
+    const res = await apiGet<{ healthy: boolean }>("/api/maya/health");
+    if (!res.healthy) {
+      console.error("MAYA_ERROR:", "Unhealthy response from /api/maya/health");
+      return false;
+    }
+
     return true;
   } catch (error) {
-    console.error("MAYA HEALTH ERROR:", error);
+    console.error("MAYA_ERROR:", error);
     return false;
   }
 }
 
 export async function sendMayaMessage(message: string) {
-  return apiPost<{ reply?: string }>("/api/maya/message", { message });
+  try {
+    const res = await apiPost<{ reply?: string }>("/api/maya/message", { message });
+    return res;
+  } catch (error) {
+    console.error("MAYA_ERROR:", error);
+    throw error;
+  }
 }

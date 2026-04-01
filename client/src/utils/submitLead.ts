@@ -3,8 +3,14 @@ import { WebsiteLeadPayload } from "@/types/lead";
 
 export async function submitLead(payload: WebsiteLeadPayload) {
   if (!payload.email || !payload.name) {
-    throw new Error("Invalid lead payload");
+    throw new Error("INVALID_LEAD_PAYLOAD");
   }
 
-  return apiPost<{ leadId: string }>("/api/lead", payload);
+  try {
+    return await apiPost<{ leadId: string }>("/api/lead", payload);
+  } catch (err) {
+    console.error("LEAD_SUBMIT_ERROR:", err);
+    alert("Submission failed");
+    throw err;
+  }
 }
