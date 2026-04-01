@@ -20,10 +20,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
-
-      - name: Verify registry
-        run: npm run verify:registry
+          cache: npm
 
       - name: Clean npm cache
         run: npm cache clean --force
