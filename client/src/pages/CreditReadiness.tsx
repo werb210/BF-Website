@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { estimateCommissionValue, trackConversion, trackEvent, trackLeadProfile } from "@/main";
 import { useLocation } from "wouter";
-import { apiRequest } from "@/lib/api";
+import { api } from "@/lib/api";
 
 type ReadinessForm = {
   organization: string;
@@ -78,7 +78,7 @@ export default function CreditReadiness() {
     let body: { score?: number; tier?: "green" | "yellow" | "red" };
 
     try {
-      body = await apiRequest<{ score?: number; tier?: "green" | "yellow" | "red" }>("/api/leads", {
+      body = await api<{ score?: number; tier?: "green" | "yellow" | "red" }>("/api/leads", {
         method: "POST",
         body: payload,
       });
