@@ -22,25 +22,28 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Clean npm cache
-        run: npm cache clean --force
+      - name: Ensure lockfile exists
+        run: test -f package-lock.json || (echo "Missing lockfile" && exit 1)
 
-      - name: Validate dependencies
+      - name: Validate lockfile consistency
         run: |
           npm install --package-lock-only
-          git diff --exit-code || (echo "LOCKFILE OUT OF SYNC" && exit 1)
+          git diff --exit-code || (echo "Lockfile drift" && exit 1)
 
-      - name: Install
-        run: npm ci --legacy-peer-deps=false
+      - name: Validate dependency versions
+        run: npm run check:versions
 
-      - name: Validate React versions
+      - name: Validate React versions match
         run: |
           node -e "
           const p=require('./package.json');
           if(p.dependencies.react !== p.dependencies['react-dom']) {
-            throw new Error('React version mismatch');
+            throw new Error('React mismatch');
           }
           "
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Validate install
         run: |
@@ -51,4 +54,12 @@ jobs:
         run: npm run verify:no-raw-fetch
 
       - name: Build
-        run: npm run build
+        run: |
+          set -e
+          npm run build 2>&1 | tee build.log
+
+      - name: Upload logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
