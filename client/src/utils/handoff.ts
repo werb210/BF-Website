@@ -1,4 +1,4 @@
-import { ENV } from "@/config/env";
+import { APPLY_URL } from "@/config/site";
 import { submitLead } from "@/utils/submitLead";
 
 export type HandoffPayload = {
@@ -10,7 +10,7 @@ export type HandoffPayload = {
 };
 
 export function redirectToApplication(leadId: string) {
-  window.location.href = `${ENV.CLIENT_APP_URL}/apply?leadId=${leadId}`;
+  window.location.href = `${APPLY_URL}?leadId=${leadId}`;
 }
 
 export async function redirectToClientApply(payload: HandoffPayload) {

@@ -1,9 +1,18 @@
+function req(name: string, value: string | undefined, fallback?: string) {
+  if (value) return value;
+  if (import.meta.env.MODE === "test") return fallback ?? "http://localhost";
+  if (fallback) return fallback;
+  throw new Error(`Missing env: ${name}`);
+}
+
 export const ENV = {
-  API_URL: import.meta.env.VITE_API_URL || "",
-  CLIENT_APP_URL: import.meta.env.VITE_CLIENT_APP_URL || "",
+  API_URL: req(
+    "VITE_API_URL",
+    import.meta.env.VITE_API_URL,
+    "http://localhost:3000"
+  ),
 };
 
 export function assertEnv() {
-  if (!ENV.API_URL) throw new Error("VITE_API_URL missing");
-  if (!ENV.CLIENT_APP_URL) throw new Error("VITE_CLIENT_APP_URL missing");
+  return ENV;
 }

@@ -1,9 +1,11 @@
 import { useEffect } from "react";
-import { ENV } from "@/config/env";
+import { CLIENT_APP_URL } from "@/config/site";
 
 export default function Apply() {
   useEffect(() => {
-    window.location.href = ENV.CLIENT_APP_URL;
+    if (CLIENT_APP_URL) {
+      window.location.href = CLIENT_APP_URL;
+    }
   }, []);
 
   return null;

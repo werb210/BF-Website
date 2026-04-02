@@ -80,7 +80,7 @@ export default function CreditReadiness() {
     try {
       body = await apiRequest<{ score?: number; tier?: "green" | "yellow" | "red" }>("/api/leads", {
         method: "POST",
-        body: JSON.stringify(payload),
+        body: payload,
       });
     } catch (err) {
       console.error("WEBSITE ERROR:", err);

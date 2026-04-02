@@ -4,6 +4,6 @@ import { WebsiteLeadPayload } from "@/types/lead";
 export async function submitLead(data: WebsiteLeadPayload) {
   return apiRequest<{ leadId: string }>("/api/leads", {
     method: "POST",
-    body: JSON.stringify(data),
+    body: data,
   });
 }

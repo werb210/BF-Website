@@ -1,11 +1,8 @@
-import { vi } from "vitest";
-
-global.fetch = vi.fn(() =>
+global.fetch = (() =>
   Promise.resolve({
     ok: true,
-    json: () => Promise.resolve({ success: true, data: {} }),
-  } as Response),
-);
+    json: () => Promise.resolve({ status: "ok", data: {} }),
+  } as Response)) as typeof fetch;
 
 /**
  * JSDOM stability/polyfills for website tests.

@@ -1,42 +1,45 @@
-import { ENV } from "@/config/env";
+import { ENV } from "../config/env";
 
-type ApiSuccess<T> = { success: true; data: T };
-type ApiError = { success: false; error: { message: string } };
-export type ApiResponse<T> = ApiSuccess<T> | ApiError;
+type ApiResponse<T> = {
+  status: "ok" | "error" | "not_ready";
+  data?: T;
+  error?: string;
+  rid?: string;
+};
 
-export async function api<T>(
+export async function api<T = unknown>(
   path: string,
-  options: RequestInit = {},
-): Promise<ApiResponse<T>> {
+  options?: {
+    method?: string;
+    body?: unknown;
+    headers?: Record<string, string>;
+  }
+): Promise<T> {
   const res = await fetch(`${ENV.API_URL}${path}`, {
+    method: options?.method || "GET",
     headers: {
       "Content-Type": "application/json",
-      ...(options.headers ?? {}),
+      ...(options?.headers || {}),
     },
-    ...options,
+    body: options?.body ? JSON.stringify(options.body) : undefined,
   });
 
-  const json = await res.json();
+  const json: ApiResponse<T> = await res.json();
 
-  if (!res.ok) {
-    return {
-      success: false,
-      error: { message: json?.message || "Request failed" },
-    };
+  if (json.status !== "ok") {
+    throw new Error(json.error || "API error");
   }
 
-  return {
-    success: true,
-    data: json,
-  };
+  return json.data as T;
 }
 
-export async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const response = await api<T>(path, options);
-
-  if (!response.success) {
-    throw new Error(response.error.message);
+export async function apiRequest<T>(
+  path: string,
+  options?: {
+    method?: string;
+    body?: unknown;
+    headers?: Record<string, string>;
   }
-
-  return response.data;
+): Promise<T> {
+  return api<T>(path, options);
 }

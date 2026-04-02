@@ -6,14 +6,8 @@ export async function submitLead(form: {
   phone?: string;
   company?: string;
 }) {
-  const res = await api<{ leadId: string }>("/api/leads", {
+  return api<{ leadId: string }>("/api/leads", {
     method: "POST",
-    body: JSON.stringify(form),
+    body: form,
   });
-
-  if (!res.success) {
-    throw new Error(res.error.message);
-  }
-
-  return res.data;
 }

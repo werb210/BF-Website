@@ -4,7 +4,14 @@ export function normalize(base: string, path: string) {
   return `${base.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 }
 
-export async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
+export async function apiRequest<T>(
+  path: string,
+  options?: {
+    method?: string;
+    body?: unknown;
+    headers?: Record<string, string>;
+  }
+): Promise<T> {
   return api<T>(path, options);
 }
 
