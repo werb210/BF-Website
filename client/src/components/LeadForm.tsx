@@ -1,6 +1,5 @@
 import { FormEvent, useState } from "react";
 import { submitLead } from "@/utils/submitLead";
-import { withLoading } from "@/lib/retry";
 
 export default function LeadForm() {
   const [form, setForm] = useState({
@@ -18,25 +17,22 @@ export default function LeadForm() {
 
     setStatus(null);
     setError(null);
+    setSubmitting(true);
 
     try {
-      await withLoading(setSubmitting, async () => {
-        await submitLead({
-          ...form,
-          name: form.name,
-        });
+      await submitLead({
+        ...form,
+        name: form.name,
       });
       setStatus("Lead submitted successfully.");
 
       const query = new URLSearchParams(form).toString();
       window.location.href = `https://client.boreal.financial/apply?${query}`;
     } catch (err) {
-      console.error("WEBSITE ERROR:", err);
-      const message = err instanceof Error ? err.message : "Unable to submit lead right now.";
-      alert(message);
-      setError(message);
+      setError(err instanceof Error ? err.message : "Unable to submit lead right now.");
+    } finally {
+      setSubmitting(false);
     }
-
   }
 
   return (

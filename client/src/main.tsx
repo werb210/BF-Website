@@ -5,33 +5,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 import "./styles/global.css";
-import { retryLeadSubmission } from "@/lib/retryLead";
-import { submitLead } from "@/utils/submitLead";
-import { apiRequest, isDegradedApiResponse } from "@/api/request";
-
-// ---- Advanced Tracking Layer ----
-function parsePendingLeadData(data: Record<string, unknown>) {
-  const email = typeof data.email === "string" ? data.email.trim() : "";
-  const phone = typeof data.phone === "string" ? data.phone.trim() : "";
-  const businessName = typeof data.businessName === "string" ? data.businessName.trim() : "";
-  const productType = typeof data.productType === "string" ? data.productType.trim() : "general";
-
-  if (!email || !phone || !businessName) {
-    throw new Error("Missing lead fields for retry");
-  }
-
-  return {
-    name: businessName,
-    email,
-    phone,
-    businessName,
-    productType,
-  };
-}
-
-async function sendLead(data: Record<string, unknown>) {
-  await submitLead(parsePendingLeadData(data));
-}
+import { apiRequest } from "@/api/request";
 
 declare global {
   interface Window {
@@ -196,20 +170,6 @@ function TrackingProvider() {
   }, []);
 
   useEffect(() => {
-    void retryLeadSubmission(sendLead);
-
-    const onOnline = () => {
-      void retryLeadSubmission(sendLead);
-    };
-
-    window.addEventListener("online", onOnline);
-
-    return () => {
-      window.removeEventListener("online", onOnline);
-    };
-  }, []);
-
-  useEffect(() => {
     if (window.location.pathname.toLowerCase().includes("credit-results")) {
       incrementSessionScore(4);
       trackEvent("funnel_stage", {
@@ -288,24 +248,12 @@ function TrackingProvider() {
 
   return (
     <>
-      {degradedMode ? (
-        <div role="status" className="bg-amber-500 px-4 py-2 text-sm font-medium text-black">
-          System temporarily unavailable
-        </div>
-      ) : null}
       <App />
     </>
   );
 }
 
 let started = false;
-let degradedMode = false;
-
-function showBanner(message: string) {
-  if (message) {
-    degradedMode = true;
-  }
-}
 
 async function bootstrap() {
   if (started) {
@@ -313,12 +261,7 @@ async function bootstrap() {
   }
 
   started = true;
-  const result = await apiRequest("/health");
-  if (isDegradedApiResponse(result)) {
-    showBanner("System temporarily unavailable");
-    console.warn("Website started in degraded backend mode.");
-    return;
-  }
+  await apiRequest("/health");
 }
 
 bootstrap().then(() => {

@@ -3,7 +3,6 @@ import { trackEvent } from "@/utils/analytics";
 import { saveLead, clearLead, getLead } from "@/lib/leadStorage";
 import { redirectToClientApply } from "@/utils/handoff";
 import { submitLead } from "@/utils/submitLead";
-import { withLoading } from "@/lib/retry";
 
 type ContactFormData = {
   companyName: string;
@@ -106,36 +105,35 @@ export default function ContactForm() {
     setLeadSavedMessage("We've saved your info and will complete submission shortly.");
 
     try {
-      await withLoading(setSubmitting, async () => {
-        trackEvent("contact_form_submitted", {
-          source: "contact_page",
-          company: formData.companyName,
-        });
+      setSubmitting(true);
+      trackEvent("contact_form_submitted", {
+        source: "contact_page",
+        company: formData.companyName,
+      });
 
-        await submitLead({
-          name: formData.name.trim(),
-          email,
-          phone,
-          businessName,
-          productType: "general",
-          message: formData.message.trim(),
-        });
+      await submitLead({
+        name: formData.name.trim(),
+        email,
+        phone,
+        businessName,
+        productType: "general",
+        message: formData.message.trim(),
+      });
 
-        await redirectToClientApply({
-          businessName,
-          email,
-          phone,
-          productType: "general",
-        });
+      await redirectToClientApply({
+        businessName,
+        email,
+        phone,
+        productType: "general",
       });
 
       clearLead();
       setLeadSavedMessage(null);
       setFormData(initialForm);
     } catch (err) {
-      console.error("WEBSITE ERROR:", err);
-      alert(err instanceof Error ? err.message : "Unable to continue right now. Please try again.");
-      setError("Unable to continue right now. Please try again.");
+      setError(err instanceof Error ? err.message : "Unable to continue right now. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
