@@ -5,7 +5,6 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 import "./styles/global.css";
-import { api } from "@/lib/api";
 import { getEnv } from "@/config/env";
 
 declare global {
@@ -254,33 +253,26 @@ function TrackingProvider() {
   );
 }
 
-let started = false;
-
-async function bootstrap() {
+try {
   getEnv();
-  if (started) {
-    throw new Error("DOUBLE_BOOTSTRAP");
-  }
-
-  started = true;
-  await api("/health");
+} catch (e) {
+  console.error("ENV VALIDATION FAILED:", e);
+  throw e;
 }
 
-bootstrap().then(() => {
-  const root = document.getElementById("root");
-  if (!root) {
-    throw new Error("Missing root");
-  }
+const root = document.getElementById("root");
+if (!root) {
+  throw new Error("Missing root");
+}
 
-  ReactDOM.createRoot(root).render(
-    <React.StrictMode>
-      <BrowserRouter>
-        <HelmetProvider>
-          <ErrorBoundary>
-            <TrackingProvider />
-          </ErrorBoundary>
-        </HelmetProvider>
-      </BrowserRouter>
-    </React.StrictMode>
-  );
-});
+ReactDOM.createRoot(root).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <HelmetProvider>
+        <ErrorBoundary>
+          <TrackingProvider />
+        </ErrorBoundary>
+      </HelmetProvider>
+    </BrowserRouter>
+  </React.StrictMode>
+);

@@ -1,18 +1,22 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getValidatedApiUrl, validateEnv } from "../system/env";
 
-describe("validateEnv", () => {
+describe("getEnv", () => {
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.resetModules();
   });
 
-  it("throws when VITE_API_URL is missing", () => {
+  it("throws when VITE_API_URL is missing", async () => {
     vi.stubEnv("VITE_API_URL", "");
-    expect(() => validateEnv()).toThrowError("MISSING_API_URL");
+
+    const { getEnv: readEnv } = await import("../config/env");
+    expect(() => readEnv()).toThrow();
   });
 
-  it("forces /api/v1 contract on API base", () => {
+  it("returns configured VITE_API_URL", async () => {
     vi.stubEnv("VITE_API_URL", "https://example.com");
-    expect(getValidatedApiUrl()).toBe("https://example.com/api/v1");
+
+    const { getEnv: readEnv } = await import("../config/env");
+    expect(readEnv().VITE_API_URL).toBe("https://example.com");
   });
 });

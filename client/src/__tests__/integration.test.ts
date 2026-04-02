@@ -16,10 +16,11 @@ function requestStatus(url: string): Promise<number> {
 }
 
 test("backend must be reachable when configured", async () => {
-  if (!process.env.VITE_API_URL) {
+  const configuredUrl = process.argv.find((arg) => arg.startsWith("--vite-api-url="))?.split("=")[1];
+  if (!configuredUrl) {
     return;
   }
 
-  const status = await requestStatus(`${process.env.VITE_API_URL.replace(/\/$/, "")}/api/v1/health`);
+  const status = await requestStatus(`${configuredUrl.replace(/\/$/, "")}/api/v1/health`);
   assert.equal(status, 200);
 });

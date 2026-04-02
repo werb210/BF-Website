@@ -1,1 +1,1 @@
-export { API_BASE } from "@/config/api";
+export { getApiUrl } from "@/config/api";

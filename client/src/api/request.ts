@@ -13,7 +13,3 @@ export async function apiRequest<T>(
 ): Promise<T> {
   return api<T>(path, options);
 }
-
-export async function bootstrap() {
-  await api("/health");
-}
