@@ -6,7 +6,7 @@ import { CheckCircle, TrendingUp, Clock, Shield } from "lucide-react";
 import { Seo } from "@/components/SEO";
 import { financialServiceJsonLd } from "@/lib/structured-data";
 import { SeoImage } from "@/components/SeoImage";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 
 export default function AccountReceivableFinancing() {
   return (

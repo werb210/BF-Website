@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { useEffect } from "react";
 import { scrollToTop } from "@/utils/scrollToTop";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 
 type Solution = {
   name: string;

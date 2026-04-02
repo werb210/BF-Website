@@ -6,7 +6,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 import "./styles/global.css";
 import { api } from "@/lib/api";
-import { assertEnv } from "@/config/env";
+import { getEnv } from "@/config/env";
 
 declare global {
   interface Window {
@@ -257,7 +257,7 @@ function TrackingProvider() {
 let started = false;
 
 async function bootstrap() {
-  assertEnv();
+  getEnv();
   if (started) {
     throw new Error("DOUBLE_BOOTSTRAP");
   }

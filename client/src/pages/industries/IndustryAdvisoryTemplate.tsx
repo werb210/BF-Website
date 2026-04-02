@@ -1,4 +1,4 @@
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 
 type Props = {
   title: string;

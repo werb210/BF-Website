@@ -1,10 +1,9 @@
-import { ENV, assertEnv } from "@/config/env";
+import { getEnv } from "@/config/env";
 
 export function getValidatedApiUrl() {
-  assertEnv();
-  return ENV.API_URL;
+  return getEnv().VITE_API_URL;
 }
 
 export function validateEnv() {
-  assertEnv();
+  getEnv();
 }

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { CLIENT_APP_URL } from "@/config/site";
+import { CLIENT_APP_URL } from "@/config/links";
 
 export default function Apply() {
   useEffect(() => {

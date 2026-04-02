@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, Users, Clock, DollarSign } from "lucide-react";
 import { Seo } from "@/components/SEO";
 import { SeoImage } from "@/components/SeoImage";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 import SeoJsonLd from "@/components/SeoJsonLd";
 import { faqSchema, serviceSchema } from "@/seo/structuredData";
 

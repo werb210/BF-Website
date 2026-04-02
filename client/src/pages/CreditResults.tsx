@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 import { estimateCommissionValue, trackEvent, trackConversion, trackLeadProfile } from "@/main";
 
 function loadResult() {

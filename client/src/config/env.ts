@@ -20,13 +20,3 @@ export function getEnv() {
   }
   return cached;
 }
-
-export const ENV = {
-  get API_URL() {
-    return getEnv().VITE_API_URL;
-  },
-};
-
-export function assertEnv() {
-  return getEnv();
-}

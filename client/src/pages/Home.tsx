@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import SEO from "@/components/SEO";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 import { industries } from "@/data/industries";
 import { products } from "@/data/products";
 import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";

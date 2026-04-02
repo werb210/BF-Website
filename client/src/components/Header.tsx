@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 
 const navItems = [
   { href: "/products", label: "Products" },

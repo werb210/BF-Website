@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);

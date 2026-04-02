@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 
 const products = [
   { label: "Line of Credit", href: "/products/loc" },

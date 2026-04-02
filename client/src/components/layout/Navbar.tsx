@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 
 export function Navbar() {
   return (

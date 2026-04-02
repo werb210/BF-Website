@@ -1,3 +1,3 @@
-import { ENV } from "@/config/env";
+import { getEnv } from "@/config/env";
 
-export const API_BASE = ENV.API_URL;
+export const API_BASE = getEnv().VITE_API_URL;

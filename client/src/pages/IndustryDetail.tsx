@@ -1,7 +1,7 @@
 import React from "react";
 import { AlertTriangle, ArrowRight, BarChart3, CircleDollarSign, TrendingUp } from "lucide-react";
 import { Link } from "wouter";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 import { industries } from "@/data/industries";
 import { products } from "@/data/products";
 import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";

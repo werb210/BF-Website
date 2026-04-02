@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { LOCATIONS, PRODUCTS } from "@/data/seoLandingConfig";
 import { SEO } from "@/seo/SEO";
 import NotFound from "@/pages/NotFound";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 
 function normalizeSlug(input: string): string {
   return input.trim().toLowerCase();

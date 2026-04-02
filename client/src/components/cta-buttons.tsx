@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 import { trackEvent } from "@/utils/analytics";
 import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 

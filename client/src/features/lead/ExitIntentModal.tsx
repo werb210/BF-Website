@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Modal from "../../components/ui/Modal";
-import { APPLY_URL } from "@/config/site";
+import { APPLY_URL } from "@/config/links";
 
 export default function ExitIntentModal() {
   const [open, setOpen] = useState(false);
