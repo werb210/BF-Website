@@ -1,4 +1,5 @@
-export const SITE_URL = import.meta.env.VITE_SITE_URL || "https://borealfinancial.ca";
+import { getEnv } from "@/config/env";
+export const SITE_URL = getEnv().VITE_SITE_URL;
 
 export const organizationSchema = {
   "@context": "https://schema.org",

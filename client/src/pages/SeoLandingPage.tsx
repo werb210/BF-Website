@@ -6,6 +6,7 @@ import { LOCATIONS, PRODUCTS } from "@/data/seoLandingConfig";
 import { SEO } from "@/seo/SEO";
 import NotFound from "@/pages/NotFound";
 import { APPLY_URL } from "@/config/links";
+import { getEnv } from "@/config/env";
 
 function normalizeSlug(input: string): string {
   return input.trim().toLowerCase();
@@ -27,7 +28,7 @@ export default function SeoLandingPage() {
 
   const title = `${product.name} in ${location} | Boreal Financial`;
   const description = `Apply for ${product.name} in ${location}. Fast approvals and flexible funding.`;
-  const siteUrl = import.meta.env.VITE_SITE_URL ?? "https://borealfinancial.ca";
+  const siteUrl = getEnv().VITE_SITE_URL;
   const canonical = `${siteUrl}/${product.slug}/${location.toLowerCase()}`;
 
   const jsonLd = {
