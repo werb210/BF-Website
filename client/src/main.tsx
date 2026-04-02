@@ -321,16 +321,21 @@ async function bootstrap() {
   }
 }
 
-await bootstrap();
+bootstrap().then(() => {
+  const root = document.getElementById("root");
+  if (!root) {
+    throw new Error("Missing root");
+  }
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <HelmetProvider>
-        <ErrorBoundary>
-          <TrackingProvider />
-        </ErrorBoundary>
-      </HelmetProvider>
-    </BrowserRouter>
-  </React.StrictMode>
-);
+  ReactDOM.createRoot(root).render(
+    <React.StrictMode>
+      <BrowserRouter>
+        <HelmetProvider>
+          <ErrorBoundary>
+            <TrackingProvider />
+          </ErrorBoundary>
+        </HelmetProvider>
+      </BrowserRouter>
+    </React.StrictMode>
+  );
+});

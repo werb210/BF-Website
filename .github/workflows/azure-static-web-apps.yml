@@ -23,8 +23,8 @@ jobs:
           action: "upload"
           app_location: "/"
           output_location: "dist"
+          app_build_command: "npm run build"
           skip_app_build: false
-          skip_deploy_on_missing_secrets: true
 
   close_pr:
     if: github.event.action == 'closed'
