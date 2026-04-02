@@ -1,8 +1,10 @@
+import { getApiBaseUrl } from "@/config/envGuard";
+
 export type ApiEnvelope<T> =
   | { status: "ok"; data: T }
   | { status: "error"; error: string };
 
-const API_BASE = (import.meta.env.VITE_API_URL ?? "/api/v1").replace(/\/$/, "");
+const API_BASE = getApiBaseUrl();
 
 export async function api<T>(url: string, opts: RequestInit = {}): Promise<T> {
   const res = await fetch(`${API_BASE}${url}`, opts);
