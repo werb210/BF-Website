@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
 import { submitLead } from "@/utils/submitLead";
+import { withLoading } from "@/lib/retry";
 
 export default function LeadForm() {
   const [form, setForm] = useState({
@@ -15,14 +16,15 @@ export default function LeadForm() {
     event.preventDefault();
     if (submitting) return;
 
-    setSubmitting(true);
     setStatus(null);
     setError(null);
 
     try {
-      await submitLead({
-        ...form,
-        name: form.name,
+      await withLoading(setSubmitting, async () => {
+        await submitLead({
+          ...form,
+          name: form.name,
+        });
       });
       setStatus("Lead submitted successfully.");
 
@@ -33,8 +35,6 @@ export default function LeadForm() {
       const message = err instanceof Error ? err.message : "Unable to submit lead right now.";
       alert(message);
       setError(message);
-    } finally {
-      setSubmitting(false);
     }
 
   }
