@@ -1,5 +1,3 @@
-import { env } from "./env";
-
-export function getApiUrl() {
-  return env.API_URL;
-}
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "/api";
