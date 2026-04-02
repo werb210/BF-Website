@@ -1,6 +1,4 @@
-import { getEnv } from "@/config/env";
-
-const GA_MEASUREMENT_ID = getEnv().VITE_GA_ID;
+const GA_MEASUREMENT_ID: string | undefined = undefined;
 
 export function initializeGA() {
   if (typeof window === "undefined") return;

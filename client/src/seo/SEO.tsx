@@ -1,5 +1,5 @@
 import { Helmet } from "@/lib/helmetAsync";
-import { getEnv } from "@/config/env";
+import { SITE_URL } from "@/config/links";
 
 interface SEOProps {
   title: string;
@@ -11,7 +11,7 @@ interface SEOProps {
 }
 
 const SITE_NAME = "Boreal Financial";
-const BASE_URL = getEnv().VITE_SITE_URL;
+const BASE_URL = SITE_URL;
 const DEFAULT_OG_IMAGE = "/images/business-handshake-close-up.jpg";
 
 function getCanonicalUrl(url?: string) {

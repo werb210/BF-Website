@@ -1,5 +1,5 @@
-import { getEnv } from "./env";
+import { env } from "./env";
 
 export function getApiUrl() {
-  return getEnv().VITE_API_URL;
+  return env.API_URL;
 }

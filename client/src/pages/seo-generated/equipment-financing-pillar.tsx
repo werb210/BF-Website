@@ -1,9 +1,9 @@
 import { Seo } from "@/components/SEO";
 import { SEOFAQ } from "@/components/SEOFAQ";
 import { getProductFaqs } from "@/data/faqs";
-import { getEnv } from "@/config/env";
+import { SITE_URL } from "@/config/links";
 
-const BASE_URL = getEnv().VITE_SITE_URL;
+const BASE_URL = SITE_URL;
 
 export default function EquipmentFinancingPillarPage() {
   const faqs = getProductFaqs("Equipment Financing");

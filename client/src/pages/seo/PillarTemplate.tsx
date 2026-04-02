@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "wouter";
 import { Seo } from "@/components/SEO";
 import NotFound from "@/pages/NotFound";
-import { getEnv } from "@/config/env";
+import { SITE_URL } from "@/config/links";
 import {
   COMPARISONS,
   INDUSTRIES,
@@ -11,7 +11,7 @@ import {
   type SlugNameItem
 } from "@/data/seoFramework";
 
-const BASE_URL = getEnv().VITE_SITE_URL;
+const BASE_URL = SITE_URL;
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (

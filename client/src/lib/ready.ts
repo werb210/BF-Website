@@ -1,13 +1,11 @@
-import { env } from "@/config/env";
+import { apiFetch } from "@/lib/api";
 
 export async function waitForReady(retries = 10, delay = 500) {
   for (let i = 0; i < retries; i++) {
     try {
-      const res = await fetch(`${env.API_URL}/ready`);
-      if (res.status === 200) return true;
-    } catch {
-      // retry
-    }
+      const res = await apiFetch("/ready");
+      if (res.status === 200) return;
+    } catch {}
 
     await new Promise((r) => setTimeout(r, delay));
   }

@@ -1,5 +1,5 @@
-import { getEnv } from "@/config/env";
-const BASE_URL = getEnv().VITE_SITE_URL;
+import { SITE_URL } from "@/config/links";
+const BASE_URL = SITE_URL;
 
 export const organizationJsonLd = {
   "@context": "https://schema.org",
