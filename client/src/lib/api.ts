@@ -1,33 +1,27 @@
-import { getEnv } from "../config/env";
+import { getEnv } from "@/config/env";
 
-type ApiResponse<T> = {
-  status: "ok" | "error" | "not_ready";
-  data?: T;
-  error?: string;
-};
-
-export async function api<T = unknown>(
-  path: string,
-  options?: {
-    method?: string;
-    body?: any;
-  }
-): Promise<T> {
+export async function api(path: string, options: RequestInit = {}) {
   const { VITE_API_URL } = getEnv();
 
   const res = await fetch(`${VITE_API_URL}${path}`, {
-    method: options?.method || "GET",
     headers: {
       "Content-Type": "application/json",
+      ...(options.headers || {}),
     },
-    body: options?.body ? JSON.stringify(options.body) : undefined,
+    ...options,
   });
 
-  const json: ApiResponse<T> = await res.json();
+  const json = await res.json();
 
-  if (json.status !== "ok") {
-    throw new Error(json.error || "API error");
+  if (!json || typeof json !== "object" || !("status" in json)) {
+    console.error("INVALID API RESPONSE:", json);
+    throw new Error("Invalid API response");
   }
 
-  return json.data as T;
+  if (json.status !== "ok") {
+    console.error("API ERROR:", json);
+    throw new Error(("error" in json && typeof json.error === "string" && json.error) || "API error");
+  }
+
+  return json.data;
 }

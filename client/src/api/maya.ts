@@ -1,7 +1,9 @@
+import { getEnv } from "@/config/env";
 import { api } from "@/lib/api";
 
-const mayaEnabled = import.meta.env.VITE_MAYA_ENABLED === "true";
-const mayaWsBase = (import.meta.env.VITE_MAYA_WS_BASE ?? "").trim().replace(/\/+$/, "");
+const env = getEnv();
+const mayaEnabled = env.VITE_MAYA_ENABLED;
+const mayaWsBase = env.VITE_MAYA_WS_BASE.trim().replace(/\/+$/, "");
 
 export function isMayaConfigured() {
   return mayaEnabled && Boolean(mayaWsBase);
@@ -21,8 +23,8 @@ export async function checkMayaHealth(_signal?: AbortSignal): Promise<boolean> {
 }
 
 export async function sendMayaMessage(message: string) {
-  return api<{ reply?: string }>("/maya-message", {
+  return api("/maya-message", {
     method: "POST",
-    body: { message },
-  });
+    body: JSON.stringify({ message }),
+  }) as Promise<{ reply?: string }>;
 }

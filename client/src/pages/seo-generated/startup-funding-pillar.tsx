@@ -1,8 +1,9 @@
 import { Seo } from "@/components/SEO";
 import { SEOFAQ } from "@/components/SEOFAQ";
 import { getProductFaqs } from "@/data/faqs";
+import { getEnv } from "@/config/env";
 
-const BASE_URL = import.meta.env.VITE_SITE_URL ?? "https://borealfinancial.ca";
+const BASE_URL = getEnv().VITE_SITE_URL;
 
 export default function StartupFundingPillarPage() {
   const faqs = getProductFaqs("Startup Business Funding");

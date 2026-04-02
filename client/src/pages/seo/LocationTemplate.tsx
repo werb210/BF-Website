@@ -2,8 +2,9 @@ import { Link } from "wouter";
 import { Seo } from "@/components/SEO";
 import NotFound from "@/pages/NotFound";
 import { LOCATION_BY_SLUG, PRODUCT_BY_SLUG } from "@/data/seoFramework";
+import { getEnv } from "@/config/env";
 
-const BASE_URL = import.meta.env.VITE_SITE_URL ?? "https://borealfinancial.ca";
+const BASE_URL = getEnv().VITE_SITE_URL;
 
 interface LocationTemplateProps {
   params: {

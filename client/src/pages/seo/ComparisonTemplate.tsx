@@ -1,8 +1,9 @@
 import { Seo } from "@/components/SEO";
 import NotFound from "@/pages/NotFound";
 import { COMPARISON_BY_SLUG } from "@/data/seoFramework";
+import { getEnv } from "@/config/env";
 
-const BASE_URL = import.meta.env.VITE_SITE_URL ?? "https://borealfinancial.ca";
+const BASE_URL = getEnv().VITE_SITE_URL;
 
 interface ComparisonTemplateProps {
   params: {

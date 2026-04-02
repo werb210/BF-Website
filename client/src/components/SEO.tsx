@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet";
+import { getEnv } from "@/config/env";
 
 type Props = {
   title: string;
@@ -15,7 +16,7 @@ function getSchema(props: Props) {
 }
 
 const SITE_NAME = "Boreal Financial";
-const SITE_URL = import.meta.env.VITE_SITE_URL ?? "https://borealfinancial.ca";
+const SITE_URL = getEnv().VITE_SITE_URL;
 
 function normalizeHref(href?: string) {
   if (!href) return href;
