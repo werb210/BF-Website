@@ -1,9 +1,7 @@
-import { getEnv } from "@/config/env";
 import { api } from "@/lib/api";
 
-const env = getEnv();
-const mayaEnabled = env.VITE_MAYA_ENABLED;
-const mayaWsBase = env.VITE_MAYA_WS_BASE.trim().replace(/\/+$/, "");
+const mayaEnabled = false;
+const mayaWsBase = "";
 
 export function isMayaConfigured() {
   return mayaEnabled && Boolean(mayaWsBase);

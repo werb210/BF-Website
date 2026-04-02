@@ -1,9 +1,9 @@
 import { Seo } from "@/components/SEO";
 import NotFound from "@/pages/NotFound";
 import { COMPARISON_BY_SLUG } from "@/data/seoFramework";
-import { getEnv } from "@/config/env";
+import { SITE_URL } from "@/config/links";
 
-const BASE_URL = getEnv().VITE_SITE_URL;
+const BASE_URL = SITE_URL;
 
 interface ComparisonTemplateProps {
   params: {

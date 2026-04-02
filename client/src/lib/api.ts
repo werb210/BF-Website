@@ -1,19 +1,10 @@
 import { env } from "@/config/env";
 
-function getAuthHeader() {
-  const token =
-    (typeof window !== "undefined" && window.localStorage.getItem("authToken")) ||
-    (typeof window !== "undefined" && window.sessionStorage.getItem("authToken"));
-
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
-
 export async function apiFetch(path: string, options: RequestInit = {}) {
   const res = await fetch(`${env.API_URL}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
-      ...getAuthHeader(),
       ...(options.headers || {}),
     },
   });
