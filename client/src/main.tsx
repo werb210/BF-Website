@@ -5,7 +5,8 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 import "./styles/global.css";
-import { getEnv } from "@/config/env";
+import { env } from "@/config/env";
+import { waitForReady } from "@/lib/ready";
 
 declare global {
   interface Window {
@@ -253,26 +254,35 @@ function TrackingProvider() {
   );
 }
 
-try {
-  getEnv();
-} catch (e) {
-  console.error("ENV VALIDATION FAILED:", e);
-  throw e;
+function renderApp() {
+  const root = document.getElementById("root");
+  if (!root) {
+    throw new Error("Missing root");
+  }
+
+  ReactDOM.createRoot(root).render(
+    <React.StrictMode>
+      <BrowserRouter>
+        <HelmetProvider>
+          <ErrorBoundary>
+            <TrackingProvider />
+          </ErrorBoundary>
+        </HelmetProvider>
+      </BrowserRouter>
+    </React.StrictMode>
+  );
 }
 
-const root = document.getElementById("root");
-if (!root) {
-  throw new Error("Missing root");
+async function bootstrap() {
+  try {
+    void env;
+    await waitForReady();
+  } catch (e) {
+    console.error("BOOTSTRAP FAILED:", e);
+    throw e;
+  }
+
+  renderApp();
 }
 
-ReactDOM.createRoot(root).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <HelmetProvider>
-        <ErrorBoundary>
-          <TrackingProvider />
-        </ErrorBoundary>
-      </HelmetProvider>
-    </BrowserRouter>
-  </React.StrictMode>
-);
+void bootstrap();

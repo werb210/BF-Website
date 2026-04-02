@@ -1,29 +1,36 @@
-import { z } from "zod";
+type Env = {
+  API_URL: string;
+  // Backward-compatible fields used across the app.
+  VITE_API_URL: string;
+  MODE: string;
+  VITE_SITE_URL: string;
+  VITE_GA_ID?: string;
+  VITE_MAYA_ENABLED: boolean;
+  VITE_MAYA_WS_BASE: string;
+};
 
-const schema = z.object({
-  MODE: z.string(),
-  VITE_API_URL: z.string().url(),
-  VITE_SITE_URL: z.string().url().default("https://borealfinancial.ca"),
-  VITE_GA_ID: z.string().optional(),
-  VITE_MAYA_ENABLED: z.boolean().default(false),
-  VITE_MAYA_WS_BASE: z.string().default(""),
-});
+let cachedEnv: Env | null = null;
 
-let cached: z.infer<typeof schema> | null = null;
-
-export function getEnv() {
-  if (!cached) {
-    cached = schema.parse({
-      MODE: import.meta.env.MODE,
-      VITE_API_URL:
-        import.meta.env.VITE_API_URL ||
-        (import.meta.env.MODE === "test" ? "http://localhost:3000" : undefined),
-      VITE_SITE_URL: import.meta.env.VITE_SITE_URL,
-      VITE_GA_ID: import.meta.env.VITE_GA_ID,
-      VITE_MAYA_ENABLED: import.meta.env.VITE_MAYA_ENABLED === "true",
-      VITE_MAYA_WS_BASE: import.meta.env.VITE_MAYA_WS_BASE,
-    });
+export function getEnv(): Env {
+  if (cachedEnv) {
+    return cachedEnv;
   }
 
-  return cached;
+  if (!import.meta.env.VITE_API_URL) {
+    throw new Error("Missing VITE_API_URL");
+  }
+
+  cachedEnv = {
+    API_URL: import.meta.env.VITE_API_URL,
+    VITE_API_URL: import.meta.env.VITE_API_URL,
+    MODE: import.meta.env.MODE,
+    VITE_SITE_URL: "https://borealfinancial.ca",
+    VITE_GA_ID: undefined,
+    VITE_MAYA_ENABLED: false,
+    VITE_MAYA_WS_BASE: "",
+  };
+
+  return cachedEnv;
 }
+
+export const env = getEnv();
