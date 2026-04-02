@@ -7,6 +7,11 @@ import { BrowserRouter } from "react-router-dom";
 import "./styles/global.css";
 import { apiRequest } from "@/api/request";
 import { validateEnv } from "./system/env";
+import { API_BASE } from "./config/api";
+
+if (!API_BASE.includes("/api/v1")) {
+  throw new Error("INVALID API CONFIG");
+}
 
 declare global {
   interface Window {
