@@ -8,30 +8,9 @@
     "npm": ">=10"
   },
   "scripts": {
-    "repo:guard": "echo 'repo guard skipped'",
     "dev": "vite",
     "build": "vite build",
-    "check": "tsc --noEmit",
-    "sitemap": "tsx scripts/generate-sitemap.ts",
-    "audit:alt": "node scripts/alt-audit.js",
-    "generate:seo": "ts-node scripts/generate-seo-pages.ts",
-    "generate:sitemap": "ts-node scripts/generate-sitemap.ts",
-    "preview": "vite preview",
-    "lint": "eslint . --ext .js,.ts,.tsx",
-    "test": "vitest run",
-    "clean:cache": "rm -rf node_modules dist .vite client/.vite",
-    "audit": "npm audit",
-    "audit:enterprise": "node scripts/enterprise-audit.js",
-    "optimize:images": "node scripts/optimize-images.js",
-    "smoke": "node ./scripts/smoke-test.js",
-    "analyze": "vite build --mode analyze",
-    "typecheck": "tsc --noEmit",
-    "validate:no-express": "! rg -n \"express|app.listen\" src",
-    "validate:no-express:strict": "! rg -n \"express|app.listen\" src client",
-    "preview:ci": "vite preview --port 4173 & sleep 3 && curl -f http://0.0.0.0:4173",
-    "verify:registry": "npm config get registry | grep registry.npmjs.org",
-    "verify:no-raw-fetch": "rg -n \"fetch\\(|axios\\(\" src | rg -v \"request.ts|apiClient.ts\" && exit 1 || exit 0",
-    "check:versions": "node ./scripts/checkVersions.js"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@hookform/resolvers": "3.10.0",

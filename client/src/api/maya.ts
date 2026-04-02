@@ -21,7 +21,7 @@ export async function checkMayaHealth(_signal?: AbortSignal): Promise<boolean> {
 }
 
 export async function sendMayaMessage(message: string) {
-  return apiRequest<{ reply?: string }>("/api/maya-message", {
+  return apiRequest<{ reply?: string }>("/maya-message", {
     method: "POST",
     body: JSON.stringify({ message }),
   });
