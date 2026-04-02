@@ -5,13 +5,8 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 import "./styles/global.css";
-import { apiRequest } from "@/api/request";
-import { validateEnv } from "./system/env";
-import { API_BASE } from "./config/api";
-
-if (!API_BASE.includes("/api/v1")) {
-  throw new Error("INVALID API CONFIG");
-}
+import { api } from "@/lib/api";
+import { assertEnv } from "@/config/env";
 
 declare global {
   interface Window {
@@ -262,13 +257,13 @@ function TrackingProvider() {
 let started = false;
 
 async function bootstrap() {
-  validateEnv();
+  assertEnv();
   if (started) {
     throw new Error("DOUBLE_BOOTSTRAP");
   }
 
   started = true;
-  await apiRequest("/health");
+  await api("/health");
 }
 
 bootstrap().then(() => {

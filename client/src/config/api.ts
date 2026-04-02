@@ -1,7 +1,3 @@
-const base = import.meta.env.VITE_API_URL;
+import { ENV } from "@/config/env";
 
-if (!base) {
-  throw new Error("VITE_API_URL missing");
-}
-
-export const API_BASE = `${base}/api/v1`;
+export const API_BASE = ENV.API_URL;

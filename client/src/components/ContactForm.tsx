@@ -1,7 +1,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { trackEvent } from "@/utils/analytics";
 import { saveLead, clearLead, getLead } from "@/lib/leadStorage";
-import { redirectToClientApply } from "@/utils/handoff";
+import { redirectToApplication } from "@/utils/handoff";
 import { submitLead } from "@/utils/submitLead";
 
 type ContactFormData = {
@@ -29,7 +29,7 @@ const createLeadData = (data: ContactFormData) => ({
   name: data.name.trim(),
   email: data.email.trim(),
   phone: data.mobilePhone.trim(),
-  businessName: data.companyName.trim(),
+  company: data.companyName.trim(),
   productType: "general",
   message: data.message.trim(),
 });
@@ -111,21 +111,14 @@ export default function ContactForm() {
         company: formData.companyName,
       });
 
-      await submitLead({
+      const { leadId } = await submitLead({
         name: formData.name.trim(),
         email,
         phone,
-        businessName,
-        productType: "general",
-        message: formData.message.trim(),
+        company: businessName,
       });
 
-      await redirectToClientApply({
-        businessName,
-        email,
-        phone,
-        productType: "general",
-      });
+      redirectToApplication(leadId);
 
       clearLead();
       setLeadSavedMessage(null);

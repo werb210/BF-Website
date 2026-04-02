@@ -1,3 +1,5 @@
-export const APPLY_URL = "https://boreal-client.azurewebsites.net/apply";
-export const CLIENT_APP_URL = "https://boreal-client.azurewebsites.net";
+import { ENV } from "@/config/env";
+
+export const APPLY_URL = `${ENV.CLIENT_APP_URL}/apply`;
+export const CLIENT_APP_URL = ENV.CLIENT_APP_URL;
 export const SITE_URL = "https://borealfinancial.com";

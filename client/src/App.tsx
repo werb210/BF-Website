@@ -1,7 +1,9 @@
+import { lazy, Suspense } from "react";
 import { AppRouter as Router } from "@/router/AppRouter";
-import FloatingChat from "./components/FloatingChat";
-import MayaWidget from "@/components/MayaWidget";
 import LeadForm from "@/components/LeadForm";
+
+const FloatingChat = lazy(() => import("@/components/FloatingChat"));
+const MayaWidget = lazy(() => import("@/components/MayaWidget"));
 
 function shouldRenderGlobalMaya(): boolean {
   const path = window.location.pathname.toLowerCase();
@@ -15,8 +17,10 @@ function App() {
     <>
       <Router />
       <LeadForm />
-      {showMaya ? <MayaWidget /> : null}
-      {showMaya ? <FloatingChat /> : null}
+      <Suspense fallback={null}>
+        {showMaya ? <MayaWidget /> : null}
+        {showMaya ? <FloatingChat /> : null}
+      </Suspense>
     </>
   );
 }

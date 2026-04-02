@@ -1,4 +1,4 @@
-import { APPLY_URL } from "@/config/site";
+import { ENV } from "@/config/env";
 import { submitLead } from "@/utils/submitLead";
 
 export type HandoffPayload = {
@@ -9,6 +9,10 @@ export type HandoffPayload = {
   requestedAmount?: string;
 };
 
+export function redirectToApplication(leadId: string) {
+  window.location.href = `${ENV.CLIENT_APP_URL}/apply?leadId=${leadId}`;
+}
+
 export async function redirectToClientApply(payload: HandoffPayload) {
   const businessName = payload.businessName.trim();
   const email = payload.email.trim();
@@ -18,18 +22,16 @@ export async function redirectToClientApply(payload: HandoffPayload) {
     throw new Error("MISSING REQUIRED FIELDS");
   }
 
-
   const { leadId } = await submitLead({
     name: businessName,
-    businessName,
+    company: businessName,
     email,
     phone,
-    productType: payload.productType.trim(),
   });
 
   if (!leadId) {
     throw new Error("[HANDOFF FAILED]");
   }
 
-  window.location.href = `${APPLY_URL}?leadId=${encodeURIComponent(leadId)}`;
+  redirectToApplication(leadId);
 }

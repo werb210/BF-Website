@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
 import { submitLead } from "@/utils/submitLead";
+import { redirectToApplication } from "@/utils/handoff";
 
 export default function LeadForm() {
   const [form, setForm] = useState({
@@ -20,14 +21,12 @@ export default function LeadForm() {
     setSubmitting(true);
 
     try {
-      await submitLead({
+      const { leadId } = await submitLead({
         ...form,
-        name: form.name,
+        company: "",
       });
       setStatus("Lead submitted successfully.");
-
-      const query = new URLSearchParams(form).toString();
-      window.location.href = `https://client.boreal.financial/apply?${query}`;
+      redirectToApplication(leadId);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to submit lead right now.");
     } finally {

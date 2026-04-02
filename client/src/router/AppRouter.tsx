@@ -10,6 +10,7 @@ import HowItWorks from "../pages/HowItWorks"
 import Products from "../pages/Products"
 import Industries from "../pages/Industries"
 import MainLayout from "@/layouts/MainLayout"
+import Apply from "@/pages/Apply"
 
 import IndustryDetail from "../pages/industries/IndustryDetail"
 
@@ -37,6 +38,7 @@ export function AppRouter() {
         <Route path="/industries" element={<Industries />} />
 
         <Route path="/contact" element={<Contact />} />
+        <Route path="/apply" element={<Apply />} />
 
         <Route path="*" element={<Home />} />
       </Routes>

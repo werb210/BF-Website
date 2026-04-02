@@ -1,9 +1,10 @@
-import { API_BASE } from "@/api/base";
+import { assertEnv } from "@/config/env";
 
 export function getValidatedApiUrl() {
-  return API_BASE;
+  assertEnv();
+  return import.meta.env.VITE_API_URL;
 }
 
 export function validateEnv() {
-  getValidatedApiUrl();
+  assertEnv();
 }
