@@ -25,8 +25,22 @@ jobs:
       - name: Clean npm cache
         run: npm cache clean --force
 
-      - name: Install deps
-        run: npm ci
+      - name: Validate dependencies
+        run: |
+          npm install --package-lock-only
+          git diff --exit-code || (echo "LOCKFILE OUT OF SYNC" && exit 1)
+
+      - name: Install
+        run: npm ci --legacy-peer-deps=false
+
+      - name: Validate React versions
+        run: |
+          node -e "
+          const p=require('./package.json');
+          if(p.dependencies.react !== p.dependencies['react-dom']) {
+            throw new Error('React version mismatch');
+          }
+          "
 
       - name: Validate install
         run: |
