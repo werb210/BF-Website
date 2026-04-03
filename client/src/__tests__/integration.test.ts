@@ -21,6 +21,6 @@ test("backend must be reachable when configured", async () => {
     return;
   }
 
-  const status = await requestStatus(`${configuredUrl.replace(/\/$/, "")}/api/v1/health`);
+  const status = await requestStatus(`${configuredUrl.replace(/\/$/, "")}/api/health`);
   assert.equal(status, 200);
 });

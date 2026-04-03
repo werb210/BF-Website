@@ -1,9 +1,35 @@
-const base =
-  import.meta.env.VITE_API_BASE_URL ||
-  "/api";
+export const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "https://server.boreal.financial";
 
-if (!base) {
-  throw new Error("API BASE URL NOT CONFIGURED");
+/**
+ * Standard API wrapper
+ */
+export async function apiFetch(
+  path: string,
+  options: RequestInit = {}
+) {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    },
+    credentials: "include" // REQUIRED
+  });
+
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    data = null;
+  }
+
+  if (!res.ok) {
+    throw data || {
+      status: "error",
+      error: { message: "request_failed" }
+    };
+  }
+
+  return data;
 }
-
-export const API_BASE_URL = base;

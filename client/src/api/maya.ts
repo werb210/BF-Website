@@ -1,19 +1,14 @@
-import { api } from "@/lib/api";
+import { apiFetch } from "@/config/api";
+import { endpoints } from "@/lib/endpoints";
 
-const mayaEnabled = false;
-const mayaWsBase = "";
+export const mayaEnabled = true;
 
 export function isMayaConfigured() {
-  return mayaEnabled && Boolean(mayaWsBase);
+  return mayaEnabled;
 }
 
-export function buildMayaWebSocketUrl(path: string) {
-  if (!isMayaConfigured()) {
-    return null;
-  }
-
-  const pathWithSlash = path.startsWith("/") ? path : `/${path}`;
-  return `${mayaWsBase}${pathWithSlash}`;
+export function buildMayaWebSocketUrl(_path: string) {
+  return null;
 }
 
 export async function checkMayaHealth(_signal?: AbortSignal): Promise<boolean> {
@@ -21,8 +16,8 @@ export async function checkMayaHealth(_signal?: AbortSignal): Promise<boolean> {
 }
 
 export async function sendMayaMessage(message: string) {
-  return api("/api/v1/call/start", {
+  return apiFetch(endpoints.mayaMessage, {
     method: "POST",
-    body: JSON.stringify({ message }),
-  }) as Promise<{ reply?: string }>;
+    body: JSON.stringify({ message })
+  });
 }
