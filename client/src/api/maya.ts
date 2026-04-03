@@ -1,23 +1,12 @@
-import { apiFetch } from "@/config/api";
-import { endpoints } from "@/lib/endpoints";
+import { apiClient } from "@/api/client";
 
-export const mayaEnabled = true;
+const mayaEnabled = import.meta.env.VITE_MAYA_ENABLED === "true";
 
-export function isMayaConfigured() {
-  return mayaEnabled;
-}
+export const sendMayaMessage = (message) => {
+  if (!mayaEnabled) return;
 
-export function buildMayaWebSocketUrl(_path: string) {
-  return null;
-}
-
-export async function checkMayaHealth(_signal?: AbortSignal): Promise<boolean> {
-  return isMayaConfigured();
-}
-
-export async function sendMayaMessage(message: string) {
-  return apiFetch(endpoints.mayaMessage, {
+  return apiClient("/api/v1/maya/message", {
     method: "POST",
     body: JSON.stringify({ message })
   });
-}
+};
