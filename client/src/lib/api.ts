@@ -1,13 +1,23 @@
-import { apiFetch } from "@/api/client";
-
-export async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const normalizedOptions = {
+export async function api(path: string, options: RequestInit = {}) {
+  const res = await fetch(`/api${path}`, {
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+    credentials: "include",
     ...options,
-    body:
-      options.body && typeof options.body !== "string"
-        ? JSON.stringify(options.body)
-        : options.body,
-  };
+  });
 
-  return apiFetch(path, normalizedOptions) as Promise<T>;
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    data = null;
+  }
+
+  if (!res.ok) {
+    throw new Error(data?.error || "API_ERROR");
+  }
+
+  return data;
 }

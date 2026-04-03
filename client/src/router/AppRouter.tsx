@@ -1,18 +1,20 @@
-import { Routes, Route } from "react-router-dom"
+import { Navigate, Route, Routes } from "react-router-dom";
 
-import Home from "../pages/Home"
-import Contact from "../pages/Contact"
-import Compare from "../pages/Compare"
-import CreditReadiness from "../pages/CreditReadiness"
-import CreditResults from "../pages/CreditResults"
-import Podcasts from "../pages/Podcasts"
-import HowItWorks from "../pages/HowItWorks"
-import Products from "../pages/Products"
-import Industries from "../pages/Industries"
-import MainLayout from "@/layouts/MainLayout"
-import Apply from "@/pages/Apply"
+import Home from "../pages/Home";
+import Contact from "../pages/Contact";
+import Compare from "../pages/Compare";
+import CreditReadiness from "../pages/CreditReadiness";
+import CreditResults from "../pages/CreditResults";
+import Podcasts from "../pages/Podcasts";
+import HowItWorks from "../pages/HowItWorks";
+import Products from "../pages/Products";
+import Industries from "../pages/Industries";
+import MainLayout from "../layouts/MainLayout";
+import Apply from "../pages/Apply";
+import Privacy from "../pages/privacy";
+import Terms from "../pages/terms";
 
-import IndustryDetail from "../pages/industries/IndustryDetail"
+import IndustryDetail from "../pages/industries/IndustryDetail";
 
 export function AppRouter() {
   return (
@@ -39,11 +41,13 @@ export function AppRouter() {
 
         <Route path="/contact" element={<Contact />} />
         <Route path="/apply" element={<Apply />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
 
-        <Route path="*" element={<Home />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </MainLayout>
-  )
+  );
 }
 
-export default AppRouter
+export default AppRouter;
