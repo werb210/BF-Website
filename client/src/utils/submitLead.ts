@@ -6,7 +6,7 @@ export async function submitLead(form: {
   phone?: string;
   company?: string;
 }) {
-  return api<{ leadId: string }>("/api/lead/submit", {
+  return api<{ leadId: string }>("/api/v1/crm/lead", {
     method: "POST",
     body: form,
   });

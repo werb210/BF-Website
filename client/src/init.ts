@@ -1,8 +1,10 @@
+import { apiCall } from "@/lib/api";
+
 export async function waitForServer() {
   for (let i = 0; i < 10; i++) {
     try {
-      const res = await fetch("/ready");
-      if (res.ok) return;
+      await apiCall("/ready");
+      return;
     } catch {}
 
     await new Promise((r) => setTimeout(r, 300));

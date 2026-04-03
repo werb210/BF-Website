@@ -78,7 +78,7 @@ export default function CreditReadiness() {
     let body: { score?: number; tier?: "green" | "yellow" | "red" };
 
     try {
-      body = await api<{ score?: number; tier?: "green" | "yellow" | "red" }>("/api/lead/submit", {
+      body = await api<{ score?: number; tier?: "green" | "yellow" | "red" }>("/api/v1/crm/lead", {
         method: "POST",
         body: payload,
       });
