@@ -1,31 +1,49 @@
-import { apiClient } from "@/api/client";
+import { API_BASE } from '../config/api';
+import { api } from './client';
 
-const mayaEnabled = import.meta.env.VITE_MAYA_ENABLED === "true";
-const mayaApiBaseUrl = import.meta.env.VITE_API_URL;
+const mayaEnabled = import.meta.env.VITE_MAYA_ENABLED === 'true';
 
-export const sendMayaMessage = (message) => {
-  if (!mayaEnabled) return;
+export function isMayaEnabled() {
+  return mayaEnabled;
+}
 
-  return apiClient("/api/v1/maya/message", {
-    method: "POST",
-    body: JSON.stringify({ message })
+export function isMayaConfigured() {
+  return mayaEnabled;
+}
+
+export async function sendMayaMessage(message: string) {
+  if (!mayaEnabled) {
+    throw new Error('Maya disabled');
+  }
+
+  return api('/api/v1/maya/message', {
+    method: 'POST',
+    body: JSON.stringify({ message }),
   });
-};
+}
 
-export const isMayaConfigured = () => {
-  return mayaEnabled && Boolean(mayaApiBaseUrl);
-};
+export async function checkMayaHealth(signal?: AbortSignal) {
+  if (!mayaEnabled) return false;
 
-export const buildMayaWebSocketUrl = (path = "/ws") => {
-  if (!mayaApiBaseUrl) return null;
+  try {
+    await api('/api/v1/maya/health', { method: 'GET', signal });
+    return true;
+  } catch {
+    return false;
+  }
+}
 
-  const websocketBase = mayaApiBaseUrl.replace(/^http:/, "ws:").replace(/^https:/, "wss:");
-  return `${websocketBase}/api/v1/maya${path}`;
-};
+export function buildMayaWebSocketUrl(path: string) {
+  if (!mayaEnabled) return null;
 
-export const checkMayaHealth = async (signal?: AbortSignal) => {
-  if (!mayaApiBaseUrl) return false;
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
 
-  const res = await fetch(`${mayaApiBaseUrl}/api/v1/maya/health`, { signal });
-  return res.ok;
-};
+  if (API_BASE.startsWith('http://') || API_BASE.startsWith('https://')) {
+    const httpUrl = new URL(API_BASE);
+    const protocol = httpUrl.protocol === 'https:' ? 'wss:' : 'ws:';
+    return `${protocol}//${httpUrl.host}${normalizedPath}`;
+  }
+
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  return `${protocol}//${window.location.host}${normalizedPath}`;
+}
