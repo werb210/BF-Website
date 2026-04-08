@@ -18,13 +18,13 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install
-        run: npm ci
-
       - name: Build
-        run: npm run build
+        run: npm run ci:build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
+      - name: Verify dist output
+        run: npm run ci:verify
 
       - name: Build And Deploy
         uses: azure/static-web-apps-deploy@v1
