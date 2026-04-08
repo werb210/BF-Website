@@ -2,11 +2,11 @@
 set -euo pipefail
 
 if find src -type f \( -name "*.test.ts" -o -name "*.test.tsx" \) | grep -q .; then
-  echo "Test files detected. CI is build-only."
+  echo "Test files detected. This repo is build-only."
   exit 1
 fi
 
-if grep -R --exclude-dir=.git --exclude-dir=scripts --exclude-dir=.github "vitest" .; then
+if grep -r "vitest" .; then
   echo "Vitest usage detected. Not allowed."
   exit 1
 fi

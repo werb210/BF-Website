@@ -10,9 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Block Vitest usage
+      - name: Block test tooling
         run: |
-          if rg -n --hidden --glob '!.git' --glob '!.github/workflows/guard.yml' "vitest" .; then
-            echo "Vitest usage detected. Not allowed."
+          if grep -r "vitest" .; then
+            echo "Vitest not allowed in website repo"
             exit 1
           fi
