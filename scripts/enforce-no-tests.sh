@@ -6,7 +6,7 @@ if find src -type f \( -name "*.test.ts" -o -name "*.test.tsx" \) | grep -q .; t
   exit 1
 fi
 
-if [ -f "vitest.config.ts" ]; then
-  echo "Vitest config should not exist in this repo."
+if grep -R --exclude-dir=.git --exclude-dir=scripts --exclude-dir=.github "vitest" .; then
+  echo "Vitest usage detected. Not allowed."
   exit 1
 fi
