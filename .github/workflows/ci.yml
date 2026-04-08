@@ -15,6 +15,16 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm ci --ignore-scripts || true
+      - name: Enforce no test surface
+        run: |
+          chmod +x scripts/enforce-no-tests.sh
+          ./scripts/enforce-no-tests.sh
 
-      - run: npm run ci:verify
+      - name: Install (strict, no silent ignore)
+        run: npm ci --ignore-scripts
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify artifact
+        run: test -f dist/index.html

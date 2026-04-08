@@ -10,5 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - run: chmod +x scripts/guard-no-node-modules-tests.sh
-      - run: ./scripts/guard-no-node-modules-tests.sh
+      - name: Block Vitest usage
+        run: |
+          if rg -n --hidden --glob '!.git' --glob '!.github/workflows/guard.yml' "vitest" .; then
+            echo "Vitest usage detected. Not allowed."
+            exit 1
+          fi
