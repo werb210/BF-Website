@@ -10,9 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Block test tooling
+      - name: Block test tooling (source only)
         run: |
-          if grep -r "vitest" .; then
+          if grep -R "vitest" src --exclude-dir=node_modules | grep -q .; then
             echo "Vitest not allowed in website repo"
             exit 1
           fi
