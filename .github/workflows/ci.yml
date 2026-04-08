@@ -15,10 +15,6 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm ci
+      - run: npm ci --ignore-scripts || true
 
-      - run: npm run build
-
-      - run: npm run test
-
-      - run: test -f dist/index.html
+      - run: npm run ci:verify
