@@ -22,20 +22,24 @@ export async function apiCall(path: string, options: RequestInit = {}) {
     credentials: "include",
   });
 
-  const data = await res.json().catch(() => ({}));
+  const json = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    throw new Error(data?.error || "API error");
+    throw new Error(json?.error || "API error");
   }
 
   if (path === "/api/auth/otp/verify") {
-    const verifiedToken = data?.data?.token || data?.token;
+    const verifiedToken = json?.data?.token || json?.token;
     if (verifiedToken) {
       localStorage.setItem("token", verifiedToken);
     }
   }
 
-  return data;
+  if (json?.status === "ok") {
+    return json?.data ?? json;
+  }
+
+  throw new Error("API error");
 }
 
 export const api = apiCall;

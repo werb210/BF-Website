@@ -10,10 +10,15 @@ export async function api(path: string, options: RequestInit = {}) {
     },
   });
 
+  const json = await res.json().catch(() => ({}));
+
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`API error ${res.status}: ${text}`);
+    throw new Error((json as { error?: string })?.error || 'API error');
   }
 
-  return res.json();
+  if ((json as { status?: string })?.status === 'ok') {
+    return (json as { data?: unknown }).data ?? json;
+  }
+
+  throw new Error('API error');
 }
