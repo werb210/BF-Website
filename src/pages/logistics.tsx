@@ -8,5 +8,5 @@ const solutions = [
 ];
 
 export default function Logistics() {
-  return <VerticalPage title="Logistics" headline="Capital built for speed, lanes, and margin discipline." subheadline="Freight factoring. Fleet facilities. Fuel liquidity. Structured to keep your operation moving." image="https://images.unsplash.com/photo-1485083269755-a7b559a4fe5e?auto=format&fit=crop&w=1200&q=80" solutions={solutions} />;
+  return <VerticalPage title="Logistics" headline="Capital built for speed, lanes, and margin discipline." subheadline="Freight factoring. Fleet facilities. Fuel liquidity. Structured to keep your operation moving." image="" solutions={solutions} />;
 }

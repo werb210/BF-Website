@@ -7,13 +7,7 @@ export function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
         <Link href="/" className="flex items-center">
           <div className="flex items-center gap-3">
-            <img
-              src="/images/header_white_transparent.png"
-              alt="Boreal Financial"
-              width={512}
-              height={128}
-              className="h-14 w-auto object-contain"
-              loading="lazy" decoding="async" />
+            <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
             <span className="text-white text-xl font-semibold tracking-wide">
               Boreal Financial
             </span>

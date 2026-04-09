@@ -12,7 +12,7 @@ interface SEOProps {
 
 const SITE_NAME = "Boreal Financial";
 const BASE_URL = SITE_URL;
-const DEFAULT_OG_IMAGE = "/images/business-handshake-close-up.jpg";
+const DEFAULT_OG_IMAGE = "";
 
 function getCanonicalUrl(url?: string) {
   if (url) {

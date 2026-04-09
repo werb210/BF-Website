@@ -6,7 +6,7 @@ export const organizationJsonLd = {
   "@type": "Organization",
   name: "Boreal Financial",
   url: BASE_URL,
-  logo: `${BASE_URL}/images/og-image.png`,
+  logo: BASE_URL,
   sameAs: ["https://www.linkedin.com/company/borealfinancial"],
 };
 

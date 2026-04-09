@@ -13,7 +13,7 @@ export default function Products() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {products.map((product) => (
             <article key={product.slug} className="rounded-3xl bg-[#0a1731] p-6 ring-1 ring-white/10 md:p-8">
-              <img src={product.image} alt={product.name} width={1200} height={640} className="h-64 w-full rounded-2xl object-cover" loading="lazy" decoding="async" />
+              <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
               <div>
                 <h2 className="mt-4 text-3xl font-bold">{product.name}</h2>
                 <p className="mt-3 text-slate-300">{product.description}</p>

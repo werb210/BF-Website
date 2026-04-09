@@ -8,5 +8,5 @@ const solutions = [
 ];
 
 export default function Construction() {
-  return <VerticalPage title="Construction" headline="Structured capital for project-driven cash flow." subheadline="Progress draws. Equipment financing. AR bridging. Delivered with lender-ready packaging." image="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80" solutions={solutions} />;
+  return <VerticalPage title="Construction" headline="Structured capital for project-driven cash flow." subheadline="Progress draws. Equipment financing. AR bridging. Delivered with lender-ready packaging." image="" solutions={solutions} />;
 }

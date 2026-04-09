@@ -6,7 +6,7 @@ export const organizationSchema = {
   "@type": "Organization",
   name: "Boreal Financial",
   url: SITE_URL,
-  logo: `${SITE_URL}/logo.png`,
+  logo: SITE_URL,
   sameAs: ["https://www.linkedin.com/company/boreal-financial"],
 };
 

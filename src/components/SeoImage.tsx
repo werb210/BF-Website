@@ -13,5 +13,5 @@ export function SeoImage({ src, alt, width, height, loading = "lazy", style, ...
     throw new Error(`SeoImage requires a non-empty alt attribute for source: ${src}`);
   }
 
-  return <img src={src} alt={alt} width={width} height={height} loading={loading} style={{ objectFit: "cover", ...style }} {...rest} decoding="async" />;
+  return <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />;
 }

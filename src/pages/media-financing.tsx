@@ -19,7 +19,7 @@ export default function MediaFinancing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <SeoImage 
-              src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&h=600" 
+              src="" 
               alt="Professional film production studio with cameras, lighting, and crew working" 
               className="mb-8 h-[500px] w-full rounded-xl object-cover object-center shadow-lg"
               data-testid="hero-image"
@@ -89,7 +89,7 @@ export default function MediaFinancing() {
             <div className="space-y-6">
               {/* Media production studio image */}
               <SeoImage 
-                src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&ixid=M3wxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=600" 
+                src="" 
                 alt="TV production studio control room with multiple monitors and professional broadcasting equipment" 
                 className="rounded-xl shadow-lg w-full h-auto"
                 data-testid="studio-image-1"

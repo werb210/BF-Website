@@ -111,7 +111,7 @@ export default function ProductDetail({ slug }: ProductDetailProps) {
       </section>
 
       <section className="relative overflow-hidden">
-        <img src={product.image} alt={product.name} width={1600} height={900} className="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" />
+        <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
         <div className="absolute inset-0 bg-black/65" />
         <div className="relative mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-16">
           <h1 className="text-4xl font-bold md:text-5xl">{pageH1}</h1>

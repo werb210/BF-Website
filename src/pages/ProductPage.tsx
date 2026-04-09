@@ -13,7 +13,7 @@ export default function ProductPage() {
   return (
     <div className="min-h-screen bg-black pb-16 pt-24 text-white">
       <div className="mx-auto max-w-6xl px-4">
-        <img src={product.image} alt={product.name} width={1200} height={675} className="mb-8 w-full rounded" loading="lazy" decoding="async" />
+        <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
 
         <h1 className="mb-6 text-4xl font-bold">{product.name}</h1>
 

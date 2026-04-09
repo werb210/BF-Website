@@ -21,7 +21,7 @@ export default function IndustryPage() {
           </p>
         </div>
 
-        <img src={industry.image} className="rounded shadow-xl" alt={industry.name} width={1200} height={675} loading="lazy" decoding="async" />
+        <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
       </div>
     </section>
   );

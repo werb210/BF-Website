@@ -8,8 +8,8 @@ import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 import MarketplaceSection from "@/components/MarketplaceSection";
 import { trackConversion } from "@/main";
 
-const primaryHeroImage = "/images/16x9 Concierge Private Banking Hero Image.jpeg";
-const backupHeroImage = "/images/An image of two groups of business people shaking hands over a meeting table celebrating signing a deal to merge.jpeg.webp";
+const primaryHeroImage = "";
+const backupHeroImage = "";
 
 const featuredIndustrySlugs = ["construction", "manufacturing", "transportation"];
 const orderedIndustries = [
@@ -119,7 +119,7 @@ export default function Home() {
             {orderedIndustries.map((industry) => (
               <div key={industry.slug} className="min-w-[320px] flex-shrink-0">
                 <Link href={`/industries/${industry.slug}`} className="group relative block overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
-                  <img src={industry.image} alt={industry.name} width={1200} height={520} className="h-52 w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy" decoding="async" />
+                  <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/25" />
                   <div className="absolute bottom-0 p-4">
                     <h3 className="text-xl font-bold">{industry.name}</h3>
@@ -139,7 +139,7 @@ export default function Home() {
             {products.map((product) => (
               <div key={product.slug} className="min-w-[320px] flex-shrink-0">
                 <article className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
-                  <img src={product.image} alt={product.name} width={1200} height={560} className="h-56 w-full object-cover" loading="lazy" decoding="async" />
+                  <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20" />
                   <div className="absolute inset-0 flex flex-col justify-end p-4">
                     <h3 className="text-xl font-bold">{product.name}</h3>

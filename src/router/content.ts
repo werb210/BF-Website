@@ -20,7 +20,7 @@ export const products: Product[] = [
   {
     slug: "term-loans",
     name: "Term Loans",
-    heroImage: "/images/business-handshake-close-up.jpg",
+    heroImage: "",
     intro:
       "Term loans provide fixed-amount capital with structured repayment, making them ideal for expansion projects, refinancing expensive debt, or funding major strategic investments.",
     bestFor: [
@@ -42,7 +42,7 @@ export const products: Product[] = [
   {
     slug: "lines-of-credit",
     name: "Line of Credit",
-    heroImage: "/images/pngtree-diverse-team-of-professionals-collaborating-in-a-modern-office-setting-with-image_20052579.webp",
+    heroImage: "",
     intro:
       "A business line of credit offers revolving access to capital you can draw, repay, and draw again, helping you cover recurring short-term gaps without repeatedly reapplying.",
     bestFor: [
@@ -64,7 +64,7 @@ export const products: Product[] = [
   {
     slug: "factoring",
     name: "Factoring",
-    heroImage: "/images/factoring-financing.jpeg",
+    heroImage: "",
     intro:
       "Factoring unlocks cash tied up in accounts receivable by advancing funds against eligible invoices, improving liquidity without waiting 30, 60, or 90 days for customer payment.",
     bestFor: [
@@ -86,7 +86,7 @@ export const products: Product[] = [
   {
     slug: "equipment-financing",
     name: "Equipment Financing",
-    heroImage: "/images/Take possession of your new manufacturing equipment.jpeg",
+    heroImage: "",
     intro:
       "Equipment financing helps businesses acquire revenue-producing assets while preserving cash reserves, with repayment terms designed around useful life and business cash flow.",
     bestFor: [
@@ -108,7 +108,7 @@ export const products: Product[] = [
   {
     slug: "purchase-order-financing",
     name: "Purchase Order Financing",
-    heroImage: "/images/An image of two groups of business people shaking hands over a meeting table celebrating signing a deal to merge.jpeg.webp",
+    heroImage: "",
     intro:
       "Purchase order financing funds supplier and production costs tied to confirmed customer orders, helping you fulfill larger contracts without straining working capital.",
     bestFor: [
@@ -130,7 +130,7 @@ export const products: Product[] = [
   {
     slug: "merchant-cash-advance",
     name: "Merchant Cash Advance",
-    heroImage: "/images/premium_photo-1661962673986-dcffa2a05e07.jpg",
+    heroImage: "",
     intro:
       "Merchant cash advances provide fast capital repaid from future card or receivable sales, making them useful for urgent funding scenarios where speed is critical.",
     bestFor: [
@@ -152,7 +152,7 @@ export const products: Product[] = [
   {
     slug: "asset-based-lending",
     name: "Asset-Based Lending",
-    heroImage: "/images/tohcyytw4kftsfv6ivr2.jpg",
+    heroImage: "",
     intro:
       "Asset-based lending creates flexible borrowing capacity secured by receivables, inventory, or equipment, supporting businesses with strong assets but complex cash cycles.",
     bestFor: [
@@ -177,7 +177,7 @@ export const industries: Industry[] = [
   {
     slug: "construction",
     name: "Construction",
-    heroImage: "/images/industries/construction.jpg",
+    heroImage: "",
     overview:
       "Equipment financing, progress billing support, and working capital structured for project-based cash flow.",
     examples: [
@@ -189,7 +189,7 @@ export const industries: Industry[] = [
   {
     slug: "manufacturing",
     name: "Manufacturing",
-    heroImage: "/images/industries/manufacturing.jpg",
+    heroImage: "",
     overview:
       "Inventory lines, asset-based lending, and equipment facilities aligned with production cycles.",
     examples: [
@@ -201,7 +201,7 @@ export const industries: Industry[] = [
   {
     slug: "retail",
     name: "Retail",
-    heroImage: "/images/industries/retail.jpg",
+    heroImage: "",
     overview:
       "Seasonal working capital, inventory financing, and growth funding for brick-and-mortar and ecommerce.",
     examples: [
@@ -213,7 +213,7 @@ export const industries: Industry[] = [
   {
     slug: "distribution",
     name: "Distribution",
-    heroImage: "/images/industries/distribution.jpg",
+    heroImage: "",
     overview:
       "PO financing, A/R facilities, and revolving lines for supply-chain-driven businesses.",
     examples: [
@@ -225,7 +225,7 @@ export const industries: Industry[] = [
   {
     slug: "media",
     name: "Media",
-    heroImage: "/images/industries/media.jpg",
+    heroImage: "",
     overview:
       "Revenue-based financing, contract-backed advances, and structured capital for agencies and creators.",
     examples: [
@@ -237,7 +237,7 @@ export const industries: Industry[] = [
   {
     slug: "healthcare",
     name: "Healthcare",
-    heroImage: "/images/premium_photo-1661962673986-dcffa2a05e07.jpg",
+    heroImage: "",
     overview:
       "Equipment, receivables, and operating capital for clinics, practices, and service providers.",
     examples: [

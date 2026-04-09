@@ -2,16 +2,16 @@ import type { CSSProperties } from "react";
 
 export default function LenderStrip() {
   const logos = [
-    "/images/lenders/lender1.png",
-    "/images/lenders/lender2.png",
-    "/images/lenders/lender3.png",
-    "/images/lenders/lender4.png",
+    "",
+    "",
+    "",
+    "",
   ];
 
   return (
     <section style={container} aria-label="Lender partners">
       {logos.map((src, i) => (
-        <img key={i} src={src} alt="Lender partner" width={300} height={120} loading="lazy" style={{ ...imgStyle, objectFit: "cover" }} decoding="async" />
+        <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
       ))}
     </section>
   );

@@ -53,7 +53,7 @@ export default function BusinessLineOfCredit() {
             
             <div>
               <SeoImage 
-                src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&h=800" 
+                src="" 
                 alt="Modern business equipment and office workspace setup" 
                 className="rounded-xl shadow-lg w-full h-auto"
                 data-testid="hero-image"
@@ -122,7 +122,7 @@ export default function BusinessLineOfCredit() {
             <div className="space-y-6">
               {/* Business line of credit image */}
               <SeoImage 
-                src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&h=800" 
+                src="" 
                 alt="Business owner reviewing line of credit documentation in modern office" 
                 className="rounded-xl shadow-lg w-full h-auto"
                 data-testid="credit-documentation-image"

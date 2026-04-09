@@ -8,5 +8,5 @@ const solutions = [
 ];
 
 export default function Manufacturing() {
-  return <VerticalPage title="Manufacturing" headline="Capital structure that scales with production." subheadline="Inventory turns. Equipment modernization. PO-backed growth. Delivered through lender-calibrated packaging." image="https://images.unsplash.com/photo-1567789884554-0b844b597180?auto=format&fit=crop&w=1200&q=80" solutions={solutions} />;
+  return <VerticalPage title="Manufacturing" headline="Capital structure that scales with production." subheadline="Inventory turns. Equipment modernization. PO-backed growth. Delivered through lender-calibrated packaging." image="" solutions={solutions} />;
 }

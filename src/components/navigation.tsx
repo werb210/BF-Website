@@ -17,13 +17,7 @@ export function Navigation() {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-3" data-testid="logo-boreal-financial">
-            <img
-              src="/images/header_white_transparent.png"
-              alt="Boreal Financial"
-              width={512}
-              height={128}
-              className="h-10 w-auto object-contain"
-              loading="lazy" decoding="async" />
+            <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
             <span className="text-white text-lg font-semibold tracking-wide">
               Boreal Financial
             </span>

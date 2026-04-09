@@ -20,7 +20,7 @@ export default function IndustryDetail({ slug }: Props) {
   return (
     <div className="bg-[#020817] text-white">
       <section className="relative overflow-hidden">
-        <img src={industry.heroImage} alt={industry.name} width={1600} height={900} className="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" />
+        <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
         <div className="absolute inset-0 bg-black/70" />
         <div className="relative mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-20">
           <h1 className="text-4xl font-bold md:text-5xl">{industry.name}</h1>
@@ -49,7 +49,7 @@ export default function IndustryDetail({ slug }: Props) {
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {industryProducts.map((product) => (
             <article key={product.slug} className="overflow-hidden rounded-2xl border border-white/10 bg-[#08132a]">
-              <img src={product.image} alt={product.name} width={1200} height={400} className="h-40 w-full object-cover" loading="lazy" decoding="async" />
+              <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
               <div className="p-4">
                 <h3 className="text-lg font-semibold">{product.name}</h3>
                 <p className="mt-2 text-sm text-slate-300">{product.description}</p>
