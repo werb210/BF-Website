@@ -16,7 +16,7 @@ export async function sendMayaMessage(message: string) {
     throw new Error('Maya disabled');
   }
 
-  return api('/api/v1/maya/message', {
+  return api('/api/maya/message', {
     method: 'POST',
     body: JSON.stringify({ message }),
   });
@@ -26,7 +26,7 @@ export async function checkMayaHealth(signal?: AbortSignal) {
   if (!mayaEnabled) return false;
 
   try {
-    await api('/api/v1/maya/health', { method: 'GET', signal });
+    await api('/api/maya/health', { method: 'GET', signal });
     return true;
   } catch {
     return false;

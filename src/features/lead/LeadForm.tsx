@@ -24,7 +24,7 @@ export default function LeadForm() {
     }
 
     try {
-      await api("/api/v1/crm/lead", {
+      await api("/api/crm/lead", {
         method: "POST",
         body: JSON.stringify(form),
       });

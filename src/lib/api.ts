@@ -1,5 +1,8 @@
 export async function apiCall(path: string, options: RequestInit = {}) {
-  const base = import.meta.env.VITE_API_URL;
+  const base =
+    import.meta.env.VITE_API_URL ||
+    import.meta.env.VITE_API_BASE_URL ||
+    "https://server.boreal.financial";
   const token = localStorage.getItem("token");
   const incomingHeaders = (options.headers as Record<string, string>) || {};
   const body =
