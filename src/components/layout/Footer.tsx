@@ -25,7 +25,7 @@ export default function Footer() {
           <ul className="space-y-2">
             <li><a href="/apply">Apply Now</a></li>
             <li><a href="/credit-readiness">Check your Credit Readiness</a></li>
-            <li><a href="https://staff.boreal.financial/login" target="_blank" rel="noopener noreferrer">Staff Login</a></li>
+            <li><a href="https://staff.boreal.financial/portal" target="_blank" rel="noopener noreferrer">Staff Login</a></li>
             <li><a href="https://staff.boreal.financial/lender" target="_blank" rel="noopener noreferrer">Lender Login</a></li>
           </ul>
         </div>
