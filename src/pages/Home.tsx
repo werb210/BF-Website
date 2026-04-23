@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
 import { APPLY_URL } from "@/config/links";
@@ -8,9 +7,6 @@ import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 import MarketplaceSection from "@/components/MarketplaceSection";
 import { trackConversion } from "@/main";
 
-const primaryHeroImage = "";
-const backupHeroImage = "";
-
 const featuredIndustrySlugs = ["construction", "manufacturing", "transportation"];
 const orderedIndustries = [
   ...featuredIndustrySlugs
@@ -19,21 +15,25 @@ const orderedIndustries = [
   ...industries.filter((industry) => !featuredIndustrySlugs.includes(industry.slug)),
 ];
 
+// When a hero image string is non-empty, use it; otherwise render a gradient only.
+// Setting backgroundImage to url('') is invalid and produces a broken render.
+function heroBg(image: string): React.CSSProperties {
+  if (!image) {
+    return { background: "linear-gradient(135deg, #0a0f1c 0%, #1c2a4a 55%, #0a0f1c 100%)" };
+  }
+  return {
+    backgroundImage: `url('${image}')`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  };
+}
 
 export default function Home() {
   const readinessToken = getReadinessSessionToken();
   const applyHref = buildApplyUrl(APPLY_URL, readinessToken);
-  const [heroImage, setHeroImage] = useState(primaryHeroImage);
-
-  useEffect(() => {
-    const image = new Image();
-    image.src = primaryHeroImage;
-    image.onerror = () => setHeroImage(backupHeroImage);
-  }, []);
 
   return (
     <>
-      <h1>Strategic Capital Advisory</h1>
       <SEO
         title="Business Line of Credit Canada | Fast Funding | Boreal Financial"
         description="Get a business line of credit in Canada up to $10M. Fast approvals, flexible terms, no hidden fees. Apply online with Boreal Financial."
@@ -49,49 +49,36 @@ export default function Home() {
             </div>
           </section>
         ) : null}
+
         <section className="relative flex min-h-[85vh] w-full items-center">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `url('${heroImage}')`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
-
+          <div className="absolute inset-0" style={heroBg("")} />
           <div className="absolute inset-0 bg-black/25 pointer-events-none" />
-
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-white">
             <p className="mb-4 text-sm uppercase tracking-widest text-white/60">Boutique Capital Advisory</p>
-
-            <h1 className="mb-6 max-w-3xl text-4xl font-bold leading-tight md:text-5xl">Strategic financing structured with precision.</h1>
-
+            <h1 className="mb-6 max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
+              Strategic financing structured with precision.
+            </h1>
             <p className="mb-8 max-w-2xl text-lg text-white/80">
               Institutional-grade financing strategy built for growth-stage and mature operators.
             </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col gap-4 sm:flex-row">
               <a
                 href={APPLY_URL}
                 onClick={(event) => {
                   event.preventDefault();
-                  trackConversion("apply_click", {
-                    source: "website",
-                    location: "hero",
-                  });
-
+                  trackConversion("apply_click", { source: "website", location: "hero" });
                   window.location.href = APPLY_URL;
                 }}
                 className="rounded-full bg-blue-600 px-6 py-3 font-medium transition hover:bg-blue-700"
               >
                 Apply Now
               </a>
-              <a
-                href="/contact"
+              <Link
+                to="/contact"
                 className="rounded-full border border-white/40 px-6 py-3 font-medium transition hover:border-white"
               >
                 Speak With Advisor
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -115,11 +102,14 @@ export default function Home() {
 
         <section className="mx-auto max-w-7xl px-5 py-12 md:px-6">
           <h2 className="text-3xl font-bold md:text-4xl">Industries</h2>
-          <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide">
+          <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
             {orderedIndustries.map((industry) => (
               <div key={industry.slug} className="min-w-[320px] flex-shrink-0">
-                <Link href={`/industries/${industry.slug}`} className="group relative block overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
-                  <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
+                <Link
+                  to={`/industries/${industry.slug}`}
+                  className="group relative block overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60"
+                >
+                  <div style={{ width: "100%", height: 200, background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: 8 }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/25" />
                   <div className="absolute bottom-0 p-4">
                     <h3 className="text-xl font-bold">{industry.name}</h3>
@@ -135,16 +125,21 @@ export default function Home() {
 
         <section className="mx-auto max-w-7xl px-5 py-12 md:px-6">
           <h2 className="text-3xl font-bold md:text-4xl">Products</h2>
-          <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide">
+          <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
             {products.map((product) => (
               <div key={product.slug} className="min-w-[320px] flex-shrink-0">
                 <article className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
-                  <div style={{ width: "100%", height: "200px", background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: "8px" }} />
+                  <div style={{ width: "100%", height: 200, background: "linear-gradient(135deg, #0a0f1c, #1c2a4a)", borderRadius: 8 }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20" />
                   <div className="absolute inset-0 flex flex-col justify-end p-4">
                     <h3 className="text-xl font-bold">{product.name}</h3>
                     <p className="mt-1 text-sm text-slate-200">{product.description}</p>
-                    <Link href={`/products/${product.slug}`} className="mt-3 inline-flex w-fit rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold">Learn More</Link>
+                    <Link
+                      to={`/products/${product.slug}`}
+                      className="mt-3 inline-flex w-fit rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold"
+                    >
+                      Learn More
+                    </Link>
                   </div>
                 </article>
               </div>
