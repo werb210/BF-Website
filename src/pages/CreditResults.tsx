@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { APPLY_URL } from "@/config/links";
-import { estimateCommissionValue, trackEvent, trackConversion, trackLeadProfile } from "@/main";
+import { estimateCommissionValue, trackEvent, trackConversion, trackLeadProfile } from "@/lib/analytics";
 
 function loadResult() {
   const params = new URLSearchParams(window.location.search);

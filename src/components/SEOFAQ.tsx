@@ -25,7 +25,7 @@ export function SEOFAQ({ faqs, title = "Frequently Asked Questions" }: SEOFAQPro
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       </Helmet>
-      <div className="container">
+      <div className="container-bf">
         <h2 className="section-title">{title}</h2>
 
         <div className="faq-grid">

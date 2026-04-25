@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import { estimateCommissionValue, trackConversion, trackEvent, trackLeadProfile } from "@/main";
+import { estimateCommissionValue, trackConversion, trackEvent, trackLeadProfile } from "@/lib/analytics";
 import { useLocation } from "wouter";
 import { api } from "@/lib/api";
 

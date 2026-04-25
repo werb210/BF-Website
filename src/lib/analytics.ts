@@ -1,5 +1,3 @@
-import "./style.css";
-
 declare global {
   interface Window {
     dataLayer?: unknown[];
@@ -8,7 +6,10 @@ declare global {
 
 let sessionScore = 0;
 
-export const trackEvent = (eventName: string, payload: Record<string, unknown> = {}) => {
+export const trackEvent = (
+  eventName: string,
+  payload: Record<string, unknown> = {},
+) => {
   if (typeof window !== "undefined" && Array.isArray(window.dataLayer)) {
     window.dataLayer.push({
       event: eventName,
@@ -24,7 +25,10 @@ function classifySessionIntent() {
   return "low_intent";
 }
 
-export const trackConversion = (type: string, payload: Record<string, unknown> = {}) => {
+export const trackConversion = (
+  type: string,
+  payload: Record<string, unknown> = {},
+) => {
   sessionScore += 1;
   trackEvent("conversion", {
     conversion_type: type,
@@ -59,3 +63,5 @@ export const estimateCommissionValue = (capitalRange: string): number => {
 
   return (ranges[capitalRange] || 100000) * 0.03;
 };
+
+export {};

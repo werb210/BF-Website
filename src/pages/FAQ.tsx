@@ -1,7 +1,7 @@
 export default function FAQ() {
   return (
     <section className="section">
-      <div className="container">
+      <div className="container-bf">
         <h1 className="mb-8 text-4xl font-bold">
           Frequently Asked Questions
         </h1>

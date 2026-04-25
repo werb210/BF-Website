@@ -2,110 +2,141 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --max-width: 1120px;
-  --section-padding: clamp(48px, 6vw, 96px);
+/*
+ * shadcn/ui CSS variables — dark palette tuned to match the existing
+ * #020817 navy backdrop. Components like bg-card / text-foreground /
+ * border-border resolve through these variables.
+ */
+@layer base {
+  :root {
+    --background: 222 47% 5%;
+    --foreground: 0 0% 100%;
+    --card: 222 47% 9%;
+    --card-foreground: 0 0% 100%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 25% 22%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 215 25% 18%;
+    --muted-foreground: 215 14% 70%;
+    --accent: 215 25% 22%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 25% 18%;
+    --input: 215 25% 18%;
+    --ring: 217 91% 60%;
+    --radius: 0.5rem;
+
+    --max-width: 1120px;
+    --section-padding: clamp(48px, 6vw, 96px);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
+      Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    background: #020817;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+  }
 }
 
-* {
-  box-sizing: border-box;
-}
+@layer components {
+  .container-bf {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
 
-html,
-body,
-#root {
-  min-height: 100%;
-}
+  .section {
+    padding: var(--section-padding) 0;
+  }
 
-body {
-  margin: 0;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.6;
-  background: #020817;
-  color: #fff;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  .section-dark {
+    background: #020817;
+    color: #fff;
+  }
 
-img {
-  max-width: 100%;
-  height: auto;
-}
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
 
-h1,
-h2,
-h3,
-h4 {
-  line-height: 1.2;
-  margin: 0;
-}
+  .section-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 0;
+  }
 
-p {
-  margin: 0;
-}
+  .faq-block {
+    max-width: 760px;
+  }
 
-.container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 24px;
-}
+  .faq-block h2 {
+    margin-bottom: 24px;
+    font-size: clamp(1.75rem, 2.6vw, 2.4rem);
+  }
 
-.section {
-  padding: var(--section-padding) 0;
-}
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 
-.section-dark {
-  background: #020817;
-  color: #fff;
-}
+  .faq-item {
+    display: block;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 14px;
+    background: rgba(11, 19, 32, 0.7);
+    padding: 0;
+    overflow: hidden;
+  }
 
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
+  .faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 20px;
+    font-weight: 600;
+  }
 
-.section-divider {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  margin: 0;
-}
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
 
-.faq-block {
-  max-width: 760px;
-}
-
-.faq-block h2 {
-  margin-bottom: 24px;
-  font-size: clamp(1.75rem, 2.6vw, 2.4rem);
-}
-
-.faq-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.faq-item {
-  display: block;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 14px;
-  background: rgba(11, 19, 32, 0.7);
-  padding: 0;
-  overflow: hidden;
-}
-
-.faq-item summary {
-  list-style: none;
-  cursor: pointer;
-  padding: 16px 20px;
-  font-weight: 600;
-}
-
-.faq-item summary::-webkit-details-marker {
-  display: none;
-}
-
-.faq-item p {
-  padding: 0 20px 18px;
-  color: rgba(255, 255, 255, 0.85);
+  .faq-item p {
+    padding: 0 20px 18px;
+    color: rgba(255, 255, 255, 0.85);
+  }
 }

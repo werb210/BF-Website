@@ -5,7 +5,7 @@ import { industries } from "@/data/industries";
 import { products } from "@/data/products";
 import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 import MarketplaceSection from "@/components/MarketplaceSection";
-import { trackConversion } from "@/main";
+import { trackConversion } from "@/lib/analytics";
 
 const featuredIndustrySlugs = ["construction", "manufacturing", "transportation"];
 const orderedIndustries = [

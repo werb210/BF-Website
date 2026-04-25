@@ -17,7 +17,7 @@ const faqItems = [
 export default function FAQ() {
   return (
     <section className="section section-dark">
-      <div className="container">
+      <div className="container-bf">
         <div className="faq-block">
           <h2>Frequently asked questions</h2>
           <div className="faq-list" role="list">

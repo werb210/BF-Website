@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { trackEvent } from "@/main";
+import { trackEvent } from "@/lib/analytics";
 
 export function useUTMCapture() {
   useEffect(() => {
