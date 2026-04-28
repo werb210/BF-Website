@@ -12,15 +12,16 @@ export default function Contact() {
     setErr("");
 
     try {
-      await api("/api/website-leads", {
+      // BF_WEBSITE_CONTACT_PATH_v53 — match BF-Server submitContactForm:
+      // POST /api/website/contact with camelCase {companyName, fullName, ...}.
+      await api("/api/website/contact", {
         method: "POST",
         body: JSON.stringify({
-          company_name: form.company,
-          name: form.name,
+          companyName: form.company,
+          fullName: form.name,
           email: form.email,
           phone: form.phone,
           message: form.help,
-          source: "contact_page",
         }),
       });
 
