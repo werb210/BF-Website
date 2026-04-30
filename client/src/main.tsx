@@ -249,12 +249,16 @@ function TrackingProvider() {
   return <App />;
 }
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <HelmetProvider>
-      <ErrorBoundary>
-        <TrackingProvider />
-      </ErrorBoundary>
-    </HelmetProvider>
-  </React.StrictMode>
-);
+try {
+  ReactDOM.createRoot(document.getElementById("root")!).render(
+    <React.StrictMode>
+      <HelmetProvider>
+        <ErrorBoundary>
+          <TrackingProvider />
+        </ErrorBoundary>
+      </HelmetProvider>
+    </React.StrictMode>
+  );
+} catch (error) {
+  console.warn("UI snapshot mode", error);
+}
