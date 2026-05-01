@@ -73,7 +73,7 @@ export default function ContactForm() {
     const { firstName, lastName } = splitName(formData.name);
 
     try {
-      await safeFetch("/api/contact/submit", {
+      await safeFetch("/api/website/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

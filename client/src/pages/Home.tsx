@@ -8,7 +8,7 @@ import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 import MarketplaceSection from "@/components/MarketplaceSection";
 import { trackConversion } from "@/main";
 
-const primaryHeroImage = "/images/16x9 Concierge Private Banking Hero Image.jpeg";
+const primaryHeroImage = "/images/16x9 Concierge Private Banking Hero Image.jpg";
 const fallbackHeroImage = "/images/An image of two groups of business people shaking hands over a meeting table celebrating signing a deal to merge.jpeg.webp";
 
 const featuredIndustrySlugs = ["construction", "manufacturing", "transportation"];

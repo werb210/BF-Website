@@ -37,6 +37,15 @@ export default function Header() {
           >
             Apply Now
           </a>
+          {/* BF_WEBSITE_BLOCK_1_13_V2 — cross-link to BI-Website */}
+          <a
+            href="https://delightful-sand-05a55580f.7.azurestaticapps.net/"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full border border-white px-5 py-2 font-medium text-white transition hover:bg-white hover:text-black"
+          >
+            Visit Boreal Insurance
+          </a>
         </nav>
 
         <button type="button" className="rounded-md p-2 text-white md:hidden" onClick={() => setOpen((prev) => !prev)} aria-label="Toggle navigation menu">
@@ -68,6 +77,16 @@ export default function Header() {
                 onClick={() => setOpen(false)}
               >
                 Apply Now
+              </a>
+              {/* BF_WEBSITE_BLOCK_1_13_V2 — cross-link to BI-Website */}
+              <a
+                href="https://delightful-sand-05a55580f.7.azurestaticapps.net/"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-2 inline-flex justify-center rounded-full border border-white px-5 py-3 font-medium text-white"
+                onClick={() => setOpen(false)}
+              >
+                Visit Boreal Insurance
               </a>
             </nav>
           </div>
