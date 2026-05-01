@@ -1,138 +1,81 @@
-import { useEffect } from "react";
-import { APPLY_URL } from "@/config/site";
-import { estimateCommissionValue, trackEvent, trackConversion, trackLeadProfile } from "@/main";
+import { useEffect, useMemo, useState } from "react";
+import { Link } from "wouter";
 
-const CREDIT_RESULT_STORAGE_KEY = "boreal_credit_readiness_result";
+const CREDIT_RESULT_STORAGE_KEY = "boreal.credit-readiness.result";
 
-function loadResult() {
-  const stored = sessionStorage.getItem(CREDIT_RESULT_STORAGE_KEY);
-  if (!stored) {
-    return { score: 72, tier: "yellow" as const, capitalRange: "" };
-  }
+type StoredResult = {
+  score: number;
+  tier: "green" | "yellow" | "red";
+  capitalRange?: string;
+  companyName?: string;
+  phone?: string;
+  redirect?: string | null;
+};
 
-  try {
-    const parsed = JSON.parse(stored) as { score?: number; tier?: "green" | "yellow" | "red"; capitalRange?: string };
-    if (typeof parsed.score === "number" && parsed.tier) {
-      return { score: Math.max(0, Math.min(100, parsed.score)), tier: parsed.tier, capitalRange: parsed.capitalRange ?? "" };
-    }
-  } catch {
-    // ignore malformed payloads
-  }
-
-  return { score: 72, tier: "yellow" as const, capitalRange: "" };
-}
+const TIER_COPY: Record<StoredResult["tier"], { label: string; blurb: string; color: string }> = {
+  green: { label: "Strong", blurb: "Your business looks well-positioned. Most lenders in our network are likely to make competitive offers.", color: "#22c55e" },
+  yellow: { label: "Moderate", blurb: "There's a real path to capital, but expect more documentation and a narrower set of lenders.", color: "#eab308" },
+  red: { label: "Early", blurb: "Funding is possible but the field of available lenders is smaller and rates may be higher.", color: "#ef4444" },
+};
 
 export default function CreditResults() {
-  const { score, tier, capitalRange } = loadResult();
-
-  const isGreen = tier === "green" || score >= 80;
-  const isYellow = !isGreen && (tier === "yellow" || score >= 60);
+  const [result, setResult] = useState<StoredResult | null>(null);
 
   useEffect(() => {
-    if (isGreen) {
-      trackLeadProfile({
-        strength: "strong",
-      });
-
-      trackEvent("funnel_stage", {
-        stage: "results_strong",
-      });
-      return;
+    try {
+      const raw = sessionStorage.getItem(CREDIT_RESULT_STORAGE_KEY);
+      if (raw) setResult(JSON.parse(raw));
+    } catch {
+      setResult(null);
     }
+  }, []);
 
-    if (isYellow) {
-      trackLeadProfile({
-        strength: "moderate",
-      });
-
-      trackEvent("funnel_stage", {
-        stage: "results_moderate",
-      });
-      return;
+  const applyHref = useMemo(() => {
+    if (!result?.redirect) {
+      const phone = result?.phone ? `&phone=${encodeURIComponent(result.phone)}` : "";
+      return `https://client.boreal.financial/apply?startAt=2${phone}`;
     }
+    return result.redirect.includes("?") ? `${result.redirect}&startAt=2` : `${result.redirect}?startAt=2`;
+  }, [result]);
 
-    trackLeadProfile({
-      strength: "weak",
-    });
+  if (!result) {
+    return (
+      <main className="bg-[#020817] min-h-screen px-5 py-12 text-white">
+        <div className="mx-auto max-w-2xl">
+          <h1 className="mb-4 text-3xl font-bold">No results yet</h1>
+          <p className="mb-6 text-white/80">Submit the credit readiness form to see your readiness score.</p>
+          <Link href="/credit-readiness" className="inline-block rounded-full bg-white px-6 py-3 font-semibold text-[#020817]">Take the assessment</Link>
+        </div>
+      </main>
+    );
+  }
 
-    trackEvent("funnel_stage", {
-      stage: "results_weak",
-    });
-  }, [isGreen, isYellow]);
-
-
-  useEffect(() => {
-    const estimatedValue = estimateCommissionValue(capitalRange);
-
-    trackEvent("funnel_value_signal", {
-      estimated_commission_value: estimatedValue,
-    });
-  }, [capitalRange]);
-
-  const cardAccentClasses = isGreen
-    ? "border border-emerald-400/60 shadow-[0_0_40px_rgba(16,185,129,0.2)]"
-    : isYellow
-      ? "border border-amber-300/60 shadow-[0_0_28px_rgba(251,191,36,0.16)]"
-      : "border border-white/10";
-
-  const scoreBarClasses = isGreen
-    ? "bg-emerald-400"
-    : isYellow
-      ? "bg-amber-400"
-      : "bg-rose-400";
+  const tier = TIER_COPY[result.tier];
 
   return (
-    <div className="flex min-h-[60vh] items-center justify-center bg-[#0b1220] px-6 text-white">
-      <div className={`w-full max-w-xl rounded-2xl bg-[#0E1A2B] p-8 text-center ${cardAccentClasses}`}>
-        <h2 className="mb-4 text-2xl font-semibold">Credit Readiness Assessment</h2>
-        <div className="mb-6 overflow-hidden rounded-full bg-white/10">
-          <div className={`h-2 rounded-full transition-all ${scoreBarClasses}`} style={{ width: `${score}%` }} />
+    <main className="bg-[#020817] min-h-screen px-5 py-12 text-white">
+      <div className="mx-auto max-w-2xl">
+        <h1 className="mb-3 text-3xl font-bold md:text-5xl">Your Capital Readiness</h1>
+        {result.companyName && <p className="mb-8 text-white/80">For <span className="font-semibold text-white">{result.companyName}</span></p>}
+        <div className="rounded-2xl border border-white/10 bg-[#08132a] p-8">
+          <div className="flex items-end gap-6">
+            <div>
+              <div className="text-xs uppercase tracking-wide text-white/60">Readiness score</div>
+              <div className="text-7xl font-bold leading-none" style={{ color: tier.color }}>{result.score}</div>
+              <div className="text-sm text-white/60">out of 100</div>
+            </div>
+            <div className="flex-1 pb-2">
+              <div className="text-xs uppercase tracking-wide text-white/60">Tier</div>
+              <div className="text-2xl font-bold" style={{ color: tier.color }}>{tier.label}</div>
+            </div>
+          </div>
+          <p className="mt-6 text-white/80">{tier.blurb}</p>
         </div>
-
-
-        {isGreen && (
-          <p className="mb-6 text-lg leading-8 text-white/85 md:text-xl md:leading-9">
-            Congratulations! You are strongly positioned to apply for capital or equipment. Please proceed to the application form and we will begin the underwriting process and build your application package for funding.
-          </p>
-        )}
-
-        {isYellow && (
-          <p className="mb-6 text-lg leading-8 text-white/85 md:text-xl md:leading-9">
-            Congratulations! You are positioned to apply. There may be some areas we need to investigate further and clarify during underwriting, but structured capital options are available.
-          </p>
-        )}
-
-        {!isGreen && !isYellow && (
-          <p className="mb-6 text-lg leading-8 text-white/85 md:text-xl md:leading-9">
-            Your profile may require additional strengthening before funding. Connect with an advisor and we will outline practical steps to improve readiness.
-          </p>
-        )}
-
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
-          <a
-            href={APPLY_URL}
-            onClick={() => {
-              const estimatedValue = estimateCommissionValue(capitalRange);
-
-              trackConversion("apply_click", {
-                source: "website",
-                location: "results",
-                estimated_commission_value: estimatedValue,
-              });
-            }}
-            className="flex h-11 min-w-[170px] items-center justify-center rounded-full bg-blue-600 px-6 font-medium text-white transition hover:bg-blue-700"
-          >
-            Apply Now
-          </a>
-
-          <a
-            href="/contact"
-            className="flex h-11 min-w-[170px] items-center justify-center rounded-full border border-white/30 px-6 text-white/80 transition hover:bg-white/10"
-          >
-            Speak With Advisor
-          </a>
+        <div className="mt-8 flex flex-col gap-3 md:flex-row">
+          <a href={applyHref} className="inline-block rounded-full bg-white px-8 py-4 text-center text-base font-semibold text-[#020817] hover:bg-white/90">Apply Now</a>
+          <Link href="/products" className="inline-block rounded-full border border-white/20 px-8 py-4 text-center text-base font-semibold text-white hover:bg-white/10">Browse products</Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

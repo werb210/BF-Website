@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { estimateCommissionValue, trackConversion, trackEvent, trackLeadProfile } from "@/main";
 import { useLocation } from "wouter";
 import { WEBSITE_API_BASE } from "@/config/api";
+import { scoreCreditReadiness } from "@/lib/creditReadinessScore";
 import { formatPhone, formatCurrency, unformatCurrency } from "@/utils/formatters";
 
 // BF_WEBSITE_BLOCK_1_13_V2 — V1 14-field form aligned with BF-client
@@ -105,7 +106,7 @@ const FIXED_ASSETS = [
   "Over $500,000",
 ];
 
-const CREDIT_RESULT_STORAGE_KEY = "boreal_credit_readiness_result";
+const CREDIT_RESULT_STORAGE_KEY = "boreal.credit-readiness.result";
 
 export default function CreditReadiness() {
   const [, navigate] = useLocation();
@@ -159,32 +160,37 @@ export default function CreditReadiness() {
         capital_range: form.annualRevenueRange,
       });
 
-      if (typeof body.score === "number" && body.tier) {
-        sessionStorage.setItem(
-          CREDIT_RESULT_STORAGE_KEY,
-          JSON.stringify({
-            score: body.score,
-            tier: body.tier,
-            capitalRange: form.annualRevenueRange,
-          }),
-        );
-        const strength: "strong" | "moderate" | "weak" =
-          body.tier === "green" ? "strong" : body.tier === "yellow" ? "moderate" : "weak";
-        trackLeadProfile({
-          strength,
-          industry: form.industry,
-          capital_range: form.annualRevenueRange,
-          collateral_type: form.fixedAssetsValueRange,
-        });
-      }
+      const computed = scoreCreditReadiness({
+        salesHistoryYears: form.salesHistoryYears,
+        annualRevenueRange: form.annualRevenueRange,
+        avgMonthlyRevenueRange: form.avgMonthlyRevenueRange,
+        accountsReceivableRange: form.accountsReceivableRange,
+        fixedAssetsValueRange: form.fixedAssetsValueRange,
+        requestedAmount: form.requestedAmount,
+        fundingType: form.fundingType,
+      });
 
-      // The server returns redirect=https://client.boreal.financial/apply?continue=<token>
-      // Phone-based prefill on the client side (Block 1.15) hydrates Step 1 KYC
-      // when the user OTP-logs in with the same phone they entered here.
-      if (body.redirect) {
-        window.location.href = body.redirect;
-        return;
-      }
+      sessionStorage.setItem(
+        CREDIT_RESULT_STORAGE_KEY,
+        JSON.stringify({
+          score: computed.score,
+          tier: computed.tier,
+          capitalRange: form.annualRevenueRange,
+          companyName: form.companyName,
+          phone: form.phone,
+          redirect: body.redirect ?? null,
+        }),
+      );
+
+      const strength: "strong" | "moderate" | "weak" =
+        computed.tier === "green" ? "strong" : computed.tier === "yellow" ? "moderate" : "weak";
+      trackLeadProfile({
+        strength,
+        industry: form.industry,
+        capital_range: form.annualRevenueRange,
+        collateral_type: form.fixedAssetsValueRange,
+      });
+
       navigate("/credit-results");
     } catch {
       setError("Unable to submit. Please try again.");
