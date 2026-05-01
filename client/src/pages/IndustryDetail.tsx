@@ -19,6 +19,10 @@ export default function IndustryDetail({ slug }: Props) {
 
   return (
     <div className="bg-[#020817] text-white">
+      {/* BF_WEBSITE_BLOCK_1_18 — back-to-main nav (issue #7) */}
+      <section className="mx-auto max-w-7xl px-5 pt-6 md:px-6">
+        <Link href="/industries" className="inline-flex items-center text-sm font-semibold text-blue-200 hover:text-white">← Back to Industries</Link>
+      </section>
       <section className="relative overflow-hidden">
         <img src={industry.heroImage} alt={industry.name} width={1600} height={900} className="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" />
         <div className="absolute inset-0 bg-black/70" />

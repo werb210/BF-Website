@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="mt-16 bg-slate-950 text-slate-200">
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-12 sm:px-6 md:grid-cols-3 md:py-16 lg:px-8">
         <div>
-          <img src="/images/100_100.png" alt="Boreal Financial" width={100} height={100} className="h-12 w-auto object-contain" loading="lazy" decoding="async" />
+          <img src="/images/header_white_transparent.png" alt="Boreal Financial" width={512} height={128} className="h-16 w-auto object-contain md:h-20" loading="lazy" decoding="async" />
           <h2 className="text-lg font-semibold">Boreal Financial</h2>
           <p className="mt-2 text-sm text-slate-400">
             Structured lending marketplace helping businesses across Canada and the United States.
@@ -39,8 +39,6 @@ export function Footer() {
             <li><a href="/contact">Contact Us</a></li>
             <li><a href="/capital-readiness-score">Capital Readiness Score</a></li>
             <li><a href="/product-comparison">Product Comparison</a></li>
-            <li><a href="/staff-login">Staff Login</a></li>
-            <li><a href="/lender-login">Lender Login</a></li>
           </ul>
         </div>
       </div>

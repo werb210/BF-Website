@@ -105,9 +105,9 @@ export default function Home() {
         <div className="section-divider" />
 
         <section className="authority-block py-12">
-          <div className="mx-auto max-w-7xl px-5 md:px-6">
+          <div className="mx-auto max-w-7xl px-5 md:px-6 text-center">
             <h2 className="text-3xl font-bold md:text-4xl">Institutional-Grade Structuring. Not Rate Shopping.</h2>
-            <p className="mt-2 text-white/80">
+            <p className="mt-2 mx-auto max-w-3xl text-white/80">
               80+ active lending institutions. 50+ years combined capital structuring experience. We arrange structured financing from $10,000 to $100,000,000.
             </p>
           </div>
@@ -119,24 +119,7 @@ export default function Home() {
 
         <div className="section-divider" />
 
-        <section className="mx-auto max-w-7xl px-5 py-12 md:px-6">
-          <h2 className="text-3xl font-bold md:text-4xl">Industries</h2>
-          <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {orderedIndustries.map((industry) => (
-              <Link key={industry.slug} href={`/industries/${industry.slug}`} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
-                <img src={industry.image} alt={industry.name} width={1200} height={520} className="h-52 w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy" decoding="async" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/25" />
-                <div className="absolute bottom-0 p-4">
-                  <h3 className="text-xl font-bold">{industry.name}</h3>
-                  <p className="mt-1 text-sm text-slate-200">{industry.description}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <div className="section-divider" />
-
+        {/* BF_WEBSITE_BLOCK_1_18 — Products first (issue #3) */}
         <section className="mx-auto max-w-7xl px-5 py-12 md:px-6">
           <h2 className="text-3xl font-bold md:text-4xl">Products</h2>
           <div className="mt-4 overflow-x-auto pb-4">
@@ -151,6 +134,27 @@ export default function Home() {
                     <Link href={`/products/${product.slug}`} className="mt-3 inline-flex w-fit rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold">Learn More</Link>
                   </div>
                 </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className="section-divider" />
+
+        {/* BF_WEBSITE_BLOCK_1_18 — Industries as horizontal carousel (issue #3) */}
+        <section className="mx-auto max-w-7xl px-5 py-12 md:px-6">
+          <h2 className="text-3xl font-bold md:text-4xl">Industries</h2>
+          <div className="mt-4 overflow-x-auto pb-4">
+            <div className="flex min-w-max gap-6 px-2">
+              {orderedIndustries.map((industry) => (
+                <Link key={industry.slug} href={`/industries/${industry.slug}`} className="group relative w-[320px] flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
+                  <img src={industry.image} alt={industry.name} width={1200} height={560} className="h-56 w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy" decoding="async" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/25" />
+                  <div className="absolute inset-0 flex flex-col justify-end p-4">
+                    <h3 className="text-xl font-bold">{industry.name}</h3>
+                    <p className="mt-1 text-sm text-slate-200">{industry.description}</p>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>

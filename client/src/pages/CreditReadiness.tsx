@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { estimateCommissionValue, trackConversion, trackEvent, trackLeadProfile } from "@/main";
 import { useLocation } from "wouter";
 import { WEBSITE_API_BASE } from "@/config/api";
+import { formatPhone, formatCurrency, unformatCurrency } from "@/utils/formatters";
 
 // BF_WEBSITE_BLOCK_1_13_V2 — V1 14-field form aligned with BF-client
 // Step1_KYC.tsx canonical schema (see client-app/src/schemas/v1WizardSchema.ts).
@@ -127,10 +128,14 @@ export default function CreditReadiness() {
     setSubmitting(true);
 
     try {
+      const submitPayload = {
+        ...form,
+        requestedAmount: unformatCurrency(form.requestedAmount),
+      };
       const response = await fetch(`${WEBSITE_API_BASE}/api/website/credit-readiness`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(submitPayload),
       });
 
       if (!response.ok) {
@@ -202,7 +207,7 @@ export default function CreditReadiness() {
             <input required type="text" autoComplete="organization" placeholder="Company Name" value={form.companyName} onChange={(e) => update("companyName", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
             <input required type="text" autoComplete="name" placeholder="Full Name" value={form.fullName} onChange={(e) => update("fullName", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
             <input required type="email" autoComplete="email" inputMode="email" placeholder="Email" value={form.email} onChange={(e) => update("email", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
-            <input required type="tel" autoComplete="tel" inputMode="tel" placeholder="Mobile Phone" value={form.phone} onChange={(e) => update("phone", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
+            <input required type="tel" autoComplete="tel" inputMode="tel" placeholder="Mobile Phone" value={form.phone} onChange={(e) => update("phone", formatPhone(e.target.value))} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
 
             <select required value={form.industry} onChange={(e) => update("industry", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">
               <option value="">Industry</option>
@@ -217,9 +222,9 @@ export default function CreditReadiness() {
               <option value="">Funding Type</option>
               {FUNDING_TYPES.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
-            <input required type="number" min="1" placeholder="Requested Amount ($)" value={form.requestedAmount} onChange={(e) => update("requestedAmount", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
+            <input required type="text" inputMode="numeric" placeholder="Requested Amount ($)" value={form.requestedAmount} onChange={(e) => update("requestedAmount", formatCurrency(e.target.value))} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
 
-            <select required value={form.purposeOfFunds} onChange={(e) => update("purposeOfFunds", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3 md:col-span-2">
+            <select required value={form.purposeOfFunds} onChange={(e) => update("purposeOfFunds", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">
               <option value="">Purpose of Funds</option>
               {PURPOSES.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
@@ -240,7 +245,7 @@ export default function CreditReadiness() {
               <option value="">Accounts Receivable</option>
               {AR.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
-            <select required value={form.fixedAssetsValueRange} onChange={(e) => update("fixedAssetsValueRange", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3 md:col-span-2">
+            <select required value={form.fixedAssetsValueRange} onChange={(e) => update("fixedAssetsValueRange", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">
               <option value="">Fixed Assets Value</option>
               {FIXED_ASSETS.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
