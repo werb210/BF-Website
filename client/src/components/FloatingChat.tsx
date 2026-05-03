@@ -172,38 +172,87 @@ export default function FloatingChat() {
     };
   }, [open, isOnline, sessionId]);
 
-  function sendMessage(event: FormEvent<HTMLFormElement>) {
+  // BF_WEBSITE_BLOCK_v9_MAYA_INPUT_ENABLED_v1
+  // Send strategy:
+  //   - If WebSocket is OPEN, use it (real-time path).
+  //   - If WebSocket is unavailable but the user has typed a message,
+  //     POST to /api/website/contact as an asynchronous fallback so
+  //     the message actually reaches a human. Acknowledge inline.
+  //   - Never silently drop the user's input.
+  async function sendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    if (isOnline !== true || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
-      return;
-    }
+    const wsOpen =
+      wsRef.current && wsRef.current.readyState === WebSocket.OPEN && isOnline === true;
 
     if (mode === "report") {
       const issueText = issue.trim();
       if (!issueText) return;
-      wsRef.current.send(JSON.stringify({ type: "message", sessionId, message: `Issue report: ${issueText}` }));
-      setMessages((prev) => [...prev, { id: `${Date.now()}-report`, from: "user", message: `Issue report: ${issueText}` }]);
+      const payload = `Issue report: ${issueText}`;
+      setMessages((prev) => [...prev, { id: `${Date.now()}-report`, from: "user", message: payload }]);
       setIssue("");
       setMode("chat");
+      if (wsOpen) {
+        wsRef.current!.send(JSON.stringify({ type: "message", sessionId, message: payload }));
+      } else {
+        await sendOfflineFallback(payload);
+      }
       return;
     }
 
     const trimmed = input.trim();
     if (!trimmed) return;
-    wsRef.current.send(JSON.stringify({ type: "message", sessionId, message: trimmed }));
     setMessages((prev) => [...prev, { id: `${Date.now()}-user`, from: "user", message: trimmed }]);
     setInput("");
+    if (wsOpen) {
+      wsRef.current!.send(JSON.stringify({ type: "message", sessionId, message: trimmed }));
+    } else {
+      await sendOfflineFallback(trimmed);
+    }
+  }
+
+  async function sendOfflineFallback(message: string) {
+    try {
+      await fetch("/api/website/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ source: "maya_offline", sessionId, message }),
+      });
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `${Date.now()}-system`,
+          from: "system",
+          message:
+            "Maya is offline right now. Your message was queued and a specialist will follow up by email.",
+        },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `${Date.now()}-system`,
+          from: "system",
+          message:
+            "Couldn't reach our servers. Please email hello@boreal.financial or try again shortly.",
+        },
+      ]);
+    }
   }
 
   function reportIssue() {
     setMode("report");
   }
 
-  function requestHumanSupport() {
+  // BF_WEBSITE_BLOCK_v9_MAYA_INPUT_ENABLED_v1
+  async function requestHumanSupport() {
     setMode("chat");
-    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
-    wsRef.current.send(JSON.stringify({ type: "staff_joined", sessionId }));
+    const wsOpen =
+      wsRef.current && wsRef.current.readyState === WebSocket.OPEN && isOnline === true;
+    if (wsOpen) {
+      wsRef.current!.send(JSON.stringify({ type: "staff_joined", sessionId }));
+      return;
+    }
+    await sendOfflineFallback("[user requested live human support]");
   }
 
   const chatUi = (
@@ -231,33 +280,52 @@ export default function FloatingChat() {
             ))}
           </div>
           <div className="flex gap-2 border-t border-white/10 px-3 py-2 md:px-4">
-            <button type="button" onClick={requestHumanSupport} className="flex-1 rounded border border-white/20 px-3 py-2" disabled={isOnline !== true}>
+            {/* BF_WEBSITE_BLOCK_v9_MAYA_INPUT_ENABLED_v1 — always interactive.
+               "Talk to a Human" prefers WS escalation but falls back to
+               offline ack. "Report an Issue" only switches mode locally,
+               which is always safe. */}
+            <button type="button" onClick={requestHumanSupport} className="flex-1 rounded border border-white/20 px-3 py-2">
               Talk to a Human
             </button>
-            <button type="button" onClick={reportIssue} className="flex-1 rounded border border-white/20 px-3 py-2" disabled={isOnline !== true}>
+            <button type="button" onClick={reportIssue} className="flex-1 rounded border border-white/20 px-3 py-2">
               Report an Issue
             </button>
           </div>
           <form onSubmit={sendMessage} className="chat-input border-t border-white/10">
             <div className="flex gap-2 border-t border-gray-700 p-3">
+              {/* BF_WEBSITE_BLOCK_v9_MAYA_INPUT_ENABLED_v1 — never disable
+                 input/textarea/Send. If WS is offline, sendMessage falls
+                 back to POST /api/website/contact so the user's typed
+                 message still reaches a human. Frozen UI was the
+                 reported failure mode. */}
               {mode === "report" ? (
                 <textarea
                   value={issue}
                   onChange={(e) => setIssue(e.target.value)}
-                  placeholder={isOnline === false ? "Chat offline" : "Describe the issue you encountered"}
+                  placeholder={
+                    isOnline === false
+                      ? "Maya is offline — your message will be emailed to a specialist"
+                      : "Describe the issue you encountered"
+                  }
                   className="min-h-24 flex-1 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 outline-none"
-                  disabled={isOnline !== true}
                 />
               ) : (
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder={isOnline === false ? "Chat offline" : "Type your message..."}
+                  placeholder={
+                    isOnline === false
+                      ? "Maya is offline — your message will be emailed to a specialist"
+                      : "Type your message..."
+                  }
                   className="flex-1 rounded-lg bg-gray-800 px-3 py-2 outline-none"
-                  disabled={isOnline !== true}
                 />
               )}
-              <button type="submit" className="self-end rounded-lg bg-blue-600 px-4 py-2 font-semibold hover:bg-blue-700 disabled:opacity-50" aria-label="Send chat message" disabled={isOnline !== true}>
+              <button
+                type="submit"
+                className="self-end rounded-lg bg-blue-600 px-4 py-2 font-semibold hover:bg-blue-700 disabled:opacity-50"
+                aria-label="Send chat message"
+              >
                 Send
               </button>
             </div>
