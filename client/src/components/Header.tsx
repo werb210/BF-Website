@@ -29,8 +29,16 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          {/* BF_WEBSITE_BLOCK_v81_BI_LINK */}
-          <a href="https://boreal.insure" rel="noopener noreferrer" className="text-sm font-semibold ml-4">
+          {/* BF_WEBSITE_BLOCK_v82_BI_LINK_REVERT_v1 — boreal.insure
+              isn't registered yet (NXDOMAIN). Match the mobile drawer
+              link (line ~78) that already uses the Azure Static Web
+              App URL. Revisit once boreal.insure resolves. */}
+          <a
+            href="https://delightful-sand-05a55580f.7.azurestaticapps.net/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-semibold ml-4"
+          >
             Visit Boreal Insurance
           </a>
           <a

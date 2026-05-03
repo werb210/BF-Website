@@ -75,11 +75,18 @@ export default function ContactForm() {
     const { firstName, lastName } = splitName(formData.name);
 
     try {
+      // BF_WEBSITE_BLOCK_v82_CONTACT_FIELDS_v1
+      // BF-Server's submitContactForm reads companyName + fullName
+      // (contact.controller.ts:11-17) and 400s when those are
+      // undefined. Match its expected shape; send firstName +
+      // lastName as well for any future consumer that wants them.
+      const fullNameJoined = [firstName, lastName].filter(Boolean).join(" ").trim();
       await safeFetch(`${WEBSITE_API_BASE}/api/website/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          company: formData.companyName,
+          companyName: formData.companyName,
+          fullName: fullNameJoined,
           firstName,
           lastName,
           email: formData.email,
