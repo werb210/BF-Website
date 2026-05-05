@@ -40,6 +40,11 @@ export default function ContactForm() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  // BF_WEBSITE_BLOCK_v130c_READINESS_HANDOFF_REPAIR_v1 — server returns
+  // { success, leadId, redirect: "https://client.boreal.financial/apply?continue=<token>" }.
+  // Capture the redirect so the success modal's Continue button can take
+  // the user to the OTP page and let them claim the lead in the wizard.
+  const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -82,7 +87,8 @@ export default function ContactForm() {
       // undefined. Match its expected shape; send firstName +
       // lastName as well for any future consumer that wants them.
       const fullNameJoined = [firstName, lastName].filter(Boolean).join(" ").trim();
-      await safeFetch(`${WEBSITE_API_BASE}/api/website/contact`, {
+      // BF_WEBSITE_BLOCK_v130c_READINESS_HANDOFF_REPAIR_v1
+      const submitResponse = await safeFetch(`${WEBSITE_API_BASE}/api/website/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         // BF_WEBSITE_BLOCK_v129c_PHONE_NORMALIZATION_v1
@@ -99,6 +105,21 @@ export default function ContactForm() {
           message: formData.message,
         }),
       });
+
+      // BF_WEBSITE_BLOCK_v130c_READINESS_HANDOFF_REPAIR_v1 — capture
+      // server-side continuation redirect (best-effort; falls back to "/").
+      try {
+        const respObj = submitResponse as { redirect?: unknown } | null;
+        const r =
+          respObj && typeof respObj === "object" && typeof respObj.redirect === "string"
+            ? respObj.redirect
+            : null;
+        if (r && /^https?:\/\//.test(r)) {
+          setRedirectUrl(r);
+        }
+      } catch {
+        // best-effort only
+      }
 
       trackEvent("contact_form_submitted", {
         source: "contact_page",
@@ -139,7 +160,11 @@ export default function ContactForm() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
           <div className="w-full max-w-md rounded-2xl border border-white/20 bg-[#0a1731] p-6 text-center">
             <p className="text-lg font-semibold">A Boreal Intake Specialist will contact you shortly</p>
-            <button onClick={() => { setShowSuccess(false); window.location.href = "/"; }} className="mt-5 rounded-full bg-white px-5 py-2.5 font-semibold text-black">Continue</button>
+            <button onClick={() => {
+              // BF_WEBSITE_BLOCK_v130c_READINESS_HANDOFF_REPAIR_v1
+              setShowSuccess(false);
+              window.location.href = redirectUrl || "/";
+            }} className="mt-5 rounded-full bg-white px-5 py-2.5 font-semibold text-black">Continue</button>
           </div>
         </div>
       ) : null}
