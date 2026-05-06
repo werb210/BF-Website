@@ -1,3 +1,4 @@
+// BF_WEBSITE_BLOCK_v124_READINESS_AND_CONTACT_HANDOFF_v1
 import { FormEvent, useEffect, useState } from "react";
 import { estimateCommissionValue, trackConversion, trackEvent, trackLeadProfile } from "@/main";
 import { useLocation } from "wouter";
@@ -21,7 +22,6 @@ type ReadinessForm = {
   industry: string;
   businessLocation: string;
   // funding profile
-  fundingType: string;
   requestedAmount: string;
   purposeOfFunds: string;
   // financial profile
@@ -39,7 +39,6 @@ const initialForm: ReadinessForm = {
   phone: "",
   industry: "",
   businessLocation: "",
-  fundingType: "",
   requestedAmount: "",
   purposeOfFunds: "",
   salesHistoryYears: "",
@@ -177,7 +176,6 @@ export default function CreditReadiness() {
         accountsReceivableRange: form.accountsReceivableRange,
         fixedAssetsValueRange: form.fixedAssetsValueRange,
         requestedAmount: form.requestedAmount,
-        fundingType: form.fundingType,
       });
 
       sessionStorage.setItem(
@@ -237,10 +235,6 @@ export default function CreditReadiness() {
               {LOCATIONS.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
 
-            <select required value={form.fundingType} onChange={(e) => update("fundingType", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">
-              <option value="">Funding Type</option>
-              {FUNDING_TYPES.map((opt) => <option key={opt}>{opt}</option>)}
-            </select>
             <input required type="text" inputMode="numeric" placeholder="Requested Amount ($)" value={form.requestedAmount} onChange={(e) => update("requestedAmount", formatCurrency(e.target.value))} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
 
             <select required value={form.purposeOfFunds} onChange={(e) => update("purposeOfFunds", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">

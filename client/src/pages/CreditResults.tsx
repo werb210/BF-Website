@@ -30,13 +30,12 @@ export default function CreditResults() {
     }
   }, []);
 
-  const applyHref = useMemo(() => {
-    if (!result?.redirect) {
-      const phone = result?.phone ? `&phone=${encodeURIComponent(result.phone)}` : "";
-      return `https://client.boreal.financial/apply?startAt=2${phone}`;
-    }
-    return result.redirect.includes("?") ? `${result.redirect}&startAt=2` : `${result.redirect}?startAt=2`;
-  }, [result]);
+  // BF_WEBSITE_BLOCK_v124_READINESS_AND_CONTACT_HANDOFF_v1
+  // Q7: Apply Now → plain /apply (OTP login). Server-side, BF-Server
+  // matches the readiness_session by phone and prefills steps 1/3/4 in
+  // the wizard. Don't pass startAt= or a custom redirect — the wizard
+  // resumes from the right step automatically.
+  const applyHref = useMemo(() => "https://client.boreal.financial/apply", []);
 
   if (!result) {
     return (

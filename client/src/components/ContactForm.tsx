@@ -1,3 +1,4 @@
+// BF_WEBSITE_BLOCK_v124_READINESS_AND_CONTACT_HANDOFF_v1
 import { FormEvent, useState } from "react";
 import { safeFetch } from "@/lib/safeFetch";
 import { trackEvent } from "@/utils/analytics";
@@ -163,7 +164,7 @@ export default function ContactForm() {
             <button onClick={() => {
               // BF_WEBSITE_BLOCK_v130c_READINESS_HANDOFF_REPAIR_v1
               setShowSuccess(false);
-              window.location.href = redirectUrl || "/";
+              window.location.href = "/"; // BF_WEBSITE_BLOCK_v124 — Continue → main page; ignore server redirect
             }} className="mt-5 rounded-full bg-white px-5 py-2.5 font-semibold text-black">Continue</button>
           </div>
         </div>
