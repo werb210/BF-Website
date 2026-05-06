@@ -35,7 +35,14 @@ export default function CreditResults() {
   // matches the readiness_session by phone and prefills steps 1/3/4 in
   // the wizard. Don't pass startAt= or a custom redirect — the wizard
   // resumes from the right step automatically.
-  const applyHref = useMemo(() => "https://client.boreal.financial/apply", []);
+  // BF_WEBSITE_BLOCK_v150_APPLY_FRESH_OTP_v1
+  // Append ?fresh=1 so BF-client's RequireOTP guard clears any stale
+  // bf_jwt_token in localStorage and forces an OTP login. Without this,
+  // a user who tested earlier on the same browser keeps the prior token
+  // and gets dumped straight into the wizard with no phone-prefill — the
+  // exact "credit readiness takes me to step 1, not OTP" symptom Todd
+  // saw in live testing.
+  const applyHref = useMemo(() => "https://client.boreal.financial/apply?fresh=1", []);
 
   if (!result) {
     return (
