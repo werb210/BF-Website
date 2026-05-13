@@ -17,6 +17,16 @@ export function Footer() {
             <li><a href="/how-it-works">How It Works</a></li>
             <li><a href="/products/term-loans">Products</a></li>
             <li><a href="/industries/construction">Industries</a></li>
+            <li>
+              <a
+                href="https://boreal.insure"
+                rel="noopener noreferrer"
+                className="hover:text-white"
+                data-testid="footer-link-boreal-insurance"
+              >
+                Boreal Insurance
+              </a>
+            </li>
           </ul>
         </div>
         <div>
