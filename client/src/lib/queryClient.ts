@@ -5,10 +5,21 @@ export async function apiRequest(
   method: string,
   url: string,
   data?: unknown | undefined,
+  extraHeaders?: Record<string, string>,
 ): Promise<Response> {
+  // BF_WEBSITE_BLOCK_v_MAYA_AUDIENCE_HEADER_v1 — optional extraHeaders
+  // so callers (notably Maya) can advertise audience without
+  // duplicating fetch plumbing. Existing two-arg and three-arg
+  // callers are unaffected.
+  const baseHeaders: Record<string, string> = data
+    ? { "Content-Type": "application/json" }
+    : {};
+  const headers = extraHeaders
+    ? { ...baseHeaders, ...extraHeaders }
+    : baseHeaders;
   return await safeFetch(url, {
     method,
-    headers: data ? { "Content-Type": "application/json" } : {},
+    headers,
     body: data ? JSON.stringify(data) : undefined,
     credentials: "include",
   });
