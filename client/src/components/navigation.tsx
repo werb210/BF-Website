@@ -45,6 +45,14 @@ export function Navigation() {
                   </a>
                 </Link>
               ))}
+              <a
+                href="https://boreal.insure"
+                rel="noopener noreferrer"
+                className="px-3 py-2 rounded-md text-sm font-semibold text-secondary hover:text-primary transition-colors"
+                data-testid="nav-link-boreal-insurance"
+              >
+                Boreal Insurance
+              </a>
               <AskQuestionButton size="sm" variant="outline">
                 Contact Us
               </AskQuestionButton>
@@ -82,6 +90,15 @@ export function Navigation() {
                   </a>
                 </Link>
               ))}
+              <a
+                href="https://boreal.insure"
+                rel="noopener noreferrer"
+                className="block px-3 py-2 rounded-md text-base font-medium text-secondary hover:text-primary transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+                data-testid="mobile-nav-link-boreal-insurance"
+              >
+                Boreal Insurance
+              </a>
               <div className="px-3 py-2 space-y-2">
                 <AskQuestionButton className="w-full" size="sm" variant="outline">
                   Contact Us
