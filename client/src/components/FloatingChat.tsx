@@ -211,12 +211,33 @@ export default function FloatingChat() {
   }
 
   async function sendOfflineFallback(message: string) {
+    // BF_WEBSITE_BLOCK_v15_FLOATING_CHAT_OFFLINE_FALLBACK_v1
+    // Pre-fix this POSTed to /api/website/contact which does NOT exist on
+    // either backend: BF-Website's local Express server mounts
+    // contactRoute at /api/contact (server/index.ts:84), and BF-Server has
+    // no /api/website/contact route either (its website.ts mounts at
+    // /api/website/* but never declares /contact). The fetch silently 404'd
+    // and the try block still showed "your message was queued" -- a lie.
+    // Fix: target the correct local path /api/contact and check res.ok so
+    // a real failure surfaces the email fallback message instead of
+    // claiming success on a 404.
     try {
-      await fetch("/api/website/contact", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ source: "maya_offline", sessionId, message }),
+        body: JSON.stringify({
+          source: "maya_offline",
+          sessionId,
+          message,
+          // contactFormSchema (server/validation.ts) expects name + email
+          // fields. We don't have them in the offline path; send empty
+          // placeholders so the schema doesn't reject the POST outright.
+          // If the server-side validation tightens, this needs revisiting.
+          name: "Maya offline visitor",
+          email: "maya-offline@boreal.financial",
+        }),
       });
+      if (!res.ok) throw new Error(`contact endpoint returned ${res.status}`);
       setMessages((prev) => [
         ...prev,
         {
