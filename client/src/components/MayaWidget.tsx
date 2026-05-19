@@ -78,11 +78,11 @@ export default function MayaWidget() {
     setMessages((prev) => [...prev, { role: "user", content: userInput }]);
 
     const res = await sendMessage(userInput);
-    setResponse(res.data);
+    setResponse(res);
 
-    const assistantReply = res.data.min_rate !== undefined && res.data.max_rate !== undefined
-      ? formatRateRange(res.data.min_rate, res.data.max_rate)
-      : res.data.reply;
+    const assistantReply = res.min_rate !== undefined && res.max_rate !== undefined
+      ? formatRateRange(res.min_rate, res.max_rate)
+      : res.reply;
 
     setMessages((prev) => [...prev, { role: "assistant", content: assistantReply }]);
   }
