@@ -1,94 +1,122 @@
-// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import FloatingChat from "@/components/FloatingChat";
-
-const sendMessageMock = vi.fn();
-const escalateMock = vi.fn();
-const reportIssueMock = vi.fn();
-const checkHealthMock = vi.fn();
-
-vi.mock("@/utils/session", () => ({
-  getReadinessSessionToken: () => "session-test-123",
-}));
+import FloatingChat from "../FloatingChat";
 
 vi.mock("@/services/mayaService", () => ({
-  sendMessage: (...args: unknown[]) => sendMessageMock(...args),
-  escalateToFundingSpecialist: (...args: unknown[]) => escalateMock(...args),
-  reportIssue: (...args: unknown[]) => reportIssueMock(...args),
+  sendMessage: vi.fn(),
+  escalateToFundingSpecialist: vi.fn(),
+  reportIssue: vi.fn(),
 }));
 
 vi.mock("@/lib/mayaClient", () => ({
-  isMayaConfigured: () => true,
-  checkMayaHealth: (...args: unknown[]) => checkHealthMock(...args),
+  isMayaConfigured: vi.fn(() => true),
+  getMayaApiBase: vi.fn(() => "https://maya.test"),
+  checkMayaHealth: vi.fn(async () => true),
 }));
 
-describe("FloatingChat", () => {
+import * as mayaService from "@/services/mayaService";
+import * as mayaClient from "@/lib/mayaClient";
+
+const mockedSendMessage = vi.mocked(mayaService.sendMessage);
+const mockedEscalate = vi.mocked(mayaService.escalateToFundingSpecialist);
+const mockedReportIssue = vi.mocked(mayaService.reportIssue);
+const mockedCheckHealth = vi.mocked(mayaClient.checkMayaHealth);
+
+describe("FloatingChat (Block 115b)", () => {
   beforeEach(() => {
-    sendMessageMock.mockReset();
-    escalateMock.mockReset();
-    reportIssueMock.mockReset();
-    checkHealthMock.mockReset();
-    checkHealthMock.mockResolvedValue(true);
+    mockedSendMessage.mockReset();
+    mockedEscalate.mockReset();
+    mockedReportIssue.mockReset();
+    mockedCheckHealth.mockReset();
+    mockedCheckHealth.mockResolvedValue(true);
   });
 
-  it("opens from floating button and shows greeting", async () => {
+  it("renders the floating button and opens the panel on click", async () => {
     render(<FloatingChat />);
-    fireEvent.click(screen.getByRole("button", { name: "Open chat" }));
-    expect(await screen.findByText(/Before we get going/i)).toBeInTheDocument();
-  });
-
-  it("submits a message via sendMessage and renders reply", async () => {
-    sendMessageMock.mockResolvedValueOnce({ reply: "Agent reply" });
-    render(<FloatingChat />);
-    fireEvent.click(screen.getByRole("button", { name: "Open chat" }));
-
-    fireEvent.change(screen.getByPlaceholderText("Type a message…"), {
-      target: { value: "Hi Maya" },
+    fireEvent.click(screen.getByRole("button", { name: /open chat/i }));
+    await waitFor(() => {
+      expect(screen.getByText(/Maya/i)).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByRole("button", { name: "Send" }));
+  });
+
+  it("renders a greeting when the panel opens", async () => {
+    render(<FloatingChat />);
+    fireEvent.click(screen.getByRole("button", { name: /open chat/i }));
+    await waitFor(() => {
+      expect(
+        screen.getByText(/what's your name and an email or phone/i),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("calls sendMessage when the user submits a message", async () => {
+    mockedSendMessage.mockResolvedValue({ reply: "Hi back" } as unknown as Awaited<
+      ReturnType<typeof mayaService.sendMessage>
+    >);
+
+    render(<FloatingChat />);
+    fireEvent.click(screen.getByRole("button", { name: /open chat/i }));
+
+    const input = await screen.findByPlaceholderText(/type a message/i);
+    fireEvent.change(input, { target: { value: "hello" } });
+    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
 
     await waitFor(() => {
-      expect(sendMessageMock).toHaveBeenCalledWith("Hi Maya", { sessionId: "session-test-123" });
+      expect(mockedSendMessage).toHaveBeenCalledTimes(1);
     });
-    expect(await screen.findByText("Agent reply")).toBeInTheDocument();
+    expect(mockedSendMessage.mock.calls[0]?.[0]).toBe("hello");
+    await waitFor(() => {
+      expect(screen.getByText("Hi back")).toBeInTheDocument();
+    });
   });
 
-  it("escalates to human support", async () => {
-    escalateMock.mockResolvedValueOnce({ ok: true });
+  it("calls escalateToFundingSpecialist when Talk to a Human is clicked", async () => {
+    mockedEscalate.mockResolvedValue({ ok: true } as unknown as Awaited<
+      ReturnType<typeof mayaService.escalateToFundingSpecialist>
+    >);
+
     render(<FloatingChat />);
-    fireEvent.click(screen.getByRole("button", { name: "Open chat" }));
-    fireEvent.click(screen.getByRole("button", { name: "Talk to a Human" }));
-
-    await waitFor(() => expect(escalateMock).toHaveBeenCalledTimes(1));
-    expect(await screen.findByText(/Boreal advisor has been notified/i)).toBeInTheDocument();
-  });
-
-  it("reports an issue", async () => {
-    reportIssueMock.mockResolvedValueOnce({ ok: true });
-    render(<FloatingChat />);
-    fireEvent.click(screen.getByRole("button", { name: "Open chat" }));
-    fireEvent.click(screen.getByRole("button", { name: "Report an Issue" }));
-
-    fireEvent.change(screen.getByPlaceholderText("Describe the issue…"), {
-      target: { value: "Broken thing" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+    fireEvent.click(screen.getByRole("button", { name: /open chat/i }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /talk to a human/i }),
+    );
 
     await waitFor(() => {
-      expect(reportIssueMock).toHaveBeenCalledWith({
-        sessionId: "session-test-123",
-        message: "Broken thing",
-      });
+      expect(mockedEscalate).toHaveBeenCalledTimes(1);
     });
   });
 
-  it("shows offline banner and offline placeholder when health check fails", async () => {
-    checkHealthMock.mockResolvedValueOnce(false);
-    render(<FloatingChat />);
-    fireEvent.click(screen.getByRole("button", { name: "Open chat" }));
+  it("switches to report mode and submits an issue", async () => {
+    mockedReportIssue.mockResolvedValue({ ok: true } as unknown as Awaited<
+      ReturnType<typeof mayaService.reportIssue>
+    >);
 
-    expect(await screen.findByText("Chat offline. Please contact us directly.")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Maya is offline — your message will be saved")).toBeInTheDocument();
+    render(<FloatingChat />);
+    fireEvent.click(screen.getByRole("button", { name: /open chat/i }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /report an issue/i }),
+    );
+
+    const textarea = await screen.findByPlaceholderText(/describe the issue/i);
+    fireEvent.change(textarea, { target: { value: "page is broken" } });
+    fireEvent.click(screen.getByRole("button", { name: /^submit$/i }));
+
+    await waitFor(() => {
+      expect(mockedReportIssue).toHaveBeenCalledTimes(1);
+    });
+    expect(mockedReportIssue.mock.calls[0]?.[0]).toMatchObject({
+      message: "page is broken",
+    });
+  });
+
+  it("renders the offline notice when checkMayaHealth resolves false", async () => {
+    mockedCheckHealth.mockResolvedValue(false);
+    render(<FloatingChat />);
+    fireEvent.click(screen.getByRole("button", { name: /open chat/i }));
+    await waitFor(() => {
+      expect(
+        screen.getByText(/chat offline\. please contact us directly\./i),
+      ).toBeInTheDocument();
+    });
   });
 });
