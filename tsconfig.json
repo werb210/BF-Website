@@ -29,7 +29,8 @@
     "baseUrl": ".",
     "types": [
       "node",
-      "vite/client"
+      "vite/client",
+      "@testing-library/jest-dom"
     ],
     "paths": {
       "@/*": [
