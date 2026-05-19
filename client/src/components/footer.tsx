@@ -15,8 +15,8 @@ export function Footer() {
           <h3 className="text-sm font-semibold uppercase tracking-wide">Explore</h3>
           <ul className="mt-3 space-y-2 text-sm text-slate-300">
             <li><a href="/how-it-works">How It Works</a></li>
-            <li><a href="/products/term-loans">Products</a></li>
-            <li><a href="/industries/construction">Industries</a></li>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/industries">Industries</a></li>
             <li>
               <a
                 href="https://boreal.insure"

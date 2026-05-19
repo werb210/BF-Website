@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
+import { useEffect, useMemo, useState } from "react";
 
 const CREDIT_RESULT_STORAGE_KEY = "boreal.credit-readiness.result";
 
@@ -77,9 +77,8 @@ export default function CreditResults() {
           </div>
           <p className="mt-6 text-white/80">{tier.blurb}</p>
         </div>
-        <div className="mt-8 flex flex-col gap-3 md:flex-row">
+        <div className="mt-8 flex justify-center">
           <a href={applyHref} className="inline-block rounded-full bg-white px-8 py-4 text-center text-base font-semibold text-[#020817] hover:bg-white/90">Apply Now</a>
-          <Link href="/products" className="inline-block rounded-full border border-white/20 px-8 py-4 text-center text-base font-semibold text-white hover:bg-white/10">Browse products</Link>
         </div>
       </div>
     </main>
