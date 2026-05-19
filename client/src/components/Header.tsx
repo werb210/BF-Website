@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
-import logo from "/images/header_white_transparent.png";
+// BF_WEBSITE_BLOCK_v312_UNIFIED_HEADER_v1 — shared image naming with
+// BF-Client + BI-Website. File uploaded to client/public/images/header.png
+// by operator after PR merge.
+import logo from "/images/header.png";
 import { APPLY_URL } from "@/config/site";
 
 const navItems = [
