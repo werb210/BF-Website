@@ -8,7 +8,7 @@ export function Navbar() {
         <Link href="/" className="flex items-center">
           <div className="flex items-center gap-3">
             <img
-              src="/images/header_white_transparent.png"
+              src="/header.png"
               alt="Boreal Financial"
               width={512}
               height={128}

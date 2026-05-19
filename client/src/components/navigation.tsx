@@ -18,7 +18,7 @@ export function Navigation() {
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-3" data-testid="logo-boreal-financial">
             <img
-              src="/images/header_white_transparent.png"
+              src="/header.png"
               alt="Boreal Financial"
               width={512}
               height={128}
