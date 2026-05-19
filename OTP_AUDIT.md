@@ -93,3 +93,4 @@ Related downstream behavior:
 - **Maya widget POSTs are vulnerable to wrong-host behavior** because they use relative `/api/maya/*` URLs from current origin.
 - **Credit Readiness flow does not invoke OTP from this repo** and posts to explicit `https://server.boreal.financial` instead.
 - I found **no other OTP-adjacent API call paths** in this repo matching `/api/auth`-style verification endpoints.
+
