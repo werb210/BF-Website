@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 // BF_WEBSITE_BLOCK_v312_UNIFIED_HEADER_v1 — shared image naming with
 // BF-Client + BI-Website. File uploaded to client/public/header.png
 // by operator after PR merge.
-import logo from "/header.png";
+const logo = "/header-mark.png";
 import { APPLY_URL } from "@/config/site";
 
 const navItems = [
@@ -22,7 +22,7 @@ export default function Header() {
     <header className="site-header w-full border-b border-white/10 bg-[#0B1320]/95 backdrop-blur">
       <div className="container flex min-h-20 items-center justify-between gap-4 py-3">
         <Link href="/" className="flex items-center gap-3 sm:gap-4" onClick={() => setOpen(false)}>
-          <img src={logo} alt="Boreal Financial" width={512} height={128} className="h-14 w-auto object-contain md:h-20" loading="lazy" decoding="async" />
+          <img src={logo} alt="Boreal Financial" width={80} height={80} className="h-12 w-12 object-contain md:h-16 md:w-16" loading="lazy" decoding="async" />
           <span className="text-base font-semibold tracking-wide text-white sm:text-xl">Boreal Financial</span>
         </Link>
 
