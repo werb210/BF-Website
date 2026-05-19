@@ -7,7 +7,7 @@ import { brotliCompressSync } from "zlib";
 import viteCompression from "vite-plugin-compression";
 import { imagetools } from "vite-imagetools";
 import sitemap from "vite-plugin-sitemap";
-import prerender from "vite-plugin-prerender";
+// import prerender from "vite-plugin-prerender"; // disabled — fails in Azure Oryx
 import { visualizer } from "rollup-plugin-visualizer";
 
 
@@ -61,9 +61,9 @@ export default defineConfig({
     sitemap({
       hostname: "https://borealfinance.com",
     }),
-    prerender({
-      routes: ["/", "/apply", "/business-loans", "/equipment-financing", "/about"],
-    }),
+    // prerender({
+    //   routes: ["/", "/apply", "/business-loans", "/equipment-financing", "/about"],
+    // }),
     visualizer({
       open: true,
       gzipSize: true,
