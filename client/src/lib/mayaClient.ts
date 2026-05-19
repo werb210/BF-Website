@@ -14,29 +14,11 @@ export function getMayaApiBase() {
 }
 
 export async function checkMayaHealth(signal?: AbortSignal): Promise<boolean> {
-  if (!isMayaConfigured()) {
-    return false;
-  }
-
+  if (!isMayaConfigured()) return false;
   try {
-    const response = await fetch(`${getMayaApiBase()}/health`, {
-      method: "GET",
-      signal,
-    });
-
+    const response = await fetch(`${getMayaApiBase()}/health`, { method: "GET", signal });
     return response.ok;
   } catch {
     return false;
   }
-}
-
-export function buildMayaWebSocketUrl(path: string) {
-  if (!isMayaConfigured()) {
-    return null;
-  }
-
-  const base = getMayaApiBase();
-  const pathWithSlash = path.startsWith("/") ? path : `/${path}`;
-  const wsBase = base.replace(/^http:/i, "ws:").replace(/^https:/i, "wss:");
-  return `${wsBase}${pathWithSlash}`;
 }
