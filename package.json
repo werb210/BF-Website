@@ -28,7 +28,9 @@
     "prestart": "node ./scripts/verify-node-version.js",
     "smoke": "node ./scripts/smoke-test.js",
     "analyze": "vite build --mode analyze",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:watch": "vitest",
+    "test:ci": "vitest run"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -137,7 +139,12 @@
     "vite-imagetools": "file:vendor/vite-imagetools",
     "vite-plugin-compression": "file:vendor/vite-plugin-compression",
     "vite-plugin-prerender": "file:vendor/vite-plugin-prerender",
-    "rollup-plugin-visualizer": "file:vendor/rollup-plugin-visualizer"
+    "rollup-plugin-visualizer": "file:vendor/rollup-plugin-visualizer",
+    "vitest": "^2.1.9",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/user-event": "^14.5.2",
+    "jsdom": "^25.0.1"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
