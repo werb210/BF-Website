@@ -29,12 +29,10 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          {/* BF_WEBSITE_BLOCK_v82_BI_LINK_REVERT_v1 — boreal.insure
-              isn't registered yet (NXDOMAIN). Match the mobile drawer
-              link (line ~78) that already uses the Azure Static Web
-              App URL. Revisit once boreal.insure resolves. */}
+          {/* BF_WEBSITE_BLOCK_v310_BI_LINK_FINAL_URL_v1 — operator-confirmed
+              URL for Boreal Insurance. */}
           <a
-            href="https://delightful-sand-05a55580f.7.azurestaticapps.net/"
+            href="https://www.boreal.insure/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-semibold ml-4"
@@ -83,7 +81,7 @@ export default function Header() {
               </a>
               {/* BF_WEBSITE_BLOCK_1_13_V2 — cross-link to BI-Website */}
               <a
-                href="https://delightful-sand-05a55580f.7.azurestaticapps.net/"
+                href="https://www.boreal.insure/"
                 target="_blank"
                 rel="noreferrer"
                 className="mt-2 inline-flex justify-center rounded-full border border-white px-5 py-3 font-medium text-white"

@@ -46,7 +46,7 @@ export function Navigation() {
                 </Link>
               ))}
               <a
-                href="https://boreal.insure"
+                href="https://www.boreal.insure/"
                 rel="noopener noreferrer"
                 className="px-3 py-2 rounded-md text-sm font-semibold text-secondary hover:text-primary transition-colors"
                 data-testid="nav-link-boreal-insurance"
@@ -91,7 +91,7 @@ export function Navigation() {
                 </Link>
               ))}
               <a
-                href="https://boreal.insure"
+                href="https://www.boreal.insure/"
                 rel="noopener noreferrer"
                 className="block px-3 py-2 rounded-md text-base font-medium text-secondary hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}

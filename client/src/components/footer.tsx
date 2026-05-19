@@ -19,7 +19,7 @@ export function Footer() {
             <li><a href="/industries">Industries</a></li>
             <li>
               <a
-                href="https://boreal.insure"
+                href="https://www.boreal.insure/"
                 rel="noopener noreferrer"
                 className="hover:text-white"
                 data-testid="footer-link-boreal-insurance"
