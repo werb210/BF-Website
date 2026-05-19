@@ -29,13 +29,13 @@ type ReportIssueOptions = {
 };
 
 export async function sendMessage(
-  message: string,
+  text: string,
   opts?: SendMessageOptions,
 ): Promise<MayaWebsiteResponse> {
   const response = await api.post<MayaWebsiteResponse>(
     "/maya/website-chat",
     {
-      message,
+      message: text,
       sessionId: opts?.sessionId,
       attribution: captureAttribution(),
     },
@@ -47,7 +47,7 @@ export async function sendMessage(
 
 export async function escalateToFundingSpecialist(
   opts: EscalationOptions = {},
-): Promise<unknown> {
+): Promise<{ ok: boolean }> {
   const response = await api.post<{ ok: boolean }>(
     "/maya/escalate",
     {
@@ -63,8 +63,8 @@ export async function escalateToFundingSpecialist(
   return response.data;
 }
 
-export async function reportIssue(opts: ReportIssueOptions): Promise<unknown> {
-  const response = await api.post(
+export async function reportIssue(opts: ReportIssueOptions): Promise<{ ok: boolean }> {
+  const response = await api.post<{ ok: boolean }>(
     "/maya/issue",
     {
       sessionId: opts.sessionId,
