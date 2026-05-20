@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
-import logo from "/images/header_white_transparent.png";
+import logoUrl from "@/assets/logo-boreal-mountains-white.svg";
 import { APPLY_URL } from "@/config/site";
 
 const navItems = [
@@ -19,7 +19,7 @@ export default function Header() {
     <header className="site-header w-full border-b border-white/10 bg-[#0B1320]/95 backdrop-blur">
       <div className="container flex min-h-20 items-center justify-between gap-4 py-3">
         <Link href="/" className="flex items-center gap-3 sm:gap-4" onClick={() => setOpen(false)}>
-          <img src={logo} alt="Boreal Financial" width={512} height={128} className="h-14 w-auto object-contain md:h-20" loading="lazy" decoding="async" />
+          <img src={logoUrl} alt="Boreal Financial" width={512} height={128} className="h-14 w-auto object-contain md:h-20" loading="lazy" decoding="async" />
           <span className="text-base font-semibold tracking-wide text-white sm:text-xl">Boreal Financial</span>
         </Link>
 
@@ -29,12 +29,8 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          {/* BF_WEBSITE_BLOCK_v82_BI_LINK_REVERT_v1 — boreal.insure
-              isn't registered yet (NXDOMAIN). Match the mobile drawer
-              link (line ~78) that already uses the Azure Static Web
-              App URL. Revisit once boreal.insure resolves. */}
           <a
-            href="https://delightful-sand-05a55580f.7.azurestaticapps.net/"
+            href="https://www.boreal.insure/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-semibold ml-4"
@@ -83,7 +79,7 @@ export default function Header() {
               </a>
               {/* BF_WEBSITE_BLOCK_1_13_V2 — cross-link to BI-Website */}
               <a
-                href="https://delightful-sand-05a55580f.7.azurestaticapps.net/"
+                href="https://www.boreal.insure/"
                 target="_blank"
                 rel="noreferrer"
                 className="mt-2 inline-flex justify-center rounded-full border border-white px-5 py-3 font-medium text-white"
