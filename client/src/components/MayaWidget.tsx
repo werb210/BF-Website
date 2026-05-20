@@ -1,4 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
+import html2canvas from "html2canvas";
+import { escalateToHuman, reportIssue } from "@/lib/mayaClient";
 import { formatRateRange } from "@/core/rateFormatter";
 import {
   escalateToFundingSpecialist,
@@ -87,12 +89,20 @@ export default function MayaWidget() {
     setMessages((prev) => [...prev, { role: "assistant", content: assistantReply }]);
   }
 
-  async function handleEscalation() {
-    await escalateToFundingSpecialist();
-    setMessages((prev) => [
-      ...prev,
-      { role: "assistant", content: "A funding specialist has been notified and will follow up shortly." },
-    ]);
+  const [issueDescription, setIssueDescription] = useState("");
+
+  async function handleTalkToHuman() {
+    const conversationTranscript = messages.map((m) => `${m.role}: ${m.content}`).join("\n") || input || "User requested human support";
+    await escalateToHuman({ message: conversationTranscript });
+    setMessages((prev) => [...prev, { role: "assistant", content: "A human will follow up via SMS shortly." }]);
+  }
+
+  async function handleReportIssue() {
+    const canvas = await html2canvas(document.body, { useCORS: true, scale: 1 });
+    const screenshotDataUrl = canvas.toDataURL("image/png");
+    await reportIssue({ description: issueDescription || "Issue reported from Maya widget", screenshotDataUrl });
+    setMessages((prev) => [...prev, { role: "assistant", content: "Thanks — our team has been notified." }]);
+    setIssueDescription("");
   }
 
   return (
@@ -122,9 +132,20 @@ export default function MayaWidget() {
       </div>
 
       <div className="p-2 border-t space-y-2">
-        <button onClick={() => void handleEscalation()} className="w-full text-xs p-2 border rounded">
-          Speak With A Funding Specialist
+        <button onClick={() => void handleTalkToHuman()} className="w-full text-xs p-2 border rounded">
+          Talk to Human
         </button>
+        <div className="space-y-2">
+          <input
+            className="w-full border rounded p-2 text-xs"
+            placeholder="Describe the issue"
+            value={issueDescription}
+            onChange={(e) => setIssueDescription(e.target.value)}
+          />
+          <button onClick={() => void handleReportIssue()} className="w-full text-xs p-2 border rounded">
+            Report Issue
+          </button>
+        </div>
 
         <p className="text-xs text-gray-500 mt-2">
           Maya provides general information and qualification guidance only. Final approvals are subject to lender review.

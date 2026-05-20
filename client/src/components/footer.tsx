@@ -1,57 +1,58 @@
+import { Link } from "wouter";
 import { APPLY_URL } from "@/config/site";
+import logoUrl from "@/assets/logo-boreal-mountains-white.svg";
 
 export function Footer() {
   return (
-    <footer className="mt-16 bg-slate-950 text-slate-200">
-      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-12 sm:px-6 md:grid-cols-3 md:py-16 lg:px-8">
-        <div>
-          <img src="/images/header_white_transparent.png" alt="Boreal Financial" width={512} height={128} className="h-16 w-auto object-contain md:h-20" loading="lazy" decoding="async" />
-          <h2 className="text-lg font-semibold">Boreal Financial</h2>
-          <p className="mt-2 text-sm text-slate-400">
-            Structured lending marketplace helping businesses across Canada and the United States.
-          </p>
-        </div>
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wide">Explore</h3>
-          <ul className="mt-3 space-y-2 text-sm text-slate-300">
-            <li><a href="/how-it-works">How It Works</a></li>
-            <li><a href="/products/term-loans">Products</a></li>
-            <li><a href="/industries/construction">Industries</a></li>
-            <li>
-              <a
-                href="https://boreal.insure"
-                rel="noopener noreferrer"
-                className="hover:text-white"
-                data-testid="footer-link-boreal-insurance"
-              >
-                Boreal Insurance
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wide">Apply Now</h3>
-          <div className="mt-3 flex flex-col gap-3">
-            <a
-              href={APPLY_URL}
-              className="inline-flex w-fit items-center justify-center rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
-            >
+    <footer className="bg-[#0a1120] border-t border-[#1c2538] text-white/80 px-6 py-8">
+      <div className="max-w-[1200px] mx-auto">
+        <div className="grid gap-8 mb-6" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <img src={logoUrl} alt="" className="h-8 w-auto" />
+              <span className="font-semibold text-white">Boreal Financial</span>
+            </div>
+            <p className="text-sm leading-relaxed text-white/65">
+              Structured lending marketplace helping businesses across Canada and the United States.
+            </p>
+          </div>
+          <div>
+            <div className="font-semibold text-white mb-3">Explore</div>
+            <ul className="list-none p-0 m-0 text-sm leading-loose">
+              <li><Link href="/how-it-works" className="text-white/75 no-underline">How It Works</Link></li>
+              {/* BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 — was /products/term-loans; fixed to /products index */}
+              <li><Link href="/products" className="text-white/75 no-underline">Products</Link></li>
+              {/* BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 — was /industries/construction; fixed to /industries index */}
+              <li><Link href="/industries" className="text-white/75 no-underline">Industries</Link></li>
+              {/* BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 — Visit Boreal Insurance fixed to live domain */}
+              <li><a href="https://www.boreal.insure/" target="_blank" rel="noopener noreferrer" className="text-white/75 no-underline">Boreal Insurance</a></li>
+            </ul>
+          </div>
+          <div>
+            <div className="font-semibold text-white mb-3">Apply Now</div>
+            <a href={APPLY_URL} target="_blank" rel="noopener noreferrer"
+               className="inline-block bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium no-underline mb-3">
               Apply Now
             </a>
-            <a
-              href="/credit-readiness"
-              className="inline-flex w-fit items-center justify-center rounded-lg border border-blue-400/70 px-5 py-2 text-sm font-medium text-blue-200 transition hover:bg-blue-500/10"
-            >
+            {/* BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 — single credit readiness target */}
+            <Link href="/credit-readiness" className="block text-white/75 no-underline text-sm mb-2">
               Check your Credit Readiness
-            </a>
+            </Link>
+            <Link href="/contact" className="block text-white/75 no-underline text-sm mb-2">Contact Us</Link>
+            <Link href="/product-comparison" className="block text-white/75 no-underline text-sm">Product Comparison</Link>
           </div>
-          <ul className="mt-5 space-y-2 text-sm text-slate-300">
-            <li><a href="/contact">Contact Us</a></li>
-            <li><a href="/capital-readiness-score">Capital Readiness Score</a></li>
-            <li><a href="/product-comparison">Product Comparison</a></li>
-          </ul>
+        </div>
+        <div className="border-t border-[#1c2538] pt-4 flex justify-between text-xs text-white/55">
+          <div className="flex gap-4">
+            <Link href="/privacy" className="text-inherit no-underline">Privacy Policy</Link>
+            <Link href="/terms" className="text-inherit no-underline">Terms of Service</Link>
+          </div>
+          <div>© {new Date().getFullYear()} Boreal Financial</div>
         </div>
       </div>
     </footer>
   );
 }
+
+
+export default Footer;

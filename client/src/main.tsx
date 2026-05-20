@@ -5,6 +5,29 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { HelmetProvider } from "react-helmet-async";
 import "./styles/global.css";
 
+// BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 — proper PWA install handling.
+let deferredInstallPrompt: any = null;
+
+window.addEventListener("beforeinstallprompt", (e: any) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  window.dispatchEvent(new CustomEvent("bf-pwa-installable", { detail: true }));
+});
+
+window.addEventListener("appinstalled", () => {
+  deferredInstallPrompt = null;
+  window.dispatchEvent(new CustomEvent("bf-pwa-installable", { detail: false }));
+});
+
+(window as any).__bfPromptInstall = async () => {
+  if (!deferredInstallPrompt) return { ok: false, reason: "not-available" };
+  deferredInstallPrompt.prompt();
+  const choice = await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  return { ok: true, outcome: choice.outcome };
+};
+
+
 // ---- Advanced Tracking Layer ----
 declare global {
   interface Window {
