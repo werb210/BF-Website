@@ -98,7 +98,7 @@ export default function MayaWidget() {
   }
 
   async function handleReportIssue() {
-    const canvas = await html2canvas(document.body, { useCORS: true, scale: 1 });
+    const canvas = await html2canvas(document.body);
     const screenshotDataUrl = canvas.toDataURL("image/png");
     await reportIssue({ description: issueDescription || "Issue reported from Maya widget", screenshotDataUrl });
     setMessages((prev) => [...prev, { role: "assistant", content: "Thanks — our team has been notified." }]);
