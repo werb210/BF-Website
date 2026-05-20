@@ -5,12 +5,19 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { HelmetProvider } from "react-helmet-async";
 import "./styles/global.css";
 
-// BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 — proper PWA install handling.
-let deferredInstallPrompt: any = null;
+// BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 + HOTFIX_LINT_v1 — proper PWA install handling.
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: ReadonlyArray<string>;
+  readonly userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+  prompt(): Promise<void>;
+}
 
-window.addEventListener("beforeinstallprompt", (e: any) => {
-  e.preventDefault();
-  deferredInstallPrompt = e;
+let deferredInstallPrompt: BeforeInstallPromptEvent | null = null;
+
+window.addEventListener("beforeinstallprompt", (e: Event) => {
+  const evt = e as BeforeInstallPromptEvent;
+  evt.preventDefault();
+  deferredInstallPrompt = evt;
   window.dispatchEvent(new CustomEvent("bf-pwa-installable", { detail: true }));
 });
 
@@ -19,9 +26,15 @@ window.addEventListener("appinstalled", () => {
   window.dispatchEvent(new CustomEvent("bf-pwa-installable", { detail: false }));
 });
 
-(window as any).__bfPromptInstall = async () => {
+// Exposed helper any component can call from a real user gesture:
+declare global {
+  interface Window {
+    __bfPromptInstall?: () => Promise<{ ok: boolean; reason?: string; outcome?: "accepted" | "dismissed" }>;
+  }
+}
+window.__bfPromptInstall = async () => {
   if (!deferredInstallPrompt) return { ok: false, reason: "not-available" };
-  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.prompt();
   const choice = await deferredInstallPrompt.userChoice;
   deferredInstallPrompt = null;
   return { ok: true, outcome: choice.outcome };
