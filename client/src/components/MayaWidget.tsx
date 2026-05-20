@@ -1,11 +1,10 @@
 import { FormEvent, useEffect, useState } from "react";
-import html2canvas from "html2canvas";
-import { escalateToHuman, reportIssue } from "@/lib/mayaClient";
 import { formatRateRange } from "@/core/rateFormatter";
 import {
   escalateToFundingSpecialist,
   fetchFaq,
   joinStartupWaitlist,
+  reportIssue,
   sendMessage,
   trackMarketingLead,
   type MayaWebsiteResponse,
@@ -65,6 +64,10 @@ export default function MayaWidget() {
   const [input, setInput] = useState("");
   const [response, setResponse] = useState<MayaWebsiteResponse | null>(null);
   const [faq, setFaq] = useState<Array<{ question: string; answer: string }>>([]);
+  // BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 + HOTFIX_MAYAWIDGET_v1 — Report Issue UI state.
+  const [issueOpen, setIssueOpen] = useState(false);
+  const [issueText, setIssueText] = useState("");
+  const [issueSubmitting, setIssueSubmitting] = useState(false);
 
   useEffect(() => {
     fetch("/health").catch(() => null);
@@ -89,20 +92,45 @@ export default function MayaWidget() {
     setMessages((prev) => [...prev, { role: "assistant", content: assistantReply }]);
   }
 
-  const [issueDescription, setIssueDescription] = useState("");
-
-  async function handleTalkToHuman() {
-    const conversationTranscript = messages.map((m) => `${m.role}: ${m.content}`).join("\n") || input || "User requested human support";
-    await escalateToHuman({ message: conversationTranscript });
-    setMessages((prev) => [...prev, { role: "assistant", content: "A human will follow up via SMS shortly." }]);
+  // BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 + HOTFIX_MAYAWIDGET_v1
+  // Talk-to-Human path. Sends current conversation transcript as summary so
+  // staff can see context in the BF-portal Communications tab. Single arg
+  // matches EscalationOptions signature.
+  async function handleEscalation() {
+    const transcript = messages
+      .map((m) => `${m.role === "user" ? "User" : "Maya"}: ${m.content}`)
+      .join("\n");
+    await escalateToFundingSpecialist({
+      surface: "bf-website",
+      summary: transcript || undefined,
+    });
+    setMessages((prev) => [
+      ...prev,
+      { role: "assistant", content: "A funding specialist has been notified and will follow up shortly." },
+    ]);
   }
 
+  // BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 + HOTFIX_MAYAWIDGET_v1
+  // Report Issue path. Single-arg call matches ReportIssueOptions signature.
+  // Page URL is appended to the message body so staff can see where it was filed.
   async function handleReportIssue() {
-    const canvas = await html2canvas(document.body);
-    const screenshotDataUrl = canvas.toDataURL("image/png");
-    await reportIssue({ description: issueDescription || "Issue reported from Maya widget", screenshotDataUrl });
-    setMessages((prev) => [...prev, { role: "assistant", content: "Thanks — our team has been notified." }]);
-    setIssueDescription("");
+    const text = issueText.trim();
+    if (!text) return;
+    setIssueSubmitting(true);
+    try {
+      const here = typeof window !== "undefined" ? window.location.href : "";
+      await reportIssue({
+        message: here ? `${text}\n\n[Page: ${here}]` : text,
+      });
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Thanks — our team has been notified about this issue." },
+      ]);
+      setIssueText("");
+      setIssueOpen(false);
+    } finally {
+      setIssueSubmitting(false);
+    }
   }
 
   return (
@@ -132,20 +160,42 @@ export default function MayaWidget() {
       </div>
 
       <div className="p-2 border-t space-y-2">
-        <button onClick={() => void handleTalkToHuman()} className="w-full text-xs p-2 border rounded">
-          Talk to Human
+        <button onClick={() => void handleEscalation()} className="w-full text-xs p-2 border rounded">
+          Speak With A Funding Specialist
         </button>
-        <div className="space-y-2">
-          <input
-            className="w-full border rounded p-2 text-xs"
-            placeholder="Describe the issue"
-            value={issueDescription}
-            onChange={(e) => setIssueDescription(e.target.value)}
-          />
-          <button onClick={() => void handleReportIssue()} className="w-full text-xs p-2 border rounded">
-            Report Issue
+
+        {!issueOpen && (
+          <button onClick={() => setIssueOpen(true)} className="w-full text-xs p-2 border rounded">
+            Report an Issue
           </button>
-        </div>
+        )}
+
+        {issueOpen && (
+          <div className="space-y-2">
+            <textarea
+              className="w-full border rounded p-2 text-xs"
+              rows={3}
+              placeholder="Describe what went wrong…"
+              value={issueText}
+              onChange={(e) => setIssueText(e.target.value)}
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={() => void handleReportIssue()}
+                disabled={issueSubmitting || !issueText.trim()}
+                className="flex-1 text-xs p-2 border rounded bg-slate-900 text-white disabled:opacity-50"
+              >
+                {issueSubmitting ? "Sending…" : "Send Report"}
+              </button>
+              <button
+                onClick={() => { setIssueOpen(false); setIssueText(""); }}
+                className="flex-1 text-xs p-2 border rounded"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
 
         <p className="text-xs text-gray-500 mt-2">
           Maya provides general information and qualification guidance only. Final approvals are subject to lender review.
