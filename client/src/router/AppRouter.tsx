@@ -42,7 +42,7 @@ export function AppRouter() {
         <Route path="/credit-results" component={CreditResults} />
         <Route path="/capital-readiness" component={CapitalReadiness} />
         <Route path="/capital-readiness-score">
-          <Redirect to="/credit-readiness" />
+          {() => <Redirect to="/credit-readiness" />}
         </Route>
         <Route path="/compare" component={Compare} />
         <Route path="/product-comparison" component={Compare} />
