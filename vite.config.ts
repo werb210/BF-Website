@@ -59,13 +59,13 @@ export default defineConfig({
       threshold: 10240,
     }),
     sitemap({
-      hostname: "https://borealfinance.com",
+      hostname: "https://boreal.financial",
     }),
     // prerender({
     //   routes: ["/", "/apply", "/business-loans", "/equipment-financing", "/about"],
     // }),
     visualizer({
-      open: true,
+      open: false,
       gzipSize: true,
       brotliSize: true,
       filename: "dist/bundle-analysis.html",

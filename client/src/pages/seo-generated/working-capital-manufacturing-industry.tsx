@@ -2,7 +2,7 @@ import { Seo } from "@/components/SEO";
 import { SEOFAQ } from "@/components/SEOFAQ";
 import { getIndustryFaqs } from "@/data/faqs";
 
-const BASE_URL = import.meta.env.VITE_SITE_URL ?? "https://borealfinancial.ca";
+const BASE_URL = import.meta.env.VITE_SITE_URL ?? "https://boreal.financial";
 
 export default function WorkingCapitalManufacturingIndustryPage() {
   const faqs = getIndustryFaqs("Working Capital Loans", "manufacturing");

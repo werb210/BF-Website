@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 // BF_WEBSITE_BLOCK_v312_UNIFIED_HEADER_v1 — shared image naming with
 // BF-Client + BI-Website. File uploaded to client/public/header.png
 // by operator after PR merge.
-const logo = "/header-mark.png";
+const logo = "/header.png";
 import { APPLY_URL } from "@/config/site";
 
 const navItems = [

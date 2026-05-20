@@ -24,4 +24,4 @@ ${routes.map(r => `
 </urlset>
 `
 
-fs.writeFileSync("public/sitemap.xml", xml)
+fs.writeFileSync("client/public/sitemap.xml", xml)

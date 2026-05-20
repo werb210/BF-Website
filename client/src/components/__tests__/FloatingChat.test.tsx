@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
 import FloatingChat from "../FloatingChat";
 
 vi.mock("@/services/mayaService", () => ({
@@ -31,11 +31,15 @@ describe("FloatingChat (Block 115b)", () => {
     mockedCheckHealth.mockResolvedValue(true);
   });
 
+  afterEach(() => {
+    cleanup();
+  });
+
   it("renders the floating button and opens the panel on click", async () => {
     render(<FloatingChat />);
     fireEvent.click(screen.getByRole("button", { name: /open chat/i }));
     await waitFor(() => {
-      expect(screen.getByText(/Maya/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/Maya/i).length).toBeGreaterThan(0);
     });
   });
 

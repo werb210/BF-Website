@@ -2,7 +2,7 @@ import { Seo } from "@/components/SEO";
 import { SEOFAQ } from "@/components/SEOFAQ";
 import { getLocationFaqs } from "@/data/faqs";
 
-const BASE_URL = import.meta.env.VITE_SITE_URL ?? "https://borealfinancial.ca";
+const BASE_URL = import.meta.env.VITE_SITE_URL ?? "https://boreal.financial";
 
 export default function WorkingCapitalCalgaryLocationPage() {
   const faqs = getLocationFaqs("Working Capital Loans", "Calgary");

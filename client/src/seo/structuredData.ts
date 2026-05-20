@@ -1,4 +1,4 @@
-export const SITE_URL = import.meta.env.VITE_SITE_URL || "https://borealfinancial.ca";
+export const SITE_URL = import.meta.env.VITE_SITE_URL || "https://boreal.financial";
 
 export const organizationSchema = {
   "@context": "https://schema.org",

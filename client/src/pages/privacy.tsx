@@ -6,7 +6,7 @@ export default function Privacy() {
       <SEO
         title="Privacy Policy"
         description="Review Boreal Financial's Privacy Policy covering how we collect, use, and protect your information."
-        url="https://borealfinancial.ca/privacy"
+        url="https://boreal.financial/privacy"
       />
       <h1 className="text-4xl font-semibold">Privacy Policy</h1>
       <p className="mt-4 text-white/80">

@@ -56,13 +56,13 @@ export default function ProductDetail({ slug }: ProductDetailProps) {
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://borealfinancial.ca",
+            item: "https://boreal.financial",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: product.name,
-            item: `https://borealfinancial.ca/products/${slug}`,
+            item: `https://boreal.financial/products/${slug}`,
           },
         ],
       }
@@ -70,7 +70,7 @@ export default function ProductDetail({ slug }: ProductDetailProps) {
 
   return (
     <div className="min-h-screen bg-[#020817] pb-12 pt-10 text-white md:pb-16">
-      <SEO title={pageTitle} description={pageDescription} url={`https://borealfinancial.ca/products/${slug}`} />
+      <SEO title={pageTitle} description={pageDescription} url={`https://boreal.financial/products/${slug}`} />
       {breadcrumbSchema ? <SeoJsonLd data={breadcrumbSchema} /> : null}
       {isLineOfCredit && (
         <>

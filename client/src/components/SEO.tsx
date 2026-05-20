@@ -15,11 +15,11 @@ function getSchema(props: Props) {
 }
 
 const SITE_NAME = "Boreal Financial";
-const SITE_URL = import.meta.env.VITE_SITE_URL ?? "https://borealfinancial.ca";
+const SITE_URL = import.meta.env.VITE_SITE_URL ?? "https://boreal.financial";
 
 function normalizeHref(href?: string) {
   if (!href) return href;
-  return href.replace("https://borealfinancial.ca", SITE_URL);
+  return href.replace("https://boreal.financial", SITE_URL);
 }
 
 function formatTitle(title: string) {
