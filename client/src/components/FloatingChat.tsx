@@ -142,7 +142,11 @@ export default function FloatingChat() {
     setIssue("");
     try {
       const { reportIssue: reportIssueFn } = await import("@/services/mayaService");
-      await reportIssueFn({ sessionId, message: text });
+      await reportIssueFn({
+        sessionId,
+        message: text,
+        pageUrl: typeof window !== "undefined" ? window.location.href : null,
+      });
       setMessages((prev) => [
         ...prev,
         { id: createSessionId(), from: "system", message: "✓ Thanks — your issue was logged." },
@@ -220,25 +224,27 @@ export default function FloatingChat() {
             </div>
           ) : (
             <>
-              <div className="flex gap-2 border-t border-white/10 px-3 py-2 md:px-4">
+              {/* BF_WEBSITE_BLOCK_v85_MAYA_WIRING_FIX_v1 */}
+              <div className="flex gap-2 border-t border-white/10 px-3 py-3 md:px-4">
                 <button
                   type="button"
                   onClick={requestHumanSupport}
-                  className="flex-1 rounded border border-white/20 px-3 py-2 text-sm"
+                  className="flex-1 rounded-xl bg-white/5 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
                 >
                   Talk to a Human
                 </button>
                 <button
                   type="button"
                   onClick={reportIssue}
-                  className="flex-1 rounded border border-white/20 px-3 py-2 text-sm"
+                  className="flex-1 rounded-xl bg-white/5 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
                 >
                   Report an Issue
                 </button>
               </div>
-              <form onSubmit={handleSend} className="flex gap-2 border-t border-white/10 px-3 py-2 md:px-4">
+              {/* BF_WEBSITE_BLOCK_v85_MAYA_WIRING_FIX_v1 */}
+              <form onSubmit={handleSend} className="flex gap-2 border-t border-white/10 px-3 py-3 md:px-4">
                 <input
-                  className="flex-1 rounded border border-white/20 bg-[#0f1d3a] px-3 py-2 text-sm text-white placeholder:text-slate-400"
+                  className="flex-1 rounded-xl border border-white/15 bg-[#0f1d3a] px-4 py-2.5 text-sm text-white placeholder:text-slate-400 focus:border-blue-500 focus:outline-none"
                   placeholder={isOnline === false ? "Maya is offline — your message will be saved" : "Type a message…"}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -247,7 +253,7 @@ export default function FloatingChat() {
                 <button
                   type="submit"
                   disabled={sending || !input.trim()}
-                  className="rounded bg-blue-600 px-3 py-2 text-sm text-white disabled:opacity-50"
+                  className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
                 >
                   Send
                 </button>
