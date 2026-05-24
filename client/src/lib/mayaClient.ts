@@ -1,13 +1,20 @@
 const mayaEnabled = import.meta.env.VITE_MAYA_ENABLED === "true";
-const mayaApiBase = (import.meta.env.VITE_MAYA_API_BASE ?? "").trim();
+// BFW_BLOCK_v152_TALK_HUMAN_COPY_AND_ISSUE_ROUTE_v1 — health check now
+// falls back to BF-Server origin when VITE_MAYA_API_BASE isn't set.
+const mayaApiBase = (import.meta.env.VITE_MAYA_API_BASE ?? "https://server.boreal.financial").trim();
 
 function normalizeBaseUrl(baseUrl: string): string {
   return baseUrl.replace(/\/+$/, "");
 }
 
 export function isMayaConfigured() {
-  return mayaEnabled && Boolean(mayaApiBase);
+  // BFW_BLOCK_v152_TALK_HUMAN_COPY_AND_ISSUE_ROUTE_v1 — Maya is "configured"
+  // as long as we have an origin to call. Talk-to-Human + Report-an-Issue
+  // still work even if the AI chat endpoint is down, because escalations
+  // go to BF-Server directly.
+  return Boolean(mayaApiBase);
 }
+void mayaEnabled;
 
 export function getMayaApiBase() {
   return normalizeBaseUrl(mayaApiBase);
