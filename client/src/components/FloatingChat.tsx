@@ -22,8 +22,13 @@ function createSessionId() {
 export default function FloatingChat() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [mode, setMode] = useState<"chat" | "report">("chat");
+  const [mode, setMode] = useState<"chat" | "report" | "lead">("chat");
+  const [lead, setLead] = useState<{ name: string; email: string; phone: string } | null>(null);
+  const [leadDraft, setLeadDraft] = useState<{ name: string; email: string; phone: string }>({ name: "", email: "", phone: "" });
+  const [leadError, setLeadError] = useState<string | null>(null);
   const [issue, setIssue] = useState("");
+  const [issueShot, setIssueShot] = useState<string | null>(null);
+  const [issueShotBusy, setIssueShotBusy] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [sending, setSending] = useState(false);
   const [isOnline, setIsOnline] = useState<boolean | null>(null);
@@ -95,8 +100,32 @@ export default function FloatingChat() {
     }
   }
 
-  async function requestHumanSupport() {
+  function requestHumanSupport() {
+    if (lead) {
+      void escalateNow(lead);
+      return;
+    }
+    setLeadError(null);
+    setMode("lead");
+  }
+
+  async function submitLead() {
+    const name = leadDraft.name.trim();
+    const email = leadDraft.email.trim();
+    const phone = leadDraft.phone.trim();
+    if (!name) { setLeadError("Please enter your name."); return; }
+    if (!email && !phone) { setLeadError("Please enter an email or phone."); return; }
+    const captured = { name, email, phone };
+    setLead(captured);
     setMode("chat");
+    setMessages((prev) => [
+      ...prev,
+      { id: createSessionId(), from: "user", message: `[I'm ${name}${email ? ` — ${email}` : ""}${phone ? ` — ${phone}` : ""}]` },
+    ]);
+    await escalateNow(captured);
+  }
+
+  async function escalateNow(contact: { name: string; email: string; phone: string }) {
     setMessages((prev) => [
       ...prev,
       { id: createSessionId(), from: "user", message: "[requested live human support]" },
@@ -106,6 +135,7 @@ export default function FloatingChat() {
         sessionId,
         surface: "website",
         silo: "BF",
+        contact,
         summary: messages
           .slice(-6)
           .map((m) => `${m.from === "user" ? "Visitor" : "Maya"}: ${m.message}`)
@@ -132,24 +162,54 @@ export default function FloatingChat() {
     }
   }
 
-  function reportIssue() {
+  async function reportIssue() {
     setMode("report");
+    setIssue("");
+    setIssueShot(null);
+    setIssueShotBusy(true);
+    try {
+      const html2canvas = (await import("html2canvas")).default;
+      const target = (document.body.querySelector("main") as HTMLElement) ?? document.body;
+      const canvas = await html2canvas(target, { useCORS: true, backgroundColor: "#0b1226", scale: Math.min(window.devicePixelRatio || 1, 2), logging: false });
+      const MAX_W = 1600;
+      let finalCanvas: HTMLCanvasElement = canvas;
+      if (canvas.width > MAX_W) {
+        const ratio = MAX_W / canvas.width;
+        const c2 = document.createElement("canvas");
+        c2.width = MAX_W;
+        c2.height = Math.round(canvas.height * ratio);
+        const ctx = c2.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(canvas, 0, 0, c2.width, c2.height);
+          finalCanvas = c2;
+        }
+      }
+      setIssueShot(finalCanvas.toDataURL("image/jpeg", 0.7));
+    } catch (err) {
+      console.error("[FloatingChat] screenshot capture failed", err);
+      setIssueShot(null);
+    } finally {
+      setIssueShotBusy(false);
+    }
   }
 
   async function submitIssue() {
     const text = issue.trim();
     if (!text) return;
+    const shot = issueShot;
     setIssue("");
     try {
       const { reportIssue: reportIssueFn } = await import("@/services/mayaService");
       await reportIssueFn({
         sessionId,
         message: text,
+        screenshot: shot ?? undefined,
         pageUrl: typeof window !== "undefined" ? window.location.href : null,
       });
+      setIssueShot(null);
       setMessages((prev) => [
         ...prev,
-        { id: createSessionId(), from: "system", message: "✓ Thanks — your issue was logged." },
+        { id: createSessionId(), from: "system", message: shot ? "✓ Thanks — your issue and a screenshot were logged." : "✓ Thanks — your issue was logged." },
       ]);
     } catch {
       setMessages((prev) => [
@@ -196,7 +256,21 @@ export default function FloatingChat() {
             {sending ? <p className="text-xs text-slate-400">Maya is typing…</p> : null}
           </div>
 
-          {mode === "report" ? (
+          {mode === "lead" ? (
+            <div className="flex flex-col gap-2 border-t border-white/10 px-3 py-2 md:px-4">
+              <div className="text-xs text-slate-300">
+                A Boreal advisor will reply. Tell us how to reach you:
+              </div>
+              <input className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Your name" value={leadDraft.name} onChange={(e) => setLeadDraft({ ...leadDraft, name: e.target.value })} autoFocus />
+              <input className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Email" type="email" value={leadDraft.email} onChange={(e) => setLeadDraft({ ...leadDraft, email: e.target.value })} />
+              <input className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Phone" type="tel" value={leadDraft.phone} onChange={(e) => setLeadDraft({ ...leadDraft, phone: e.target.value })} />
+              {leadError ? <div className="text-xs text-red-400">{leadError}</div> : null}
+              <div className="flex gap-2">
+                <button type="button" onClick={() => setMode("chat")} className="flex-1 rounded border border-white/20 px-3 py-2 text-sm">Cancel</button>
+                <button type="button" onClick={() => void submitLead()} className="flex-1 rounded bg-blue-600 px-3 py-2 text-sm text-white">Start chat</button>
+              </div>
+            </div>
+          ) : mode === "report" ? (
             <div className="flex flex-col gap-2 border-t border-white/10 px-3 py-2 md:px-4">
               <textarea
                 className="w-full rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white"
@@ -205,10 +279,20 @@ export default function FloatingChat() {
                 onChange={(e) => setIssue(e.target.value)}
                 placeholder="Describe the issue…"
               />
+              <div className="text-xs text-slate-400">
+                {issueShotBusy
+                  ? "Capturing screenshot…"
+                  : issueShot
+                  ? "Screenshot attached (will be sent)"
+                  : "No screenshot captured — text-only report"}
+              </div>
+              {issueShot ? (
+                <img alt="Screenshot of this page" src={issueShot} style={{ maxHeight: 80, borderRadius: 4, border: "1px solid rgba(255,255,255,0.15)" }} />
+              ) : null}
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={() => setMode("chat")}
+                  onClick={() => { setMode("chat"); setIssueShot(null); }}
                   className="flex-1 rounded border border-white/20 px-3 py-2 text-sm"
                 >
                   Cancel
