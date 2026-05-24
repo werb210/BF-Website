@@ -21,11 +21,14 @@ type EscalationOptions = {
   surface?: string;
   silo?: string;
   summary?: string;
+  contact?: { name?: string; email?: string; phone?: string };
 };
 
 type ReportIssueOptions = {
   sessionId?: string;
   message: string;
+  screenshot?: string;
+  pageUrl?: string | null;
 };
 
 export async function sendMessage(
@@ -51,7 +54,7 @@ export async function sendMessage(
 // env CSV after-hours) and persists to communications_conversations so the
 // handoff appears in the staff portal Messages tab.
 export async function escalateToFundingSpecialist(
-  opts: EscalationOptions & { contact?: { phone?: string | null; email?: string | null }; conversationId?: string } = {},
+  opts: EscalationOptions & { conversationId?: string } = {},
 ): Promise<{ ok: boolean; conversation_id?: string }> {
   const response = await api.post<{ ok: boolean; conversation_id?: string }>(
     "/maya/escalate",
@@ -59,6 +62,7 @@ export async function escalateToFundingSpecialist(
       kind: "talk_to_human",
       message: opts.summary && opts.summary.trim() ? opts.summary : "Website visitor requested a human.",
       contact: {
+        name: opts.contact?.name ?? null,
         phone: opts.contact?.phone ?? null,
         email: opts.contact?.email ?? null,
       },
@@ -78,13 +82,14 @@ export async function escalateToFundingSpecialist(
 // BF_WEBSITE_BLOCK_v85_MAYA_WIRING_FIX_v1 — /maya/issue did not exist.
 // Route to /maya/escalate with kind=report_issue (v220/v222).
 export async function reportIssue(
-  opts: ReportIssueOptions & { contact?: { phone?: string | null; email?: string | null }; pageUrl?: string | null },
+  opts: ReportIssueOptions & { contact?: { phone?: string | null; email?: string | null } },
 ): Promise<{ ok: boolean; issue_id?: string }> {
   const response = await api.post<{ ok: boolean; issue_id?: string }>(
     "/maya/escalate",
     {
       kind: "report_issue",
       description: opts.message,
+      screenshot: opts.screenshot ?? null,
       page_url: opts.pageUrl ?? (typeof window !== "undefined" ? window.location.href : null),
       contact: {
         phone: opts.contact?.phone ?? null,
