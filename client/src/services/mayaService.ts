@@ -84,16 +84,18 @@ export async function escalateToFundingSpecialist(
 export async function reportIssue(
   opts: ReportIssueOptions & { contact?: { phone?: string | null; email?: string | null } },
 ): Promise<{ ok: boolean; issue_id?: string }> {
+  // BFW_BLOCK_v152_TALK_HUMAN_COPY_AND_ISSUE_ROUTE_v1 — bypass the agent
+  // (whose /maya/issue route was returning 4xx in the live test). Post
+  // directly to BF-Server /api/maya/escalate with kind: 'report_issue',
+  // same path bf-client uses. BF-Server v645 accepts `screenshot`,
+  // `screenshot_base64`, and `screenshot_data_url` as aliases.
   const response = await api.post<{ ok: boolean; issue_id?: string }>(
     "/maya/escalate",
     {
       kind: "report_issue",
       description: opts.message,
-      // BFW_BLOCK_v150_SCREENSHOT_FIELD_FIX_v1 — agent /maya/issue handler
-      // expects `screenshotBase64` (it adds the data: prefix before
-      // forwarding to BF-Server as screenshot_data_url). Previously sent
-      // as `screenshot` which the agent ignored.
-      screenshotBase64: opts.screenshot ?? null,
+      message: opts.message,
+      screenshot_data_url: opts.screenshot ?? null,
       page_url: opts.pageUrl ?? (typeof window !== "undefined" ? window.location.href : null),
       contact: {
         phone: opts.contact?.phone ?? null,

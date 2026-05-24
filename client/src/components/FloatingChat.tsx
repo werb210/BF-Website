@@ -141,22 +141,29 @@ export default function FloatingChat() {
           .map((m) => `${m.from === "user" ? "Visitor" : "Maya"}: ${m.message}`)
           .join("\n"),
       });
+      // BFW_BLOCK_v152_TALK_HUMAN_COPY_AND_ISSUE_ROUTE_v1 — escalation always
+      // logs to BF-Server's conversations table even if no staff is online
+      // (the SMS notify is best-effort + has env-fallback). Show a real
+      // success message; never tell the user to email us.
       setMessages((prev) => [
         ...prev,
         {
           id: createSessionId(),
           from: "system",
           message:
-            "✓ A Boreal advisor has been notified. If we're outside business hours, your message went to our on-call team.",
+            "✓ Got it — your message is in our queue. A Boreal advisor will text you back at " +
+            (contact.phone || contact.email) +
+            ". You can keep typing here too; we'll see everything.",
         },
       ]);
     } catch {
+      // Network error only — message wasn't actually saved.
       setMessages((prev) => [
         ...prev,
         {
           id: createSessionId(),
           from: "system",
-          message: "Couldn't reach the team — please email hello@boreal.financial.",
+          message: "Network hiccup — your last message didn't save. Try sending it again.",
         },
       ]);
     }
