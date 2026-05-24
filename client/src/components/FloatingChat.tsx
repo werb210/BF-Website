@@ -168,7 +168,13 @@ export default function FloatingChat() {
     setIssueShot(null);
     setIssueShotBusy(true);
     try {
-      const html2canvas = (await import("html2canvas")).default;
+      // BFW_BLOCK_v151_HTML2CANVAS_TYPE_CAST_v1 — the vendored
+      // html2canvas/index.d.ts only declares (element). Runtime impl
+      // accepts options. Cast once at import so the call site stays clean.
+      const html2canvas = (await import("html2canvas")).default as unknown as (
+        element: HTMLElement,
+        options?: Record<string, unknown>,
+      ) => Promise<HTMLCanvasElement>;
       const target = (document.body.querySelector("main") as HTMLElement) ?? document.body;
       const canvas = await html2canvas(target, { useCORS: true, backgroundColor: "#0b1226", scale: Math.min(window.devicePixelRatio || 1, 2), logging: false });
       const MAX_W = 1600;
