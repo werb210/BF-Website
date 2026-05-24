@@ -89,7 +89,11 @@ export async function reportIssue(
     {
       kind: "report_issue",
       description: opts.message,
-      screenshot: opts.screenshot ?? null,
+      // BFW_BLOCK_v150_SCREENSHOT_FIELD_FIX_v1 — agent /maya/issue handler
+      // expects `screenshotBase64` (it adds the data: prefix before
+      // forwarding to BF-Server as screenshot_data_url). Previously sent
+      // as `screenshot` which the agent ignored.
+      screenshotBase64: opts.screenshot ?? null,
       page_url: opts.pageUrl ?? (typeof window !== "undefined" ? window.location.href : null),
       contact: {
         phone: opts.contact?.phone ?? null,
