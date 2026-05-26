@@ -6,7 +6,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="border-b border-subtle bg-brand-bg">
+    <header className="relative border-b border-subtle bg-brand-bg">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link
           href="/"
@@ -47,7 +47,12 @@ export function Navbar() {
       </div>
 
       {open && (
-        <div className="space-y-4 border-t border-subtle bg-brand-bgAlt px-6 py-4 md:hidden">
+        /* BF_WEBSITE_BLOCK_v153_MOBILE_FIRST_LAUNCH_v1 — fixed-position,
+            high z-index, full-width slide-down so the menu sits ABOVE the
+            hero image instead of behind it. Pre-fix: only the first two
+            links were visible on iPhone (screenshot 11.21.41), rest covered
+            by the hero. */
+        <div className="absolute left-0 right-0 top-full z-[70] space-y-4 border-t border-subtle bg-brand-bg px-6 py-4 shadow-lg md:hidden">
           <Link href="/products" className="block text-white/80 hover:text-white" onClick={() => setOpen(false)}>
             Products
           </Link>

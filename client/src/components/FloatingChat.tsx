@@ -86,13 +86,20 @@ export default function FloatingChat() {
       const reply =
         (res?.reply ?? "").toString().trim() || "Thanks — a Boreal advisor will reach out.";
       setMessages((prev) => [...prev, { id: createSessionId(), from: "system", message: reply }]);
-    } catch {
+    } catch (err) {
+      // BF_WEBSITE_BLOCK_v153_MOBILE_FIRST_LAUNCH_v1 — surface a more
+      // diagnostic message in dev, keep the user-friendly fallback in
+      // production. Pre-fix the same line fired regardless of cause.
+      const detail = err instanceof Error ? err.message : "";
+      if (import.meta.env.DEV && detail) {
+        console.warn("[Maya chat] failed:", detail);
+      }
       setMessages((prev) => [
         ...prev,
         {
           id: createSessionId(),
           from: "system",
-          message: "I'm having trouble — please try again, or click Talk to a Human.",
+          message: "I'm having trouble reaching Maya right now. Tap Talk to a Human and an advisor will follow up shortly.",
         },
       ]);
     } finally {
