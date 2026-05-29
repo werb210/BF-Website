@@ -44,7 +44,7 @@ export default function FloatingChat() {
         id: createSessionId(),
         from: "system",
         message:
-          "Hi — I'm Maya. Before we get going, what's your name and an email or phone I can use to follow up?",
+          "Hi — I'm Maya. How can I help?",
       },
     ]);
   }, [open, messages.length]);
