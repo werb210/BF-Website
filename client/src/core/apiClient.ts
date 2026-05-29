@@ -19,8 +19,8 @@ async function request<T>(
   body?: unknown,
   headers?: Record<string, string>,
 ): Promise<{ data: T }> {
-  const response = await apiRequest(method, `${WEBSITE_API_BASE}/api${url}`, body, headers);
-  const data = (await response.json()) as T;
+  // BFW_BLOCK_v85 — safeFetch already returns parsed JSON; do not re-parse.
+  const data = (await apiRequest(method, `${WEBSITE_API_BASE}/api${url}`, body, headers)) as T;
   return { data };
 }
 
