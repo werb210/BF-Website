@@ -6,6 +6,8 @@ import { checkMayaHealth, isMayaConfigured } from "@/lib/mayaClient";
 import {
   sendMessage,
   escalateToFundingSpecialist,
+  fetchConversationMessages,
+  postConversationMessage,
   type MayaWebsiteResponse,
 } from "@/services/mayaService";
 
@@ -31,6 +33,9 @@ export default function FloatingChat() {
   const [issueShotBusy, setIssueShotBusy] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [sending, setSending] = useState(false);
+  // BF_WEBSITE_BLOCK_v87_TWO_WAY_MESSENGER_v1
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  const seenStaffIds = useRef<Set<string>>(new Set());
   const [isOnline, setIsOnline] = useState<boolean | null>(null);
   const [healthChecked, setHealthChecked] = useState(false);
   const healthAbortRef = useRef<AbortController | null>(null);
@@ -74,6 +79,38 @@ export default function FloatingChat() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
+  // BF_WEBSITE_BLOCK_v87_TWO_WAY_MESSENGER_v1 — after escalation, poll the
+  // shared thread so staff replies (direction='outbound') land in the same
+  // window. Dedup by message id.
+  useEffect(() => {
+    if (!conversationId) return;
+    let active = true;
+    const poll = async () => {
+      try {
+        const list = await fetchConversationMessages(conversationId);
+        if (!active) return;
+        const fresh = list.filter(
+          (m) => m.direction === "outbound" && !seenStaffIds.current.has(m.id),
+        );
+        if (fresh.length) {
+          fresh.forEach((m) => seenStaffIds.current.add(m.id));
+          setMessages((prev) => [
+            ...prev,
+            ...fresh.map((m) => ({ id: m.id, from: "system" as const, message: m.body })),
+          ]);
+        }
+      } catch {
+        /* transient — next tick retries */
+      }
+    };
+    void poll();
+    const timer = setInterval(poll, 4000);
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
+  }, [conversationId]);
+
   async function handleSend(e?: FormEvent) {
     e?.preventDefault();
     const text = input.trim();
@@ -82,6 +119,12 @@ export default function FloatingChat() {
     setMessages((prev) => [...prev, { id: createSessionId(), from: "user", message: text }]);
     setSending(true);
     try {
+      // BF_WEBSITE_BLOCK_v87_TWO_WAY_MESSENGER_v1 — once escalated, post into
+      // the shared conversation; a human (not Maya) answers via the poll.
+      if (conversationId) {
+        await postConversationMessage(conversationId, text);
+        return;
+      }
       const res: MayaWebsiteResponse = await sendMessage(text, { sessionId });
       const reply =
         (res?.reply ?? "").toString().trim() || "Thanks — a Boreal advisor will reach out.";
@@ -138,16 +181,20 @@ export default function FloatingChat() {
       { id: createSessionId(), from: "user", message: "[requested live human support]" },
     ]);
     try {
-      await escalateToFundingSpecialist({
+      const esc = await escalateToFundingSpecialist({
         sessionId,
         surface: "website",
         silo: "BF",
         contact,
+        conversationId: conversationId ?? undefined,
         summary: messages
           .slice(-6)
           .map((m) => `${m.from === "user" ? "Visitor" : "Maya"}: ${m.message}`)
           .join("\n"),
       });
+      // BF_WEBSITE_BLOCK_v87_TWO_WAY_MESSENGER_v1 — capturing the thread id
+      // flips the widget into two-way mode (poll + posts go to the thread).
+      if (esc?.conversation_id) setConversationId(esc.conversation_id);
       // BFW_BLOCK_v152_TALK_HUMAN_COPY_AND_ISSUE_ROUTE_v1 — escalation always
       // logs to BF-Server's conversations table even if no staff is online
       // (the SMS notify is best-effort + has env-fallback). Show a real

@@ -110,6 +110,40 @@ export async function reportIssue(
   return response.data;
 }
 
+// BF_WEBSITE_BLOCK_v87_TWO_WAY_MESSENGER_v1 — once a visitor is escalated,
+// the chat becomes two-way against the same communications_conversations
+// thread the staff portal reads/writes. Mirrors bf-client MayaWidget v56.
+// Public GET/POST live under /api/public/conversation/:id/* and are
+// UUID-token gated. ok() wraps payloads as { status, data }.
+export type ConversationMessage = {
+  id: string;
+  direction: string;
+  body: string;
+  created_at?: string;
+};
+
+export async function fetchConversationMessages(
+  conversationId: string,
+): Promise<ConversationMessage[]> {
+  const r = await api.get<{
+    status?: string;
+    data?: { messages?: ConversationMessage[] };
+    messages?: ConversationMessage[];
+  }>(`/public/conversation/${encodeURIComponent(conversationId)}/messages`);
+  const payload = r.data;
+  return payload?.data?.messages ?? payload?.messages ?? [];
+}
+
+export async function postConversationMessage(
+  conversationId: string,
+  body: string,
+): Promise<void> {
+  await api.post(
+    `/public/conversation/${encodeURIComponent(conversationId)}/message`,
+    { body },
+  );
+}
+
 export async function trackMarketingLead() {
   if (import.meta.env.DEV) {
     return { data: { ok: true } };
