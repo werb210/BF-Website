@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
 import { scoreCreditReadiness } from "../creditReadinessScore";
 
 describe("credit readiness scoring", () => {
@@ -10,8 +11,8 @@ describe("credit readiness scoring", () => {
       accountsReceivableRange: "$1,000,000 to $3,000,000",
       requestedAmount: "100000",
     });
-    expect(r.tier).toBe("green");
-    expect(r.score).toBeGreaterThanOrEqual(65);
+    assert.equal(r.tier, "green");
+    assert.ok(r.score >= 65);
   });
 
   it("early profile is red", () => {
@@ -22,6 +23,6 @@ describe("credit readiness scoring", () => {
       accountsReceivableRange: "Zero to $100,000",
       requestedAmount: "200000",
     });
-    expect(r.tier).toBe("red");
+    assert.equal(r.tier, "red");
   });
 });
