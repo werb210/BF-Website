@@ -27,7 +27,7 @@ export function initGA() {
   };
 
   window.gtag("js", new Date());
-  window.gtag("config", GA_MEASUREMENT_ID, { send_page_view: false });
+  window.gtag("config", GA_MEASUREMENT_ID, { send_page_view: true });
   initialized = true;
 }
 

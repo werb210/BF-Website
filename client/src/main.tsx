@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { initGA } from "./analytics/ga";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { HelmetProvider } from "react-helmet-async";
 import "./styles/global.css";
@@ -286,6 +287,7 @@ function TrackingProvider() {
 }
 
 try {
+  initGA(); // BF_WEBSITE_GA4_INIT_v1 — start GA4 (G-D1Y4105RXP) before render
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
       <HelmetProvider>
