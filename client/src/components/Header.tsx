@@ -35,7 +35,7 @@ export default function Header() {
             rel="noopener noreferrer"
             className="text-sm font-semibold ml-4"
           >
-            Visit Boreal Insurance
+            Visit Boreal Risk Management
           </a>
           <a
             href={APPLY_URL}
@@ -85,7 +85,7 @@ export default function Header() {
                 className="mt-2 inline-flex justify-center rounded-full border border-white px-5 py-3 font-medium text-white"
                 onClick={() => setOpen(false)}
               >
-                Visit Boreal Insurance
+                Visit Boreal Risk Management
               </a>
             </nav>
           </div>

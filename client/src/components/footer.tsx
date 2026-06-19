@@ -24,8 +24,8 @@ export function Footer() {
               <li><Link href="/products" className="text-white/75 no-underline">Products</Link></li>
               {/* BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 — was /industries/construction; fixed to /industries index */}
               <li><Link href="/industries" className="text-white/75 no-underline">Industries</Link></li>
-              {/* BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 — Visit Boreal Insurance fixed to live domain */}
-              <li><a href="https://www.boreal.insure/" target="_blank" rel="noopener noreferrer" className="text-white/75 no-underline">Boreal Insurance</a></li>
+              {/* BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 — Visit Boreal Risk Management fixed to live domain */}
+              <li><a href="https://www.boreal.insure/" target="_blank" rel="noopener noreferrer" className="text-white/75 no-underline">Boreal Risk Management</a></li>
             </ul>
           </div>
           <div>
