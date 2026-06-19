@@ -51,7 +51,7 @@ export function Navigation() {
                 className="px-3 py-2 rounded-md text-sm font-semibold text-secondary hover:text-primary transition-colors"
                 data-testid="nav-link-boreal-insurance"
               >
-                Boreal Insurance
+                Boreal Risk Management
               </a>
               <AskQuestionButton size="sm" variant="outline">
                 Contact Us
@@ -97,7 +97,7 @@ export function Navigation() {
                 onClick={() => setMobileMenuOpen(false)}
                 data-testid="mobile-nav-link-boreal-insurance"
               >
-                Boreal Insurance
+                Boreal Risk Management
               </a>
               <div className="px-3 py-2 space-y-2">
                 <AskQuestionButton className="w-full" size="sm" variant="outline">
