@@ -75,6 +75,10 @@ export const captureAttribution = () => {
     utm_campaign: params.get("utm_campaign"),
     utm_term: params.get("utm_term"),
     utm_content: params.get("utm_content"),
+    gclid: params.get("gclid"),
+    gbraid: params.get("gbraid"),
+    wbraid: params.get("wbraid"),
+    referrer: document.referrer || null,
     landing_page: window.location.pathname,
     first_visit_timestamp: Date.now(),
   };
@@ -204,6 +208,32 @@ function TrackingProvider() {
 
   useEffect(() => {
     captureAttribution();
+  }, []);
+
+  // BF_WEBSITE_ATTRIBUTION_HANDOFF_v1 - carry utm + gclid to the client app so the
+  // application/CRM record is attributed back to the originating ad click.
+  useEffect(() => {
+    const FORWARD = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "gbraid", "wbraid"];
+    const onClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      const a = target && target.closest ? target.closest("a") : null;
+      if (!a) return;
+      const href = a.getAttribute("href") || "";
+      if (!href.includes("client.boreal.financial")) return;
+      try {
+        const url = new URL(href, window.location.origin);
+        const attr = getAttribution() as Record<string, string | null>;
+        for (const k of FORWARD) {
+          const v = attr[k];
+          if (v && !url.searchParams.has(k)) url.searchParams.set(k, String(v));
+        }
+        a.setAttribute("href", url.toString());
+      } catch {
+        /* ignore malformed href */
+      }
+    };
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
   }, []);
 
   useEffect(() => {
