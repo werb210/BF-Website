@@ -78,6 +78,7 @@ export const captureAttribution = () => {
     gclid: params.get("gclid"),
     gbraid: params.get("gbraid"),
     wbraid: params.get("wbraid"),
+    li_fat_id: params.get("li_fat_id"), // BF_WEBSITE_LI_FAT_ID_v1
     referrer: document.referrer || null,
     landing_page: window.location.pathname,
     first_visit_timestamp: Date.now(),
@@ -213,7 +214,7 @@ function TrackingProvider() {
   // BF_WEBSITE_ATTRIBUTION_HANDOFF_v1 - carry utm + gclid to the client app so the
   // application/CRM record is attributed back to the originating ad click.
   useEffect(() => {
-    const FORWARD = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "gbraid", "wbraid"];
+    const FORWARD = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "gbraid", "wbraid", "li_fat_id"];
     const onClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       const a = target && target.closest ? target.closest("a") : null;
