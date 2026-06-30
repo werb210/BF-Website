@@ -7,6 +7,7 @@ import CreditReadiness from "../pages/CreditReadiness";
 import CreditResults from "../pages/CreditResults";
 import Podcasts from "../pages/Podcasts";
 import Apply from "../pages/Apply";
+import EmailLanding from "../pages/EmailLanding"; // BF_WEBSITE_BLOCK_v202_EMAIL_LANDING
 import FAQ from "../pages/FAQ";
 import HowItWorks from "../pages/HowItWorks";
 import Privacy from "../pages/privacy";
@@ -28,6 +29,7 @@ export function AppRouter() {
     <MainLayout>
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/e/:slug">{(params) => <EmailLanding slug={(params as { slug?: string }).slug} />}</Route>
         <Route path="/industries" component={Industries} />
         <Route path="/industries/:slug">
           {(params) => <IndustryDetail slug={params.slug} />}
