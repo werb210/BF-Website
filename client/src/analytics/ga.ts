@@ -1,4 +1,8 @@
-const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_ID as string | undefined;
+// BF_WEBSITE_BLOCK_v201_GA4_ID_FALLBACK: GA4 collection must not silently die
+// when a build ships without VITE_GA_ID. The env still wins if present;
+// otherwise fall back to the known BF measurement ID so collection always runs.
+const GA_MEASUREMENT_ID =
+  (import.meta.env.VITE_GA_ID as string | undefined) || "G-D1Y4105RXP";
 
 declare global {
   interface Window {
