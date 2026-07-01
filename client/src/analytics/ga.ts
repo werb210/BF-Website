@@ -2,7 +2,7 @@
 // when a build ships without VITE_GA_ID. The env still wins if present;
 // otherwise fall back to the known BF measurement ID so collection always runs.
 const GA_MEASUREMENT_ID =
-  (import.meta.env.VITE_GA_ID as string | undefined) || "G-D1Y4105RXP";
+  (import.meta.env.VITE_GA_ID as string | undefined) || "G-D1Y4105RXP"; // BF_WEBSITE_GA4_FALLBACK_v1 - public GA4 id; ensures the marketing site reports even when VITE_GA_ID is unset at build time
 
 declare global {
   interface Window {
