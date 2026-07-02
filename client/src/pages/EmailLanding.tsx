@@ -1,5 +1,9 @@
-// BF_WEBSITE_BLOCK_v202_EMAIL_LANDING — hosted "view in browser" page for a
-// marketing email/SMS. Fetches the rendered HTML from BF-Server by slug.
+// BF_WEBSITE_BLOCK_v203_EMAIL_LANDING_IFRAME - hosted "view in browser" page.
+// The stored html is a complete standalone document (doctype/html/body with its
+// own backgrounds and 600px table frame). Injecting it into the site DOM crushed
+// the outer full-width table into a 600px div and let the site's dark theme and
+// Tailwind preflight bleed into the email markup. Rendering it in an iframe via
+// srcDoc gives it its own document + CSS scope, exactly like an email client.
 import { useEffect, useState, type CSSProperties } from "react";
 
 const API_BASE = (import.meta.env.VITE_API_URL as string | undefined) || "https://server.boreal.financial";
@@ -27,14 +31,16 @@ export default function EmailLanding({ slug }: { slug?: string }) {
     return () => { cancelled = true; };
   }, [slug]);
 
-  const shell: CSSProperties = { minHeight: "100vh", background: "#f3f4f6", padding: "24px 12px", display: "flex", justifyContent: "center" };
-  const msg: CSSProperties = { color: "#6b7280", fontFamily: "Arial, Helvetica, sans-serif", marginTop: 48 };
-  if (state === "loading") return <div style={shell}><p style={msg}>Loading…</p></div>;
+  const shell: CSSProperties = { minHeight: "100vh", background: "#f4f5f7", display: "flex", justifyContent: "center", alignItems: state === "ok" ? "stretch" : "flex-start", padding: state === "ok" ? 0 : "48px 12px" };
+  const msg: CSSProperties = { color: "#6b7280", fontFamily: "Arial, Helvetica, sans-serif", margin: 0 };
+  if (state === "loading") return <div style={shell}><p style={msg}>Loading...</p></div>;
   if (state === "notfound") return <div style={shell}><p style={msg}>This page is no longer available.</p></div>;
   if (state === "error") return <div style={shell}><p style={{ ...msg, color: "#b91c1c" }}>Something went wrong. Please try again later.</p></div>;
   return (
-    <div style={shell}>
-      <div style={{ width: "100%", maxWidth: 600 }} dangerouslySetInnerHTML={{ __html: html }} />
-    </div>
+    <iframe
+      title="Boreal Financial email"
+      srcDoc={html}
+      style={{ display: "block", width: "100%", height: "100vh", border: 0, background: "#f4f5f7" }}
+    />
   );
 }
