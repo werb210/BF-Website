@@ -18,6 +18,7 @@ import PartnerLogin from "../pages/PartnerLogin";
 import SystemStatus from "../pages/SystemStatus";
 import MainLayout from "@/layouts/MainLayout";
 import TermsPage from "../pages/TermsPage";
+import SmsInfo from "../pages/SmsInfo"; // BF_WEBSITE_SMS_CASL_v1
 
 import Industries from "../pages/Industries";
 import IndustryDetail from "../pages/IndustryDetail";
@@ -53,6 +54,7 @@ export function AppRouter() {
         <Route path="/podcasts" component={Podcasts} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/terms" component={TermsPage} />
+        <Route path="/sms" component={SmsInfo} />
         <Route path="/staff-login" component={StaffLogin} />
         <Route path="/lender-login" component={PartnerLogin} />
         <Route path="/system-status" component={SystemStatus} />
