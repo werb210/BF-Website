@@ -12,7 +12,6 @@ import FAQ from "../pages/FAQ";
 import HowItWorks from "../pages/HowItWorks";
 import Privacy from "../pages/privacy";
 import NotFound from "../pages/NotFound";
-import CapitalReadiness from "../pages/CapitalReadiness";
 import StaffLogin from "../pages/StaffLogin";
 import PartnerLogin from "../pages/PartnerLogin";
 import SystemStatus from "../pages/SystemStatus";
@@ -43,7 +42,13 @@ export function AppRouter() {
         <Route path="/contact" component={Contact} />
         <Route path="/credit-readiness" component={CreditReadiness} />
         <Route path="/credit-results" component={CreditResults} />
-        <Route path="/capital-readiness" component={CapitalReadiness} />
+        {/* BF_WEBSITE_ONE_READINESS_v1 - the orphan capital-readiness flow
+            (parallel scoring system from an old site rebuild, never linked
+            anywhere) is gone; anything hitting the old URL lands on the one
+            real readiness check. */}
+        <Route path="/capital-readiness">
+          {() => <Redirect to="/credit-readiness" />}
+        </Route>
         <Route path="/capital-readiness-score">
           {() => <Redirect to="/credit-readiness" />}
         </Route>
