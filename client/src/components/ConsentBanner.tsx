@@ -2,19 +2,24 @@ import { useEffect, useState } from "react";
 
 const KEY = "boreal_consent_v1";
 
+// BF_WEBSITE_CONSENT_GTAG_FORMAT_FIX_v1 - Consent Mode commands MUST be pushed
+// as gtag()-style `arguments` objects; pushing a plain array is silently
+// ignored by GTM. That made Accept a no-op, so with the denied default in
+// index.html every visitor stayed denied and GA4 collected NOTHING from ~Jun 23
+// while Clarity (not consent-gated) kept recording.
 function applyConsent(granted: boolean) {
-  const w = window as unknown as { dataLayer: unknown[] };
+  const w = window as unknown as { dataLayer?: unknown[] };
   w.dataLayer = w.dataLayer || [];
-  w.dataLayer.push([
-    "consent",
-    "update",
-    {
-      ad_storage: granted ? "granted" : "denied",
-      analytics_storage: granted ? "granted" : "denied",
-      ad_user_data: granted ? "granted" : "denied",
-      ad_personalization: granted ? "granted" : "denied",
-    },
-  ]);
+  function gtag(..._args: unknown[]) {
+    // eslint-disable-next-line prefer-rest-params
+    (w.dataLayer as unknown[]).push(arguments);
+  }
+  gtag("consent", "update", {
+    ad_storage: granted ? "granted" : "denied",
+    analytics_storage: granted ? "granted" : "denied",
+    ad_user_data: granted ? "granted" : "denied",
+    ad_personalization: granted ? "granted" : "denied",
+  });
 }
 
 export default function ConsentBanner() {
