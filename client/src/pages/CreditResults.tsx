@@ -14,8 +14,8 @@ type StoredResult = {
 
 const TIER_COPY: Record<StoredResult["tier"], { label: string; blurb: string; color: string }> = {
   green: { label: "Strong", blurb: "Your business looks well-positioned. Most lenders in our network are likely to make competitive offers.", color: "#22c55e" },
-  yellow: { label: "Moderate", blurb: "There's a real path to capital, but expect more documentation and a narrower set of lenders.", color: "#eab308" },
-  red: { label: "Early", blurb: "Funding is possible but the field of available lenders is smaller and rates may be higher.", color: "#ef4444" },
+  yellow: { label: "Moderate", blurb: "There's a real path to capital, but expect more documentation and a narrower set of lenders. Apply now to see your options.", color: "#eab308" }, // BF_WEBSITE_TIER_COPY_v2
+  red: { label: "Early", blurb: "Funding is possible but the field of available lenders is smaller and rates may be higher. Apply now to see your options.", color: "#ef4444" }, // BF_WEBSITE_TIER_COPY_v2
 };
 
 export default function CreditResults() {
