@@ -63,6 +63,9 @@ const requestScore = (annualRevenueRange?: string, requestedAmount?: string | nu
 export function scoreCreditReadiness(input: CreditReadinessInput): { score: number; tier: CreditReadinessTier } {
   const raw = yearsScore(input.salesHistoryYears) + revenueScore(input.annualRevenueRange) + collateralScore(input.fixedAssetsValueRange) + arScore(input.accountsReceivableRange) + requestScore(input.annualRevenueRange, input.requestedAmount);
   const score = Math.max(0, Math.min(100, Math.round(raw)));
-  const tier: CreditReadinessTier = score >= 65 ? "green" : score >= 40 ? "yellow" : "red";
+  // BF_WEBSITE_READINESS_TIERS_v2 - re-banded 2026-07-04 (operator decision):
+  // the old 65/40 cutoffs graded healthy small businesses as "Moderate" and
+  // deterred applications. Green >= 50, yellow 30-49, red < 30.
+  const tier: CreditReadinessTier = score >= 50 ? "green" : score >= 30 ? "yellow" : "red";
   return { score, tier };
 }
