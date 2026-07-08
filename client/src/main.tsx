@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { initJourneyTracking } from "@/utils/journey"; // BF_WEBSITE_VISITOR_JOURNEY_v1
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { initGA } from "./analytics/ga";
@@ -210,7 +211,7 @@ function TrackingProvider() {
   useEffect(() => {
     captureAttribution();
     // BF_WEBSITE_VISITOR_JOURNEY_v1 - start anonymous journey tracking.
-    void import("@/utils/journey").then((m) => m.initJourneyTracking()).catch(() => {});
+    try { initJourneyTracking(); } catch { /* tracking must never break the site */ }
   }, []);
 
   // BF_WEBSITE_ATTRIBUTION_HANDOFF_v1 - carry utm + gclid to the client app so the
