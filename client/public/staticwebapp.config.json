@@ -4,11 +4,6 @@
       "route": "/refer",
       "redirect": "https://staff.boreal.financial/referrer/signup",
       "statusCode": 302
-    },
-    {
-      "route": "/refer/",
-      "redirect": "https://staff.boreal.financial/referrer/signup",
-      "statusCode": 302
     }
   ],
   "navigationFallback": {
