@@ -209,6 +209,8 @@ function TrackingProvider() {
 
   useEffect(() => {
     captureAttribution();
+    // BF_WEBSITE_VISITOR_JOURNEY_v1 - start anonymous journey tracking.
+    void import("@/utils/journey").then((m) => m.initJourneyTracking()).catch(() => {});
   }, []);
 
   // BF_WEBSITE_ATTRIBUTION_HANDOFF_v1 - carry utm + gclid to the client app so the
