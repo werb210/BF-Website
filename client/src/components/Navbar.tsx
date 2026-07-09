@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { APPLY_URL } from "@/config/site";
+import { buildApplyUrl } from "@/utils/session";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -30,7 +31,7 @@ export function Navbar() {
             Contact
           </Link>
           <a
-            href={APPLY_URL}
+            href={buildApplyUrl(APPLY_URL)}
             className="flex h-10 items-center rounded-full bg-brand-accent px-6 font-medium text-white transition-colors hover:bg-brand-accentHover"
           >
             Apply Now
@@ -66,7 +67,7 @@ export function Navbar() {
             Contact
           </Link>
           <a
-            href={APPLY_URL}
+            href={buildApplyUrl(APPLY_URL)}
             className="flex h-10 items-center justify-center rounded-full bg-brand-accent px-6 font-medium text-white transition-colors hover:bg-brand-accentHover"
             onClick={() => setOpen(false)}
           >

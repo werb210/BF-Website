@@ -78,7 +78,7 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href={APPLY_URL}
+                href={buildApplyUrl(APPLY_URL)}
                 onClick={(event) => {
                   event.preventDefault();
                   trackConversion("apply_click", {
@@ -86,7 +86,7 @@ export default function Home() {
                     location: "hero",
                   });
 
-                  window.location.href = APPLY_URL;
+                  window.location.href = buildApplyUrl(APPLY_URL);
                 }}
                 className="rounded-full bg-blue-600 px-6 py-3 font-medium transition hover:bg-blue-700"
               >

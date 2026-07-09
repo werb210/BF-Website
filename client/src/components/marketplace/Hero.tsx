@@ -1,4 +1,5 @@
 import { APPLY_URL } from "@/config/site";
+import { buildApplyUrl } from "@/utils/session";
 
 export function Hero() {
   return (
@@ -19,7 +20,7 @@ export function Hero() {
             Boreal is a marketplace built for business owners who want options fast. Apply once and compare offers side-by-side with no lender-to-lender back-and-forth.
           </p>
           <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-5">
-            <a href={APPLY_URL} className="rounded-md bg-white px-5 py-3 text-center font-semibold text-slate-900">Apply Now</a>
+            <a href={buildApplyUrl(APPLY_URL)} className="rounded-md bg-white px-5 py-3 text-center font-semibold text-slate-900">Apply Now</a>
             <a href="#how-it-works" className="text-sm font-semibold text-white underline underline-offset-4">How it works</a>
           </div>
         </div>

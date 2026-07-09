@@ -6,6 +6,7 @@ import { CheckCircle, Users, Clock, DollarSign } from "lucide-react";
 import { Seo } from "@/components/SEO";
 import { SeoImage } from "@/components/SeoImage";
 import { APPLY_URL } from "@/config/site";
+import { buildApplyUrl } from "@/utils/session";
 import SeoJsonLd from "@/components/SeoJsonLd";
 import { faqSchema, serviceSchema } from "@/seo/structuredData";
 
@@ -213,7 +214,7 @@ export default function BusinessLineOfCredit() {
           </p>
           <div className="space-y-4">
             <Button size="lg" variant="secondary" asChild data-testid="button-apply-now-main">
-              <a href={APPLY_URL}>
+              <a href={buildApplyUrl(APPLY_URL)}>
                 Apply Now
               </a>
             </Button>

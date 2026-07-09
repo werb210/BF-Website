@@ -22,5 +22,23 @@ export function buildApplyUrl(baseUrl: string, readinessSessionToken?: string | 
     const journeyId = typeof window !== "undefined" ? window.localStorage.getItem("boreal_journey_session") : null;
     if (journeyId) url.searchParams.set("journeySession", journeyId);
   } catch { /* ignore */ }
+  // BF_WEBSITE_APPLY_ATTRIBUTION_v1 - forward captured ad/marketing attribution
+  // (gclid + utm_*) across the domain hop to client.boreal.financial. Without this
+  // the wizard sees a clean URL and every application is attributed to "direct";
+  // Google Ads clicks and conversions can never tie back to a funded deal.
+  try {
+    const raw = typeof window !== "undefined" ? window.localStorage.getItem("boreal_attribution") : null;
+    if (raw) {
+      const a = JSON.parse(raw) as Record<string, string | null | undefined>;
+      const forward = [
+        "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+        "gclid", "gbraid", "wbraid", "li_fat_id",
+      ];
+      for (const k of forward) {
+        const v = a?.[k];
+        if (v && !url.searchParams.has(k)) url.searchParams.set(k, String(v));
+      }
+    }
+  } catch { /* attribution is non-essential - never break the apply link */ }
   return url.toString();
 }

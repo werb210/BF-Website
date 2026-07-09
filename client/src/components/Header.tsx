@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import logoUrl from "@/assets/logo-boreal-mountains-white.svg";
 import { APPLY_URL } from "@/config/site";
+import { buildApplyUrl } from "@/utils/session";
 
 const navItems = [
   { href: "/products", label: "Products" },
@@ -38,7 +39,7 @@ export default function Header() {
             Visit Boreal Risk Management
           </a>
           <a
-            href={APPLY_URL}
+            href={buildApplyUrl(APPLY_URL)}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-full bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-500"
@@ -69,7 +70,7 @@ export default function Header() {
                 </Link>
               ))}
               <a
-                href={APPLY_URL}
+                href={buildApplyUrl(APPLY_URL)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 inline-flex justify-center rounded-full bg-blue-600 px-5 py-3 font-medium text-white"

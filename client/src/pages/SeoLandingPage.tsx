@@ -6,6 +6,7 @@ import { LOCATIONS, PRODUCTS } from "@/data/seoLandingConfig";
 import { SEO } from "@/seo/SEO";
 import NotFound from "@/pages/NotFound";
 import { APPLY_URL } from "@/config/site";
+import { buildApplyUrl } from "@/utils/session";
 
 function normalizeSlug(input: string): string {
   return input.trim().toLowerCase();
@@ -54,7 +55,7 @@ export default function SeoLandingPage() {
             Boreal Financial helps companies secure {product.name.toLowerCase()} in {location} with fast underwriting,
             lender matching, and practical guidance tailored to local operating realities.
           </p>
-          <a href={APPLY_URL}>
+          <a href={buildApplyUrl(APPLY_URL)}>
             <Button size="lg">Apply Now</Button>
           </a>
         </section>
