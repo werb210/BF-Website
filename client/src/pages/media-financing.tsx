@@ -7,6 +7,7 @@ import { Seo } from "@/components/SEO";
 import { financialServiceJsonLd } from "@/lib/structured-data";
 import { SeoImage } from "@/components/SeoImage";
 import { APPLY_URL } from "@/config/site";
+import { buildApplyUrl } from "@/utils/session";
 
 export default function MediaFinancing() {
   return (
@@ -202,7 +203,7 @@ export default function MediaFinancing() {
             Ready to bring your vision to life? Apply for media financing and get the capital you need to make your project a success.
           </p>
           <Button size="lg" asChild data-testid="button-apply-media-financing">
-            <a href={APPLY_URL}>
+            <a href={buildApplyUrl(APPLY_URL)}>
               Apply Now
             </a>
           </Button>

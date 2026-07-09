@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { APPLY_URL } from "@/config/site";
+import { buildApplyUrl } from "@/utils/session";
 import logoUrl from "@/assets/logo-boreal-mountains-white.svg";
 
 export function Footer() {
@@ -30,7 +31,7 @@ export function Footer() {
           </div>
           <div>
             <div className="font-semibold text-white mb-3">Apply Now</div>
-            <a href={APPLY_URL} target="_blank" rel="noopener noreferrer"
+            <a href={buildApplyUrl(APPLY_URL)} target="_blank" rel="noopener noreferrer"
                className="inline-block bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium no-underline mb-3">
               Apply Now
             </a>

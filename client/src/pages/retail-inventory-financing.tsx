@@ -7,6 +7,7 @@ import { Seo } from "@/components/SEO";
 import { financialServiceJsonLd } from "@/lib/structured-data";
 import { SeoImage } from "@/components/SeoImage";
 import { APPLY_URL } from "@/config/site";
+import { buildApplyUrl } from "@/utils/session";
 
 export default function RetailInventoryFinancing() {
   return (
@@ -296,7 +297,7 @@ export default function RetailInventoryFinancing() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="secondary" asChild data-testid="button-apply-now">
-              <a href={APPLY_URL}>
+              <a href={buildApplyUrl(APPLY_URL)}>
                 Apply Now
               </a>
             </Button>

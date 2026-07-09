@@ -1,4 +1,5 @@
 import { APPLY_URL } from "@/config/site";
+import { buildApplyUrl } from "@/utils/session";
 
 type Props = {
   title: string;
@@ -42,7 +43,7 @@ export default function ProductTemplate({
           <div className="grid gap-4 text-center md:grid-cols-5">
             <div>
               <p className="font-semibold">1. Apply</p>
-              <a href={APPLY_URL} className="text-sm text-blue-600 underline">
+              <a href={buildApplyUrl(APPLY_URL)} className="text-sm text-blue-600 underline">
                 Apply Now
               </a>
             </div>
@@ -54,7 +55,7 @@ export default function ProductTemplate({
         </section>
 
         <div className="text-center">
-          <a href={APPLY_URL} className="rounded-md bg-blue-600 px-6 py-3 text-white">
+          <a href={buildApplyUrl(APPLY_URL)} className="rounded-md bg-blue-600 px-6 py-3 text-white">
             Apply Now
           </a>
         </div>

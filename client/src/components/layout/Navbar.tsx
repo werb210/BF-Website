@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { APPLY_URL } from "@/config/site";
+import { buildApplyUrl } from "@/utils/session";
 
 export function Navbar() {
   return (
@@ -27,7 +28,7 @@ export function Navbar() {
           <Link href="/contact">Contact</Link>
 
           <a
-            href={APPLY_URL}
+            href={buildApplyUrl(APPLY_URL)}
             className="ml-4 rounded-full bg-blue-600 px-6 py-2 font-medium text-white transition hover:bg-blue-700"
           >
             Apply Now

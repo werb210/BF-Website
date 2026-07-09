@@ -1,4 +1,5 @@
 import { APPLY_URL } from "@/config/site";
+import { buildApplyUrl } from "@/utils/session";
 
 const useCases = [
   "Film & TV production",
@@ -31,7 +32,7 @@ export default function MediaFinancing() {
           <p className="mt-4 max-w-2xl text-slate-200">
             Structured funding for production, digital campaigns, and content-backed revenue.
           </p>
-          <a href={APPLY_URL} className="mt-7 inline-flex rounded-full bg-blue-600 px-6 py-2.5 font-semibold text-white">
+          <a href={buildApplyUrl(APPLY_URL)} className="mt-7 inline-flex rounded-full bg-blue-600 px-6 py-2.5 font-semibold text-white">
             Apply Now
           </a>
         </div>
@@ -68,7 +69,7 @@ export default function MediaFinancing() {
         <div className="rounded-2xl border border-blue-300/30 bg-blue-900/30 p-6 text-center">
           <h2 className="text-2xl font-semibold">Ready to structure your media facility?</h2>
           <p className="mt-3 text-slate-200">Talk with our team to align funding terms to your production and receivables cycle.</p>
-          <a href={APPLY_URL} className="mt-6 inline-flex rounded-full bg-white px-6 py-2.5 font-semibold text-slate-900">
+          <a href={buildApplyUrl(APPLY_URL)} className="mt-6 inline-flex rounded-full bg-white px-6 py-2.5 font-semibold text-slate-900">
             Apply Now
           </a>
         </div>
