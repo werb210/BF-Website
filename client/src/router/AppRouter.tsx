@@ -8,6 +8,7 @@ import CreditResults from "../pages/CreditResults";
 import Podcasts from "../pages/Podcasts";
 import Apply from "../pages/Apply";
 import EmailLanding from "../pages/EmailLanding"; // BF_WEBSITE_BLOCK_v202_EMAIL_LANDING
+import ReferralLanding from "../pages/ReferralLanding"; // BF_WEBSITE_REFERRAL_LANDING_v1
 import FAQ from "../pages/FAQ";
 import HowItWorks from "../pages/HowItWorks";
 import Privacy from "../pages/privacy";
@@ -30,6 +31,9 @@ export function AppRouter() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/e/:slug">{(params) => <EmailLanding slug={(params as { slug?: string }).slug} />}</Route>
+        {/* BF_WEBSITE_REFERRAL_LANDING_v1 */}
+        <Route path="/r/f/:code">{(params) => <ReferralLanding code={(params as { code?: string }).code} variant="funding" />}</Route>
+        <Route path="/r/b/:code">{(params) => <ReferralLanding code={(params as { code?: string }).code} variant="both" />}</Route>
         <Route path="/industries" component={Industries} />
         <Route path="/industries/:slug">
           {(params) => <IndustryDetail slug={params.slug} />}
