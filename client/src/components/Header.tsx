@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom"; // BF_WEBSITE_MOBILE_MENU_PORTAL_v1
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import logoUrl from "@/assets/logo-boreal-mountains-white.svg";
@@ -53,8 +54,13 @@ export default function Header() {
         </button>
       </div>
 
-      {open ? (
-        <div className="fixed inset-0 z-[60] md:hidden" role="dialog" aria-modal="true">
+      {open && typeof document !== "undefined" ? createPortal((
+        // BF_WEBSITE_MOBILE_MENU_PORTAL_v1 - the <header> uses backdrop-blur
+        // (backdrop-filter), which makes it the containing block + stacking
+        // context for fixed descendants, trapping this overlay behind the hero.
+        // Rendering into document.body escapes that context so the drawer sits
+        // above the page as intended.
+        <div className="fixed inset-0 z-[100] md:hidden" role="dialog" aria-modal="true">
           <button type="button" aria-label="Close mobile navigation" className="absolute inset-0 bg-black/55" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-0 h-full w-[min(88vw,360px)] overflow-auto border-l border-white/10 bg-[#081325] p-6">
             <div className="mb-6 flex items-center justify-between">
@@ -91,7 +97,7 @@ export default function Header() {
             </nav>
           </div>
         </div>
-      ) : null}
+      ), document.body) : null}
     </header>
   );
 }
