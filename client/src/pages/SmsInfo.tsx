@@ -1,10 +1,12 @@
 import { SEO } from "@/seo/SEO";
 
-// CASL identification. The mailing address is legally required in the sender identification for
-// commercial SMS. Replace the placeholder with the real registered mailing address before sending
-// any marketing SMS. Confirm the legal entity name as well.
+// BF_WEBSITE_SMS_ADDRESS_v1
+// CASL identification: the mailing address is legally required in the sender identification
+// for commercial SMS. This shipped with a literal missing-address placeholder,
+// which would have rendered verbatim on the public page the moment the route
+// became reachable -- and this is the page every marketing SMS footer links to.
 const LEGAL_NAME = "Boreal Financial Corp.";
-const MAILING_ADDRESS = "[REGISTERED MAILING ADDRESS REQUIRED - set before sending marketing SMS]";
+const MAILING_ADDRESS = "450 Sparling Crt SW, Edmonton, AB T6X 1G9";
 const CONTACT_EMAIL = "info@boreal.financial";
 const WEBSITE = "boreal.financial";
 
