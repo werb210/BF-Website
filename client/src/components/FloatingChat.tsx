@@ -164,7 +164,7 @@ export default function FloatingChat() {
     const email = leadDraft.email.trim();
     const phone = leadDraft.phone.trim();
     if (!name) { setLeadError("Please enter your name."); return; }
-    if (!email && !phone) { setLeadError("Please enter an email or phone."); return; }
+    if (!phone && !email) { setLeadError("Please add a mobile number (or email) so an advisor can reach you."); return; }
     const captured = { name, email, phone };
     setLead(captured);
     setMode("chat");
@@ -326,11 +326,11 @@ export default function FloatingChat() {
           {mode === "lead" ? (
             <div className="flex flex-col gap-2 border-t border-white/10 px-3 py-2 md:px-4">
               <div className="text-xs text-slate-300">
-                A Boreal advisor will reply. Tell us how to reach you:
+                A Boreal advisor will text you back. A mobile number is best:
               </div>
-              <input className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Your name" value={leadDraft.name} onChange={(e) => setLeadDraft({ ...leadDraft, name: e.target.value })} autoFocus />
-              <input className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Email" type="email" value={leadDraft.email} onChange={(e) => setLeadDraft({ ...leadDraft, email: e.target.value })} />
-              <input className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Phone" type="tel" value={leadDraft.phone} onChange={(e) => setLeadDraft({ ...leadDraft, phone: e.target.value })} />
+              <input className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Your name" value={leadDraft.name} onChange={(e) => setLeadDraft({ ...leadDraft, name: e.target.value })} />
+              <input className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Mobile number" type="tel" value={leadDraft.phone} onChange={(e) => setLeadDraft({ ...leadDraft, phone: e.target.value })} autoFocus />
+              <input className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Email (optional if you gave a number)" type="email" value={leadDraft.email} onChange={(e) => setLeadDraft({ ...leadDraft, email: e.target.value })} />
               {leadError ? <div className="text-xs text-red-400">{leadError}</div> : null}
               <div className="flex gap-2">
                 <button type="button" onClick={() => setMode("chat")} className="flex-1 rounded border border-white/20 px-3 py-2 text-sm">Cancel</button>
