@@ -63,6 +63,25 @@ export const trackEvent = (eventName: string, payload: Record<string, unknown> =
 // ---- Attribution Layer ----
 const ATTRIBUTION_KEY = "boreal_attribution";
 
+// BF_WEBSITE_ATTRIBUTION_MERGE_v1
+// The marketing params that identify where a visitor came from. Everything else
+// stored alongside them (referrer, landing_page, timestamp) is context, not
+// signal - a record holding only context tells you nothing about the source.
+const MARKETING_KEYS = [
+  "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+  "gclid", "gbraid", "wbraid", "li_fat_id",
+] as const;
+
+type AttributionRecord = Record<string, string | number | null>;
+
+function hasMarketingSignal(a: AttributionRecord | null | undefined): boolean {
+  if (!a) return false;
+  return MARKETING_KEYS.some((k) => {
+    const v = a[k];
+    return typeof v === "string" && v.trim() !== "";
+  });
+}
+
 export const captureAttribution = () => {
   if (typeof window === "undefined") {
     return;
@@ -70,7 +89,7 @@ export const captureAttribution = () => {
 
   const params = new URLSearchParams(window.location.search);
 
-  const attribution = {
+  const attribution: AttributionRecord = {
     utm_source: params.get("utm_source"),
     utm_medium: params.get("utm_medium"),
     utm_campaign: params.get("utm_campaign"),
@@ -85,8 +104,62 @@ export const captureAttribution = () => {
     first_visit_timestamp: Date.now(),
   };
 
-  if (!localStorage.getItem(ATTRIBUTION_KEY)) {
-    localStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(attribution));
+  // BF_WEBSITE_ATTRIBUTION_MERGE_v1
+  // This used to be a bare `if (!localStorage.getItem(KEY)) set(...)`, which wrote
+  // the record even when every marketing field was null. Consequence, measured in
+  // production: any visitor who reached the site once WITHOUT parameters - typed
+  // the URL, arrived from organic search, opened a bookmark - had an all-null
+  // record written and locked in. When that same person later clicked a Google ad
+  // and arrived carrying ?gclid=..., the guard was already satisfied and the gclid
+  // was discarded. Every application was therefore attributed to nothing: 28
+  // applications over 30 days, zero gclid, zero utm_source, against real ad spend.
+  //
+  // Auto-tagging was on and the ad Final URL was clean the whole time - Google was
+  // appending the gclid correctly and this code threw it away.
+  //
+  // Two rules now:
+  //   1. Never persist a record that carries no marketing signal. Context-only
+  //      records (referrer/landing_page) block nothing and are not worth keeping.
+  //   2. First-touch marketing source still wins - a later ad click must not
+  //      overwrite the campaign that originally introduced the visitor - but any
+  //      marketing field MISSING from the stored record is filled in from the
+  //      current URL. That is what makes a first-visit-then-ad-click sequence work.
+  //
+  // Mirrors BF_CLIENT_ATTRIBUTION_MERGE_v1 in bf-client, which fixed this exact
+  // failure on the client app and was never applied here.
+  try {
+    const raw = localStorage.getItem(ATTRIBUTION_KEY);
+    const stored: AttributionRecord | null = raw ? (JSON.parse(raw) as AttributionRecord) : null;
+
+    if (!stored) {
+      if (hasMarketingSignal(attribution)) {
+        localStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(attribution));
+      }
+      return;
+    }
+
+    // Stored record exists. Fill in only the marketing fields it is missing.
+    const merged: AttributionRecord = { ...stored };
+    let changed = false;
+    for (const k of MARKETING_KEYS) {
+      const incoming = attribution[k];
+      const existing = merged[k];
+      const existingIsSet = typeof existing === "string" && existing.trim() !== "";
+      const incomingIsSet = typeof incoming === "string" && incoming.trim() !== "";
+      if (!existingIsSet && incomingIsSet) {
+        merged[k] = incoming;
+        changed = true;
+      }
+    }
+    if (changed) localStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(merged));
+  } catch {
+    // localStorage unavailable or holding malformed JSON. Tracking must never
+    // break the site, so fall back to a plain write when there is real signal.
+    try {
+      if (hasMarketingSignal(attribution)) {
+        localStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(attribution));
+      }
+    } catch { /* give up silently */ }
   }
 };
 
