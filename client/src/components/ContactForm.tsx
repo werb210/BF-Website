@@ -5,6 +5,8 @@ import { trackEvent } from "@/utils/analytics";
 import { WEBSITE_API_BASE } from "@/config/api";
 // BF_WEBSITE_BLOCK_v129c_PHONE_NORMALIZATION_v1
 import { formatPhone, toE164 } from "@/utils/formatters";
+// BF_WEBSITE_CONTACT_REDIRECT_v151
+import { readStoredAttribution, resolveContactRedirect } from "@shared/applyRedirect";
 
 type ContactFormData = {
   companyName: string;
@@ -163,8 +165,10 @@ export default function ContactForm() {
             <p className="text-lg font-semibold">A Boreal Intake Specialist will contact you shortly</p>
             <button onClick={() => {
               // BF_WEBSITE_BLOCK_v130c_READINESS_HANDOFF_REPAIR_v1
+              // BF_WEBSITE_CONTACT_REDIRECT_v151 — honor the server's
+              // continuation redirect and explicitly preserve attribution.
               setShowSuccess(false);
-              window.location.href = "/"; // BF_WEBSITE_BLOCK_v124 — Continue → main page; ignore server redirect
+              window.location.href = resolveContactRedirect(redirectUrl, readStoredAttribution());
             }} className="mt-5 rounded-full bg-white px-5 py-2.5 font-semibold text-black">Continue</button>
           </div>
         </div>
