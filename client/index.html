@@ -16,6 +16,29 @@
         wait_for_update: 500
       });
     </script>
+    <!-- BF_WEBSITE_ADS_TAG_v152
+     The Google Ads tag lived only on client.boreal.financial, never on this
+     domain, even though every ad lands here first. Consequences: no _gcl_aw
+     cookie is written on the landing domain, no remarketing audience can be
+     collected from ad traffic, and attribution across the hop to the
+     application wizard depends entirely on the URL parameters appended by
+     buildApplyUrl / the click interceptor in main.tsx - with no cookie
+     fallback if that link is bypassed.
+
+     linker.domains lets the two properties share the click id, which is the
+     supported cross-domain mechanism. It is additive: the explicit gclid
+     forwarding already in main.tsx keeps working.
+
+     This sits ABOVE the GTM snippet but BELOW the consent defaults, so
+     Consent Mode v2 still gates it - ad_storage is denied until the banner
+     grants. -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18248196538"></script>
+    <script>
+      gtag('js', new Date());
+      gtag('config', 'AW-18248196538', {
+        linker: { domains: ['boreal.financial', 'client.boreal.financial'], accept_incoming: true }
+      });
+    </script>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TQPDWWJ3');</script>
     <!-- End Google Tag Manager -->
