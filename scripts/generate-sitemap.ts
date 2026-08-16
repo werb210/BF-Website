@@ -7,6 +7,7 @@ export const BASE = "https://www.boreal.financial"
 
 export const ROUTES: string[] = [
   "/",
+  "/us",
   "/compare",
   "/contact",
   "/credit-readiness",
@@ -42,7 +43,7 @@ export const ROUTES: string[] = [
   "/industries/media"
 ]
 
-export const PRIORITY: Record<string, string> = { "/": "1.0", "/products": "0.9" }
+export const PRIORITY: Record<string, string> = { "/": "1.0", "/us": "0.9", "/products": "0.9" }
 
 export function priorityFor(route: string): string {
   if (PRIORITY[route]) return PRIORITY[route]

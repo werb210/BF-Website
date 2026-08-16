@@ -36,7 +36,7 @@ const FAQS = [
   ["How fast can I get funded?", "Most complete applications reach funding in three to four days. Complex files and larger amounts take longer, and we'll tell you which yours is early rather than late."],
   ["What does it cost me?", "Nothing to apply and nothing to be matched. We're paid by the lender that funds you, unless we agree otherwise with you in advance."],
   ["What documents do I need?", "To start: six months of business bank statements and basic details about the company. Larger amounts and some products need financial statements, a rent roll, equipment lists or similar. We'll ask for what your file actually needs rather than everything up front."],
-  ["Do you lend in the United States?", "Yes, including SBA 7(a) and 504 through lenders on our US panel. See our US financing pages."],
+  ["Do you lend in the United States?", "Yes, including SBA 7(a) and 504 through lenders on our US panel. See our US financing page at /us."],
 ] as const;
 
 export default function Home() {
