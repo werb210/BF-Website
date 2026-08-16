@@ -419,8 +419,8 @@ export const industries: Industry[] = [
   },
   {
     "slug": "media",
-    "title": "Media",
-    "name": "Media",
+    "title": "Media & Production",
+    "name": "Media & Production",
     "image": "https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=1400&q=80",
     "heroImage": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1800&q=80",
     "description": "Production costs land up front, and the money arrives when the project delivers.",

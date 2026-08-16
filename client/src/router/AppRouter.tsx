@@ -5,7 +5,6 @@ import Contact from "../pages/Contact";
 import Compare from "../pages/Compare";
 import CreditReadiness from "../pages/CreditReadiness";
 import CreditResults from "../pages/CreditResults";
-import Podcasts from "../pages/Podcasts";
 import Apply from "../pages/Apply";
 import EmailLanding from "../pages/EmailLanding"; // BF_WEBSITE_BLOCK_v202_EMAIL_LANDING
 import ReferralLanding from "../pages/ReferralLanding"; // BF_WEBSITE_REFERRAL_LANDING_v1
@@ -60,7 +59,6 @@ export function AppRouter() {
         <Route path="/product-comparison" component={Compare} />
         <Route path="/how-it-works" component={HowItWorks} />
         <Route path="/faq" component={FAQ} />
-        <Route path="/podcasts" component={Podcasts} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/terms" component={TermsPage} />
         <Route path="/sms" component={SmsInfo} />

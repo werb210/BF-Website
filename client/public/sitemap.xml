@@ -36,11 +36,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://boreal.financial/podcasts</loc>
-    <lastmod>2026-08-16</lastmod>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://boreal.financial/privacy</loc>
     <lastmod>2026-08-16</lastmod>
     <priority>0.6</priority>
@@ -114,5 +109,100 @@
     <loc>https://boreal.financial/products/media-financing</loc>
     <lastmod>2026-08-16</lastmod>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/construction</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/factoring</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/loc</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/equipment-financing</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/sale-leaseback</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/manufacturing</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/asset-based-lending</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/retail</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/term-loan</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/restaurant-food-service</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/technology</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/healthcare</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/commercial-real-estate</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/transportation</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/professional-services</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/agriculture</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/energy</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/distribution</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://boreal.financial/industries/media</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.7</priority>
   </url>
 </urlset>
