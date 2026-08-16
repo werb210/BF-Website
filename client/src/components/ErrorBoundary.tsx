@@ -15,10 +15,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error) {
-    if (import.meta.env.DEV) {
-      console.error("Unhandled UI error", error);
-    }
+  componentDidCatch(error: Error, info: { componentStack?: string | null }) {
+    // BF_WEBSITE_HOTFIX_v16 - always log. A boundary that hides the error in
+    // production means an outage cannot be diagnosed from the browser at all.
+    console.error("Unhandled UI error", error, info?.componentStack ?? "");
   }
 
   render() {

@@ -1,5 +1,5 @@
 // BF_WEBSITE_BLOCK_1_36_PWA_SETUP
-const VERSION = "v1";
+const VERSION = "v16";
 const STATIC_CACHE = `bf-static-${VERSION}`;
 const RUNTIME_CACHE = `bf-runtime-${VERSION}`;
 const OFFLINE_URL = "/offline.html";
