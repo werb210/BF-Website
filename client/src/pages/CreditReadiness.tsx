@@ -210,55 +210,68 @@ export default function CreditReadiness() {
   }
 
   return (
-    <main className="bg-[#020817] px-5 py-10 text-white md:px-6 md:py-12">
-      <div className="mx-auto max-w-4xl">
-        <h1 className="mb-3 text-3xl font-bold md:text-5xl">Credit Readiness</h1>
-        <p className="text-xl font-semibold md:text-2xl">Tell us about your business</p>
+    <main className="bg-white font-sans text-boreal-ink">
+      <section className="bg-gradient-to-br from-boreal-ink via-boreal-inkDeep to-[#0d233f]">
+        <div className="mx-auto max-w-[820px] px-6 py-14 md:py-20">
+          <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-boreal-gold">
+            Free, and it doesn&rsquo;t touch your credit
+          </p>
+          <h1 className="mt-4 font-display text-4xl font-bold leading-tight text-white md:text-5xl">
+            See what you could qualify for
+          </h1>
+          <p className="mt-5 text-lg leading-relaxed text-[#c3cfe0]">
+            Answer a few questions about your business and we&rsquo;ll tell you which kinds of
+            financing are realistic and what a lender will want to see. Two minutes, no documents
+            needed yet, and no credit check &mdash; we don&rsquo;t pull it.
+          </p>
+        </div>
+      </section>
 
+      <div className="mx-auto max-w-[820px] px-6 py-12 md:py-16">
         <form
           autoComplete="on"
           onSubmit={handleSubmit}
-          className="mt-10 rounded-2xl border border-white/10 bg-[#08132a] p-6"
+          className="rounded-2xl border border-boreal-line bg-white p-6 md:p-8"
         >
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <input required type="text" autoComplete="organization" placeholder="Company Name" value={form.companyName} onChange={(e) => update("companyName", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
-            <input required type="text" autoComplete="name" placeholder="Full Name" value={form.fullName} onChange={(e) => update("fullName", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
-            <input required type="email" autoComplete="email" inputMode="email" placeholder="Email" value={form.email} onChange={(e) => update("email", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
-            <input required type="tel" autoComplete="tel" inputMode="tel" placeholder="Mobile Phone" value={form.phone} onChange={(e) => update("phone", formatPhone(e.target.value))} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
+            <input required type="text" autoComplete="organization" placeholder="Company Name" value={form.companyName} onChange={(e) => update("companyName", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20" />
+            <input required type="text" autoComplete="name" placeholder="Full Name" value={form.fullName} onChange={(e) => update("fullName", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20" />
+            <input required type="email" autoComplete="email" inputMode="email" placeholder="Email" value={form.email} onChange={(e) => update("email", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20" />
+            <input required type="tel" autoComplete="tel" inputMode="tel" placeholder="Mobile Phone" value={form.phone} onChange={(e) => update("phone", formatPhone(e.target.value))} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20" />
 
-            <select required value={form.industry} onChange={(e) => update("industry", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">
+            <select required value={form.industry} onChange={(e) => update("industry", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
               <option value="">Industry</option>
               {INDUSTRIES.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
-            <select required value={form.businessLocation} onChange={(e) => update("businessLocation", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">
+            <select required value={form.businessLocation} onChange={(e) => update("businessLocation", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
               <option value="">Business Location</option>
               {LOCATIONS.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
 
-            <input required type="text" inputMode="numeric" placeholder="Requested Amount ($)" value={form.requestedAmount} onChange={(e) => update("requestedAmount", formatCurrency(e.target.value))} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3" />
+            <input required type="text" inputMode="numeric" placeholder="Requested Amount ($)" value={form.requestedAmount} onChange={(e) => update("requestedAmount", formatCurrency(e.target.value))} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20" />
 
-            <select required value={form.purposeOfFunds} onChange={(e) => update("purposeOfFunds", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">
+            <select required value={form.purposeOfFunds} onChange={(e) => update("purposeOfFunds", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
               <option value="">Purpose of Funds</option>
               {PURPOSES.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
 
-            <select required value={form.salesHistoryYears} onChange={(e) => update("salesHistoryYears", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">
+            <select required value={form.salesHistoryYears} onChange={(e) => update("salesHistoryYears", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
               <option value="">Years in Business</option>
               {SALES_HISTORY.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
-            <select required value={form.annualRevenueRange} onChange={(e) => update("annualRevenueRange", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">
+            <select required value={form.annualRevenueRange} onChange={(e) => update("annualRevenueRange", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
               <option value="">Annual Revenue</option>
               {ANNUAL_REV.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
-            <select required value={form.avgMonthlyRevenueRange} onChange={(e) => update("avgMonthlyRevenueRange", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">
+            <select required value={form.avgMonthlyRevenueRange} onChange={(e) => update("avgMonthlyRevenueRange", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
               <option value="">Average Monthly Revenue</option>
               {MONTHLY_REV.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
-            <select required value={form.accountsReceivableRange} onChange={(e) => update("accountsReceivableRange", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">
+            <select required value={form.accountsReceivableRange} onChange={(e) => update("accountsReceivableRange", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
               <option value="">Accounts Receivable</option>
               {AR.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
-            <select required value={form.fixedAssetsValueRange} onChange={(e) => update("fixedAssetsValueRange", e.target.value)} className="w-full rounded border border-slate-700 bg-[#0b213f] p-3">
+            <select required value={form.fixedAssetsValueRange} onChange={(e) => update("fixedAssetsValueRange", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
               <option value="">Fixed Assets Value</option>
               {FIXED_ASSETS.map((opt) => <option key={opt}>{opt}</option>)}
             </select>
@@ -266,9 +279,16 @@ export default function CreditReadiness() {
 
           {error ? <p className="mt-4 text-sm text-red-300">{error}</p> : null}
 
-          <button type="submit" disabled={submitting} className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-all duration-200 disabled:opacity-70">
-            {submitting ? "Submitting..." : "Check Readiness & Continue"}
+          <button
+            type="submit"
+            disabled={submitting}
+            className="mt-6 w-full rounded-lg bg-boreal-gold py-3.5 text-[15px] font-semibold text-boreal-ink transition hover:bg-[#cfa953] disabled:opacity-70"
+          >
+            {submitting ? "Checking\u2026" : "See what I could qualify for"}
           </button>
+          <p className="mt-3 text-center text-[12px] leading-snug text-boreal-body">
+            No cost, no obligation, and no impact on your credit.
+          </p>
         </form>
       </div>
     </main>
