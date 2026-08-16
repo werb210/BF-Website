@@ -2,7 +2,9 @@
 // when a build ships without VITE_GA_ID. The env still wins if present;
 // otherwise fall back to the known BF measurement ID so collection always runs.
 const GA_MEASUREMENT_ID =
-  (import.meta.env.VITE_GA_ID as string | undefined) || "G-D1Y4105RXP"; // BF_WEBSITE_GA4_FALLBACK_v1 - public GA4 id; ensures the marketing site reports even when VITE_GA_ID is unset at build time
+  (import.meta.env.VITE_GA_ID as string | undefined) || "G-T6LN8Y3L3Z"; // BF_WEBSITE_TAGS_v15 - the previous measurement id belonged to a property
+// this account cannot open, so nobody could read the data or mark key events.
+// This is the property named "Boreal Financial - Website", which Todd owns.
 
 declare global {
   interface Window {
@@ -18,10 +20,10 @@ export function initGA() {
     return;
   }
 
-  const script = document.createElement("script");
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-  document.head.appendChild(script);
+  // BF_WEBSITE_TAGS_v15 - no script injection here. index.html already loads
+  // gtag.js for the Ads tag, and gtag("config", <GA4 id>) below makes that same
+  // library fetch this property. Injecting a second <script> for the same id
+  // downloaded 183 KiB twice on every page view.
 
   window.dataLayer = window.dataLayer || [];
   window.gtag = window.gtag || function gtag(...args: unknown[]) {

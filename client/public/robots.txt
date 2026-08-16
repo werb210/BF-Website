@@ -7,4 +7,4 @@ Disallow: /lender-login
 Disallow: /credit-results
 Disallow: /system-status
 
-Sitemap: https://boreal.financial/sitemap.xml
+Sitemap: https://www.boreal.financial/sitemap.xml

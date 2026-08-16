@@ -4,12 +4,12 @@ import fs from "node:fs";
 
 const PUBLIC_DIR = "client/public";
 
-test("sitemap ships from client/public on the canonical apex domain", () => {
+test("sitemap ships from client/public on the canonical www host", () => {
   const xml = fs.readFileSync(`${PUBLIC_DIR}/sitemap.xml`, "utf8");
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   assert.ok(locs.length >= 30, `expected 30+ sitemap URLs, found ${locs.length}`);
   for (const loc of locs) {
-    assert.ok(loc.startsWith("https://boreal.financial"), `off-domain sitemap URL: ${loc}`);
+    assert.ok(loc.startsWith("https://www.boreal.financial"), `off-domain sitemap URL: ${loc}`);
   }
 });
 
@@ -37,14 +37,35 @@ test("fonts are non-blocking, Lucky Orange is gone, and API is preconnected", ()
   assert.match(html, /href="https:\/\/server\.boreal\.financial"/);
 });
 
-test("no source file points at the www host", () => {
-  const walk = (dir: string): string[] => fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
-    const path = `${dir}/${entry.name}`;
-    if (entry.isDirectory()) return entry.name === "node_modules" ? [] : walk(path);
-    return /\.(ts|tsx|html)$/.test(entry.name) ? [path] : [];
-  });
-  const offenders = [...walk("client/src"), "client/index.html"].filter((file) =>
-    fs.readFileSync(file, "utf8").includes("www.boreal.financial"),
+test("the empty GTM container is gone and GA4 loads once", () => {
+  const html = fs.readFileSync("client/index.html", "utf8");
+  assert.ok(!/GTM-TQPDWWJ3/.test(html), "the empty GTM container is back in index.html");
+
+  const ga = fs.readFileSync("client/src/analytics/ga.ts", "utf8");
+  assert.ok(
+    !/googletagmanager\.com\/gtag\/js/.test(ga),
+    "ga.ts injects a second gtag script again - that is the duplicate load",
   );
-  assert.deepEqual(offenders, []);
+  assert.ok(!/G-D1Y4105RXP/.test(ga), "ga.ts points at the inaccessible property again");
+});
+
+test("canonical host is www everywhere", () => {
+  const walk = (dir: string): string[] =>
+    fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      const p = `${dir}/${e.name}`;
+      if (e.isDirectory()) return e.name === "node_modules" ? [] : walk(p);
+      return /\.(ts|tsx)$/.test(e.name) ? [p] : [];
+    });
+  const offenders = walk("client/src").filter((f) =>
+    /https:\/\/(?!www\.)boreal\.financial/.test(fs.readFileSync(f, "utf8")),
+  );
+  assert.deepEqual(offenders, [], `bare apex URL found in: ${offenders.join(", ")}`);
+
+  for (const f of ["client/public/sitemap.xml", "client/public/robots.txt", "client/public/llms.txt"]) {
+    const body = fs.readFileSync(f, "utf8");
+    assert.ok(
+      !/https:\/\/(?!www\.)boreal\.financial/.test(body),
+      `${f} still points at the unmapped apex host`,
+    );
+  }
 });

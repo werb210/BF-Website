@@ -11,7 +11,7 @@ const routes = [
   "/industries/manufacturing"
 ]
 
-const base = "https://boreal.financial"
+const base = "https://www.boreal.financial"
 
 const xml =
 `<?xml version="1.0" encoding="UTF-8"?>

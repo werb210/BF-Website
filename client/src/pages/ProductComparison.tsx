@@ -31,7 +31,7 @@ export default function ProductComparison() {
       <SEO
         title="Compare Business Financing Options | Boreal Financial"
         description="Term loans, lines of credit, factoring, equipment finance and more, side by side - amount, speed, term, cost basis and collateral."
-        canonical="https://boreal.financial/compare"
+        canonical="https://www.boreal.financial/compare"
       />
       <main className="bg-white font-sans text-boreal-ink">
         <section className="bg-gradient-to-br from-boreal-ink via-boreal-inkDeep to-[#0d233f]">

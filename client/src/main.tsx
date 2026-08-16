@@ -51,12 +51,21 @@ declare global {
 }
 
 export const trackEvent = (eventName: string, payload: Record<string, unknown> = {}) => {
-  if (typeof window !== "undefined" && window.dataLayer) {
-    window.dataLayer.push({
-      event: eventName,
-      timestamp: Date.now(),
-      ...payload,
-    });
+  if (typeof window === "undefined") return;
+
+  const body = { event: eventName, timestamp: Date.now(), ...payload };
+
+  if (window.dataLayer) {
+    window.dataLayer.push(body);
+  }
+
+  // BF_WEBSITE_TAGS_v15 - every event raised through this helper (conversion,
+  // funnel_stage, form_submit, lead_profile, session_summary) was pushed only to
+  // dataLayer, and the GTM container on the other end was empty. None of it ever
+  // reached an analytics product. gtag is the live path.
+  const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+  if (typeof w.gtag === "function") {
+    w.gtag("event", eventName, payload);
   }
 };
 
