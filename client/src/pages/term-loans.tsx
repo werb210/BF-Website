@@ -39,7 +39,7 @@ const requiredDocs = [
 export default function TermLoans() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Seo title="Term Loans | Boreal Financial" description="Structured term loans for growth projects, refinancing, and long-term capital investments." canonical="https://borealfinancial.ca/term-loans" jsonLd={financialServiceJsonLd("Term Loans", "Structured term loans for long-term projects and growth initiatives.", "/term-loans")} />
+      <Seo title="Term Loans | Boreal Financial" description="Structured term loans for growth projects, refinancing, and long-term capital investments." canonical="https://boreal.financial/term-loans" jsonLd={financialServiceJsonLd("Term Loans", "Structured term loans for long-term projects and growth initiatives.", "/term-loans")} />
       <Navigation />
 
       <main>

@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://borealfinancial.com/sitemap.xml
+# Staff and lender sign-in carry no public content.
+Disallow: /staff-login
+Disallow: /lender-login
+Disallow: /credit-results
+Disallow: /system-status
+
+Sitemap: https://boreal.financial/sitemap.xml

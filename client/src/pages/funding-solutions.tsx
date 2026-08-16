@@ -42,7 +42,7 @@ const products = [
 export default function FundingSolutions() {
   return (
     <div className="min-h-screen bg-background">
-      <Seo title="Funding Solutions | Boreal Financial" description="Explore Boreal Financial funding solutions, including term loans, lines of credit, factoring, and purchase order financing." canonical="https://borealfinancial.ca/funding-solutions" jsonLd={organizationJsonLd} />
+      <Seo title="Funding Solutions | Boreal Financial" description="Explore Boreal Financial funding solutions, including term loans, lines of credit, factoring, and purchase order financing." canonical="https://boreal.financial/funding-solutions" jsonLd={organizationJsonLd} />
       <Navigation />
 
       <main>

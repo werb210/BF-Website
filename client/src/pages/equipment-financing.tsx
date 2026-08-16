@@ -39,7 +39,7 @@ const requiredDocs = [
 export default function EquipmentFinancing() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Seo title="Equipment Financing | Boreal Financial" description="Acquire and upgrade mission-critical equipment with flexible Boreal Financial equipment financing." canonical="https://borealfinancial.ca/equipment-financing" jsonLd={financialServiceJsonLd("Equipment Financing", "Finance machinery, vehicles, and equipment with predictable terms.", "/equipment-financing")} />
+      <Seo title="Equipment Financing | Boreal Financial" description="Acquire and upgrade mission-critical equipment with flexible Boreal Financial equipment financing." canonical="https://boreal.financial/equipment-financing" jsonLd={financialServiceJsonLd("Equipment Financing", "Finance machinery, vehicles, and equipment with predictable terms.", "/equipment-financing")} />
       <Navigation />
 
       <main>
