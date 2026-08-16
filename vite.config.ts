@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 import { brotliCompressSync } from "zlib";
 import viteCompression from "vite-plugin-compression";
 import { imagetools } from "vite-imagetools";
-import sitemap from "vite-plugin-sitemap";
 // import prerender from "vite-plugin-prerender"; // disabled — fails in Azure Oryx
 import { visualizer } from "rollup-plugin-visualizer";
 
@@ -58,18 +57,19 @@ export default defineConfig({
       ext: ".gz",
       threshold: 10240,
     }),
-    sitemap({
-      hostname: "https://borealfinance.com",
-    }),
     // prerender({
     //   routes: ["/", "/apply", "/business-loans", "/equipment-financing", "/about"],
     // }),
-    visualizer({
-      open: true,
-      gzipSize: true,
-      brotliSize: true,
-      filename: "dist/bundle-analysis.html",
-    }),
+    ...(process.env.NODE_ENV === "analyze" || process.argv.includes("analyze")
+      ? [
+          visualizer({
+            open: false,
+            gzipSize: true,
+            brotliSize: true,
+            filename: "dist/bundle-analysis.html",
+          }),
+        ]
+      : []),
     brotliBundlePlugin,
   ],
   resolve: {

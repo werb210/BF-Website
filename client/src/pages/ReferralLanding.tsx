@@ -8,7 +8,7 @@
 // relevant marketing site.
 import { APPLY_URL } from "@/config/site";
 
-const BF_SITE = "https://www.boreal.financial/";
+const BF_SITE = "https://boreal.financial/";
 const BI_SITE = "https://www.boreal.insure/";
 const BI_APPLY = "https://www.boreal.insure/applications/new";
 
