@@ -4,6 +4,8 @@ import SEO from "@/components/SEO";
 import { APPLY_URL } from "@/config/site";
 import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 import { trackConversion } from "@/main";
+// BF_WEBSITE_SCHEMA_v10
+import { organizationJsonLd } from "@/lib/structured-data";
 
 const PHONE_DISPLAY = "+1 (825) 451-1768";
 const PRODUCTS = [
@@ -45,7 +47,22 @@ export default function Home() {
   );
 
   return <>
-    <SEO title="Business Financing Canada | 80+ Lenders, One Application | Boreal Financial" description="One application matches your business to 80+ Canadian lenders. Term loans, lines of credit, equipment and working capital. Funding in 3-4 days. We never pull your credit." />
+    <SEO
+        title="Business Financing Canada | 80+ Lenders, One Application | Boreal Financial"
+        description="One application matches your business to 80+ Canadian lenders. Term loans, lines of credit, equipment and working capital. Funding in 3-4 days. We never pull your credit."
+        schema={[
+          organizationJsonLd,
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: FAQS.map(([q, a]) => ({
+              "@type": "Question",
+              name: q,
+              acceptedAnswer: { "@type": "Answer", text: a },
+            })),
+          },
+        ]}
+      />
     <main className="bg-white font-sans text-boreal-ink">
       <section className="relative overflow-hidden bg-gradient-to-br from-boreal-ink via-boreal-inkDeep to-[#0d233f]">
         <div aria-hidden className="pointer-events-none absolute inset-0 opacity-40" style={{backgroundImage:"radial-gradient(circle at 18% 20%, rgba(191,155,73,.18), transparent 45%), radial-gradient(circle at 82% 70%, rgba(191,155,73,.10), transparent 40%)"}} />
