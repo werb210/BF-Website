@@ -1,6 +1,7 @@
 import { Switch, Route, Redirect } from "wouter";
 
 import Home from "../pages/Home";
+import UnitedStates from "../pages/UnitedStates";
 import Contact from "../pages/Contact";
 import Compare from "../pages/Compare";
 import CreditReadiness from "../pages/CreditReadiness";
@@ -29,6 +30,9 @@ export function AppRouter() {
     <MainLayout>
       <Switch>
         <Route path="/" component={Home} />
+        {/* BF_WEBSITE_US_v19 - landing page for the US ad campaign. */}
+        <Route path="/us" component={UnitedStates} />
+        <Route path="/usa" component={UnitedStates} />
         <Route path="/e/:slug">{(params) => <EmailLanding slug={(params as { slug?: string }).slug} />}</Route>
         {/* BF_WEBSITE_REFERRAL_LANDING_v1 */}
         <Route path="/r/f/:code">{(params) => <ReferralLanding code={(params as { code?: string }).code} variant="funding" />}</Route>

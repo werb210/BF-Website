@@ -19,7 +19,7 @@ test("the SEO component renders the schema prop it is given", () => {
 
 test("pages that pass schema still do", () => {
   for (const f of ["client/src/pages/Home.tsx", "client/src/pages/ProductDetail.tsx"]) {
-    assert.match(fs.readFileSync(f, "utf8"), /schema=\{/, `${f} stopped passing schema`);
+    assert.ok(fs.readFileSync(f, "utf8").includes("schema={"), `${f} stopped passing schema`);
   }
 });
 
@@ -30,7 +30,7 @@ test("the dead structured-data module is gone", () => {
 test("login pages carry no placeholder copy and use the brand system", () => {
   for (const f of ["client/src/pages/StaffLogin.tsx", "client/src/pages/PartnerLogin.tsx"]) {
     const src = fs.readFileSync(f, "utf8");
-    assert.ok(!/demo build/i.test(src), `${f} still says \"demo build\"`);
+    assert.ok(!/demo build/i.test(src), `${f} still carries the placeholder copy`);
     assert.ok(!/bg-slate-900/.test(src), `${f} is still on the old dark styling`);
     assert.match(src, /font-display/, `${f} does not use the display face`);
     assert.match(src, /noindex/, `${f} should not be indexed`);
