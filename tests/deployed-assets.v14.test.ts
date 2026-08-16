@@ -18,9 +18,17 @@ test("build does not regenerate the sitemap", () => {
   assert.ok(!/^\s*import .*from "vite-plugin-sitemap"/m.test(cfg));
 });
 
-test("sitemap generator writes the deployed file", () => {
-  const gen = fs.readFileSync("scripts/generate-sitemap.ts", "utf8");
-  assert.ok(gen.includes('"client/public/sitemap.xml"'));
+test("the committed sitemap matches the generator exactly", async () => {
+  const mod = await import("../scripts/generate-sitemap.ts");
+  const committed = fs.readFileSync(`${PUBLIC_DIR}/sitemap.xml`, "utf8");
+  const lastmod = committed.match(/<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/)?.[1];
+  assert.ok(lastmod, "sitemap has no lastmod");
+  assert.equal(
+    committed,
+    mod.buildSitemap(lastmod as string),
+    "client/public/sitemap.xml has drifted from scripts/generate-sitemap.ts",
+  );
+  assert.ok(mod.ROUTES.length >= 30, `generator lists only ${mod.ROUTES.length} routes`);
 });
 
 test("llms.txt has an H1 and links", () => {
@@ -46,7 +54,11 @@ test("the empty GTM container is gone and GA4 loads once", () => {
     !/googletagmanager\.com\/gtag\/js/.test(ga),
     "ga.ts injects a second gtag script again - that is the duplicate load",
   );
-  assert.ok(!/G-D1Y4105RXP/.test(ga), "ga.ts points at the inaccessible property again");
+  assert.ok(
+    /G-D1Y4105RXP/.test(ga),
+    "ga.ts must use G-D1Y4105RXP - the GA4 property Todd owns and administers",
+  );
+  assert.ok(!/G-T6LN8Y3L3Z/.test(ga), "ga.ts points at the third-party property again");
 });
 
 test("canonical host is www everywhere", () => {

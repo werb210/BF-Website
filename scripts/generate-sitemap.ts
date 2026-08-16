@@ -1,28 +1,73 @@
 import fs from "fs"
 
-const routes = [
+// BF_WEBSITE_HOTFIX_v17 - single source of truth for the deployed sitemap.
+// Run with `npm run sitemap`. tests/deployed-assets.v14.test.ts fails if the
+// committed client/public/sitemap.xml does not match this output exactly.
+export const BASE = "https://www.boreal.financial"
+
+export const ROUTES: string[] = [
   "/",
+  "/compare",
   "/contact",
+  "/credit-readiness",
+  "/faq",
+  "/how-it-works",
+  "/industries",
   "/privacy",
+  "/products",
+  "/sms",
   "/terms",
-  "/work-with-us",
-  "/industries/logistics",
+  "/products/loc",
+  "/products/term-loan",
+  "/products/equipment-financing",
+  "/products/factoring",
+  "/products/merchant-cash-advance",
+  "/products/po-financing",
+  "/products/asset-based-lending",
+  "/products/sale-leaseback",
+  "/products/commercial-real-estate",
+  "/products/sba",
+  "/products/media-financing",
   "/industries/construction",
-  "/industries/manufacturing"
+  "/industries/manufacturing",
+  "/industries/retail",
+  "/industries/restaurant-food-service",
+  "/industries/technology",
+  "/industries/healthcare",
+  "/industries/transportation",
+  "/industries/professional-services",
+  "/industries/agriculture",
+  "/industries/energy",
+  "/industries/distribution",
+  "/industries/media"
 ]
 
-const base = "https://www.boreal.financial"
+export const PRIORITY: Record<string, string> = { "/": "1.0", "/products": "0.9" }
 
-const xml =
-`<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${routes.map(r => `
-  <url>
-    <loc>${base}${r}</loc>
-  </url>
-`).join("")}
-</urlset>
-`
+export function priorityFor(route: string): string {
+  if (PRIORITY[route]) return PRIORITY[route]
+  if (
+    route.startsWith("/products/") ||
+    route === "/credit-readiness" ||
+    route === "/how-it-works" ||
+    route === "/industries"
+  ) {
+    return "0.8"
+  }
+  if (route.startsWith("/industries/") || route === "/compare" || route === "/contact") {
+    return "0.7"
+  }
+  return "0.6"
+}
 
-// Write to Vite's deployed publicDir so generated and shipped assets cannot drift.
-fs.writeFileSync("client/public/sitemap.xml", xml)
+export function buildSitemap(lastmod: string): string {
+  const entries = ROUTES.map(
+    (r) => `  <url>\n    <loc>${BASE}${r === "/" ? "/" : r}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <priority>${priorityFor(r)}</priority>\n  </url>`
+  ).join("\n")
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</urlset>\n`
+}
+
+if (process.argv[1] && process.argv[1].includes("generate-sitemap")) {
+  const lastmod = new Date().toISOString().slice(0, 10)
+  fs.writeFileSync("client/public/sitemap.xml", buildSitemap(lastmod))
+}

@@ -2,9 +2,11 @@
 // when a build ships without VITE_GA_ID. The env still wins if present;
 // otherwise fall back to the known BF measurement ID so collection always runs.
 const GA_MEASUREMENT_ID =
-  (import.meta.env.VITE_GA_ID as string | undefined) || "G-T6LN8Y3L3Z"; // BF_WEBSITE_TAGS_v15 - the previous measurement id belonged to a property
-// this account cannot open, so nobody could read the data or mark key events.
-// This is the property named "Boreal Financial - Website", which Todd owns.
+  (import.meta.env.VITE_GA_ID as string | undefined) || "G-D1Y4105RXP"; // BF_WEBSITE_TAGS_v15 - the previous measurement id belonged to a property
+// BF_WEBSITE_HOTFIX_v17 - this is the measurement id on GA4 account
+// 398128483 (property 541827105), where borealfinancial@gmail.com is
+// Administrator and generate_lead is already a key event. Do not change it
+// again without reading the property list while signed in as that account.
 
 declare global {
   interface Window {
