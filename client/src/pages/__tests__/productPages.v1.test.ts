@@ -18,8 +18,14 @@ describe("product pages", () => {
     assert.ok(detail.includes("const SHOW_RANGES = false;"), "SHOW_RANGES is not off");
   });
 
-  it("index has the 7-column comparison table for all 8 products", () => {
-    assert.ok(index.includes('"Collateral"'), "Products.tsx is missing the Collateral column");
+  it("index features the approved product set as cards", () => {
+    for (const slug of ["term-loan", "loc", "factoring", "equipment-financing",
+                        "asset-based-lending", "sale-leaseback",
+                        "commercial-real-estate", "sba"]) {
+      assert.ok(index.includes(`slug: "${slug}"`), `Products.tsx is missing ${slug}`);
+    }
+    assert.ok(!index.includes('slug: "merchant-cash-advance"'),
+      "MCA must not be featured on the index");
     assert.equal(content.match(/slug:"/g)?.length, 8);
   });
 });
