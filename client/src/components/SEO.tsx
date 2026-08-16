@@ -28,7 +28,10 @@ function formatTitle(title: string) {
   return title.includes(`| ${SITE_NAME}`) ? title : `${title} | ${SITE_NAME}`;
 }
 
-export default function SEO({ title, description, canonical, url, noindex }: Props) {
+export default function SEO(props: Props) {
+  const { title, description, canonical, url, noindex } = props;
+  const schema = getSchema(props);
+  const schemaBlocks = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
   const canonicalUrl = normalizeHref(canonical ?? url ?? (typeof window !== "undefined" ? `${SITE_URL}${window.location.pathname}${window.location.search}` : SITE_URL));
   const fullTitle = formatTitle(title);
 
@@ -41,25 +44,17 @@ export default function SEO({ title, description, canonical, url, noindex }: Pro
       <meta property="og:type" content="website" />
       <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
       {canonicalUrl ? <link rel="canonical" href={canonicalUrl} /> : null}
+      {schemaBlocks.map((block, index) => (
+        <script key={index} type="application/ld+json">
+          {JSON.stringify(block)}
+        </script>
+      ))}
     </Helmet>
   );
 }
 
+// BF_WEBSITE_SCHEMA_v18 - kept as an alias so existing imports keep working.
+// The default export now renders schema itself.
 export function Seo(props: Props) {
-  const schema = getSchema(props);
-
-  return (
-    <>
-      <SEO {...props} />
-      {Array.isArray(schema)
-        ? schema.map((item, index) => (
-            <script key={index} type="application/ld+json">
-              {JSON.stringify(item)}
-            </script>
-          ))
-        : schema
-          ? <script type="application/ld+json">{JSON.stringify(schema)}</script>
-          : null}
-    </>
-  );
+  return <SEO {...props} />;
 }
