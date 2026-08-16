@@ -17,15 +17,17 @@
       "/assets/*",
       "/images/*",
       "/icons/*",
-      "/*.css",
-      "/*.js",
-      "/*.png",
-      "/*.jpg",
-      "/*.svg",
-      "/*.ico",
-      "/*.json",
-      "/*.txt",
-      "/*.xml"
+      "/*.{css,js,json,txt,xml,png,jpg,jpeg,svg,ico,webmanifest}"
     ]
+  },
+  "responseOverrides": {
+    "404": {
+      "rewrite": "/index.html",
+      "statusCode": 200
+    }
+  },
+  "mimeTypes": {
+    ".json": "application/json",
+    ".webmanifest": "application/manifest+json"
   }
 }
