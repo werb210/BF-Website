@@ -5,6 +5,8 @@ import SEO from "@/components/SEO";
 import { APPLY_URL } from "@/config/site";
 import { industries } from "@/data/industries";
 import { trackConversion } from "@/main";
+// BF_WEBSITE_SCHEMA_v10
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 import NotFound from "@/pages/NotFound";
 import { scrollToTop } from "@/utils/scrollToTop";
 import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
@@ -17,7 +19,15 @@ export default function IndustryDetail({ slug }: { slug: string }) {
 
   return (
     <>
-      <SEO title={`${industry.title} Financing Canada | Boreal Financial`} description={industry.description} />
+      <SEO
+        title={`${industry.title} Financing Canada | Boreal Financial`}
+        description={industry.description}
+        schema={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Industries", path: "/industries" },
+          { name: industry.title, path: `/industries/${industry.slug}` },
+        ])}
+      />
       <main className="bg-white font-sans text-boreal-ink">
         <section className="bg-gradient-to-br from-boreal-ink via-boreal-inkDeep to-[#0d233f]">
           <div className="mx-auto max-w-[820px] px-6 py-16 md:py-24">

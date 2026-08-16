@@ -8,6 +8,8 @@ import { industries } from "@/data/industries";
 import { APPLY_URL } from "@/config/site";
 import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 import { trackConversion } from "@/main";
+// BF_WEBSITE_SCHEMA_v10
+import { financialServiceJsonLd, breadcrumbJsonLd } from "@/lib/structured-data";
 
 const SHOW_RANGES = false;
 const slugAliases: Record<string, string> = {
@@ -25,7 +27,27 @@ export default function ProductDetail({ slug }: { slug: string }) {
   if (!p) return <main className="bg-white font-sans text-boreal-ink"><div className="mx-auto max-w-[820px] px-6 py-20 text-center"><h1 className="font-display text-3xl font-bold">We don&rsquo;t have a page for that</h1><p className="mt-4 text-[16px] text-boreal-body">It may have moved, or we may not place that product. Here&rsquo;s what we do.</p><Link href="/products" className="mt-7 inline-block rounded-lg bg-boreal-gold px-6 py-3.5 font-semibold">See all products</Link></div></main>;
   const related = industries.filter((i) => p.inds.some((n) => i.name.toLowerCase().includes(n.toLowerCase()) || n.toLowerCase().includes(i.name.toLowerCase())));
   return <>
-    <SEO title={`${p.name} | Boreal Financial`} description={p.def} />
+    <SEO
+        title={`${p.name} | Boreal Financial`}
+        description={p.def}
+        schema={[
+          financialServiceJsonLd(p.name, p.def, `/products/${p.slug}`),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Products", path: "/products" },
+            { name: p.name, path: `/products/${p.slug}` },
+          ]),
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: p.faqs.map(([q, a]) => ({
+              "@type": "Question",
+              name: q,
+              acceptedAnswer: { "@type": "Answer", text: a },
+            })),
+          },
+        ]}
+      />
     <main className="bg-white font-sans text-boreal-ink">
       <section className="bg-gradient-to-br from-boreal-ink via-boreal-inkDeep to-[#0d233f]"><div className="mx-auto max-w-[820px] px-6 py-16 md:py-24">
         <Link href="/products" className={`${eyebrow} hover:underline`}>{p.tag}</Link>
