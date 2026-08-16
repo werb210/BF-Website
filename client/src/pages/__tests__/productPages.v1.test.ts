@@ -26,6 +26,9 @@ describe("product pages", () => {
     }
     assert.ok(!index.includes('slug: "merchant-cash-advance"'),
       "MCA must not be featured on the index");
-    assert.equal(content.match(/slug:"/g)?.length, 8);
+    // BF_WEBSITE_PRODUCT_DETAIL_v6 - was 8; sale-leaseback,
+    // commercial-real-estate and sba were added because they are linked from
+    // the homepage, products index and industry pages.
+    assert.equal(content.match(/slug:"/g)?.length, 11);
   });
 });
