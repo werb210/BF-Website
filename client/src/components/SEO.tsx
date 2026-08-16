@@ -17,11 +17,11 @@ function getSchema(props: Props) {
 const SITE_NAME = "Boreal Financial";
 // BF_WEBSITE_SEO_v9 - the canonical domain is boreal.financial. The previous
 // default pointed every canonical tag at a domain we do not own.
-const SITE_URL = import.meta.env.VITE_SITE_URL ?? "https://boreal.financial";
+const SITE_URL = import.meta.env.VITE_SITE_URL ?? "https://www.boreal.financial";
 
 function normalizeHref(href?: string) {
   if (!href) return href;
-  return href.replace("https://boreal.financial", SITE_URL);
+  return href.replace("https://www.boreal.financial", SITE_URL);
 }
 
 function formatTitle(title: string) {

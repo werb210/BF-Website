@@ -10,12 +10,12 @@ interface SEOProps {
 }
 
 const SITE_NAME = "Boreal Financial";
-const BASE_URL = import.meta.env.VITE_SITE_URL ?? "https://boreal.financial";
+const BASE_URL = import.meta.env.VITE_SITE_URL ?? "https://www.boreal.financial";
 const DEFAULT_OG_IMAGE = "/images/business-handshake-close-up.jpg";
 
 function getCanonicalUrl(url?: string) {
   if (url) {
-    return url.replace("https://boreal.financial", BASE_URL).replace("https://boreal.financial", BASE_URL);
+    return url.replace("https://www.boreal.financial", BASE_URL).replace("https://www.boreal.financial", BASE_URL);
   }
 
   const path = typeof window !== "undefined" ? `${window.location.pathname}${window.location.search}` : "/";

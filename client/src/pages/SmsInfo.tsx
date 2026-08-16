@@ -15,7 +15,7 @@ const WEBSITE = "boreal.financial";
 export default function SmsInfo() {
   return (
     <div className="mx-auto max-w-[820px] px-6 py-16 font-sans text-boreal-ink">
-      <SEO title="SMS Communications & Opt-Out" description="How Boreal Financial sends SMS messages, and how to opt out." url="https://boreal.financial/sms" />
+      <SEO title="SMS Communications & Opt-Out" description="How Boreal Financial sends SMS messages, and how to opt out." url="https://www.boreal.financial/sms" />
       <h1 className="font-display text-4xl font-bold text-boreal-ink">SMS Communications &amp; Opt-Out</h1>
 
       <section className="mt-8 space-y-4 text-[16px] leading-relaxed text-boreal-body">
