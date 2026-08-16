@@ -6,7 +6,7 @@ export default function Terms() {
       <SEO
         title="Terms of Use"
         description="Read Boreal Financial's Terms of Use for access, acceptable use, and limitations related to this website."
-        url="https://borealfinancial.ca/terms"
+        url="https://boreal.financial/terms"
       />
       <h1 className="text-4xl font-semibold">Terms of Use</h1>
       <p className="mt-4 text-white/80">

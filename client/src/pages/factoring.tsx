@@ -39,7 +39,7 @@ const requiredDocs = [
 export default function Factoring() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Seo title="Invoice Factoring | Boreal Financial" description="Convert outstanding invoices into immediate working capital with Boreal Financial factoring solutions." canonical="https://borealfinancial.ca/factoring" jsonLd={financialServiceJsonLd("Invoice Factoring", "Unlock cash tied up in receivables with factoring facilities.", "/factoring")} />
+      <Seo title="Invoice Factoring | Boreal Financial" description="Convert outstanding invoices into immediate working capital with Boreal Financial factoring solutions." canonical="https://boreal.financial/factoring" jsonLd={financialServiceJsonLd("Invoice Factoring", "Unlock cash tied up in receivables with factoring facilities.", "/factoring")} />
       <Navigation />
 
       <main>

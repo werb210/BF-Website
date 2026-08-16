@@ -39,7 +39,7 @@ const requiredDocs = [
 export default function LinesOfCredit() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Seo title="Lines of Credit | Boreal Financial" description="Flexible revolving lines of credit for payroll, inventory purchases, and operational cash flow." canonical="https://borealfinancial.ca/lines-of-credit" jsonLd={financialServiceJsonLd("Lines of Credit", "Flexible revolving capital for day-to-day operations.", "/lines-of-credit")} />
+      <Seo title="Lines of Credit | Boreal Financial" description="Flexible revolving lines of credit for payroll, inventory purchases, and operational cash flow." canonical="https://boreal.financial/lines-of-credit" jsonLd={financialServiceJsonLd("Lines of Credit", "Flexible revolving capital for day-to-day operations.", "/lines-of-credit")} />
       <Navigation />
 
       <main>

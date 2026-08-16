@@ -10,7 +10,7 @@ import {
   type SlugNameItem
 } from "@/data/seoFramework";
 
-const BASE_URL = import.meta.env.VITE_SITE_URL ?? "https://borealfinancial.ca";
+const BASE_URL = import.meta.env.VITE_SITE_URL ?? "https://boreal.financial";
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (

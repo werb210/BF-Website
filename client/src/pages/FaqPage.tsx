@@ -23,7 +23,7 @@ export default function FaqPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title={title} description={description} url="https://borealfinancial.ca/faq" schema={faqSchema} />
+      <SEO title={title} description={description} url="https://boreal.financial/faq" schema={faqSchema} />
       <Navigation />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-8">
         <header className="space-y-3">

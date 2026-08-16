@@ -13,7 +13,7 @@ import { faqSchema, serviceSchema } from "@/seo/structuredData";
 export default function BusinessLineOfCredit() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Seo title="Business Line of Credit | Boreal Financial" description="A business line of credit that provides revolving access to capital as your cash flow needs change." canonical="https://borealfinancial.ca/business-line-of-credit" />
+      <Seo title="Business Line of Credit | Boreal Financial" description="A business line of credit that provides revolving access to capital as your cash flow needs change." canonical="https://boreal.financial/business-line-of-credit" />
       <SeoJsonLd
         data={serviceSchema(
           "Business Line of Credit",

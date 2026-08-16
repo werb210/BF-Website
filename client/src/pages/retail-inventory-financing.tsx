@@ -12,7 +12,7 @@ import { buildApplyUrl } from "@/utils/session";
 export default function RetailInventoryFinancing() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Seo title="Retail Inventory Financing | Boreal Financial" description="Retail inventory financing that helps businesses stock products, preserve cash flow, and scale sales." canonical="https://borealfinancial.ca/retail-inventory-financing" jsonLd={financialServiceJsonLd("Retail Inventory Financing", "Finance inventory purchases and seasonal stock planning.", "/retail-inventory-financing")} />
+      <Seo title="Retail Inventory Financing | Boreal Financial" description="Retail inventory financing that helps businesses stock products, preserve cash flow, and scale sales." canonical="https://boreal.financial/retail-inventory-financing" jsonLd={financialServiceJsonLd("Retail Inventory Financing", "Finance inventory purchases and seasonal stock planning.", "/retail-inventory-financing")} />
       <Navigation />
       
       {/* Hero Section */}

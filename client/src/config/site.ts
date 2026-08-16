@@ -1,2 +1,2 @@
 export const APPLY_URL = "https://client.boreal.financial"
-export const SITE_URL = "https://borealfinancial.com"
+export const SITE_URL = "https://boreal.financial"

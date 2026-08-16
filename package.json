@@ -15,7 +15,6 @@
     "db:push": "drizzle-kit push",
     "sitemap": "tsx scripts/generate-sitemap.ts",
     "audit:alt": "node scripts/alt-audit.js",
-    "generate:seo": "ts-node scripts/generate-seo-pages.ts",
     "generate:sitemap": "ts-node scripts/generate-sitemap.ts",
     "preview": "vite preview",
     "lint": "eslint . --ext .js,.ts,.tsx",

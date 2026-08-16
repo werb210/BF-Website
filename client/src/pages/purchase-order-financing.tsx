@@ -39,7 +39,7 @@ const requiredDocs = [
 export default function PurchaseOrderFinancing() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Seo title="Purchase Order Financing | Boreal Financial" description="Purchase order financing to help cover supplier costs and fulfill larger customer orders confidently." canonical="https://borealfinancial.ca/purchase-order-financing" jsonLd={financialServiceJsonLd("Purchase Order Financing", "Finance supplier payments and fulfill large customer orders.", "/purchase-order-financing")} />
+      <Seo title="Purchase Order Financing | Boreal Financial" description="Purchase order financing to help cover supplier costs and fulfill larger customer orders confidently." canonical="https://boreal.financial/purchase-order-financing" jsonLd={financialServiceJsonLd("Purchase Order Financing", "Finance supplier payments and fulfill large customer orders.", "/purchase-order-financing")} />
       <Navigation />
 
       <main>
