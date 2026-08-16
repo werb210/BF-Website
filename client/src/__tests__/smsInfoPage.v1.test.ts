@@ -25,9 +25,28 @@ describe("Azure SWA config reaches the deployed build", () => {
     assert.equal(cfg.routes?.some((r: { route?: string }) => r.route === "/refer"), true);
   });
 
-  it("matches the repo-root copy so the two cannot drift", () => {
-    const root = readFileSync(path.join(process.cwd(), "staticwebapp.config.json"), "utf8");
-    assert.deepEqual(JSON.parse(readFileSync(inPublic, "utf8")), JSON.parse(root));
+  it("is the only copy, so Azure cannot read a stale one", () => {
+    // BF_WEBSITE_SWA_FALLBACK_v13 - the root copy is gone rather than kept in
+    // sync. app_location is "/", so when Azure finds the file in the app source
+    // folder it can use that one and never read the built copy in dist. Only
+    // the built copy is guaranteed to be the deployed artifact.
+    assert.equal(existsSync(path.join(process.cwd(), "staticwebapp.config.json")), false);
+  });
+
+  it("excludes static assets in a form Azure can parse", () => {
+    // A pattern Azure cannot parse causes the WHOLE config to be discarded,
+    // which presents exactly as navigationFallback being absent.
+    const cfg = JSON.parse(readFileSync(inPublic, "utf8"));
+    assert.equal(cfg.navigationFallback.exclude.includes("/assets/*"), true);
+    assert.equal(
+      cfg.navigationFallback.exclude.some((e: string) => e.includes("{css,js")),
+      true,
+    );
+  });
+
+  it("overrides 404 to the app so a dead link never shows Azure's error page", () => {
+    const cfg = JSON.parse(readFileSync(inPublic, "utf8"));
+    assert.equal(cfg.responseOverrides?.["404"]?.rewrite, "/index.html");
   });
 });
 

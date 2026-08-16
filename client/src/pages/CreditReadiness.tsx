@@ -4,6 +4,8 @@ import { estimateCommissionValue, trackConversion, trackEvent, trackLeadProfile 
 import { useLocation } from "wouter";
 import { WEBSITE_API_BASE } from "@/config/api";
 import { scoreCreditReadiness } from "@/lib/creditReadinessScore";
+// BF_WEBSITE_SWA_FALLBACK_v13
+import SEO from "@/components/SEO";
 // BF_WEBSITE_BLOCK_v129c_PHONE_NORMALIZATION_v1
 import { formatPhone, formatCurrency, unformatCurrency, toE164 } from "@/utils/formatters";
 
@@ -210,7 +212,12 @@ export default function CreditReadiness() {
   }
 
   return (
-    <main className="bg-white font-sans text-boreal-ink">
+    <>
+      <SEO
+        title="See What Your Business Could Qualify For | Boreal Financial"
+        description="Answer a few questions and we'll tell you which kinds of financing are realistic. Two minutes, no documents needed, and no credit check."
+      />
+      <main className="bg-white font-sans text-boreal-ink">
       <section className="bg-gradient-to-br from-boreal-ink via-boreal-inkDeep to-[#0d233f]">
         <div className="mx-auto max-w-[820px] px-6 py-14 md:py-20">
           <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-boreal-gold">
@@ -292,5 +299,6 @@ export default function CreditReadiness() {
         </form>
       </div>
     </main>
+    </>
   );
 }
