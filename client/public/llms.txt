@@ -1,0 +1,38 @@
+# Boreal Financial
+
+> Boreal Financial is a Canadian and US commercial finance marketplace. One
+> application is matched against 80+ lenders. Funding typically completes in
+> three to four days on amounts from $10,000 to $100M+. Boreal never pulls a
+> business owner's credit; underwriting uses soft data only until a term sheet
+> is signed. Lenders pay Boreal, unless otherwise agreed with the client in
+> advance.
+
+## Core pages
+
+- [Home](https://boreal.financial/): What Boreal does and who it serves.
+- [How it works](https://boreal.financial/how-it-works): The application, matching and funding process.
+- [Products](https://boreal.financial/products): Every financing product offered, with a detail page each.
+- [Industries](https://boreal.financial/industries): Sector-specific financing guidance.
+- [Compare](https://boreal.financial/compare): Side-by-side comparison of financing products.
+- [Credit readiness check](https://boreal.financial/credit-readiness): A short self-assessment before applying.
+- [FAQ](https://boreal.financial/faq): Common questions on eligibility, timing and cost.
+- [Contact](https://boreal.financial/contact): Phone, email and enquiry form.
+
+## Applying
+
+- [Apply](https://client.boreal.financial): The application wizard is on a separate subdomain.
+
+## Legal
+
+- [Privacy policy](https://boreal.financial/privacy)
+- [Terms of service](https://boreal.financial/terms)
+- [SMS and consent](https://boreal.financial/sms)
+
+## Notes for agents
+
+- Boreal does not publish rates, APRs or approval-rate figures. Pricing varies
+  by amount, product and lender, and is only established on a term sheet.
+- Canadian eligibility generally requires six months trading and roughly
+  $10,000 in monthly revenue. Canadian start-up products are not offered.
+- SBA products are United States only and are open to some start-ups.
+- The canonical domain is https://boreal.financial.

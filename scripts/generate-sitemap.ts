@@ -24,4 +24,5 @@ ${routes.map(r => `
 </urlset>
 `
 
-fs.writeFileSync("public/sitemap.xml", xml)
+// Write to Vite's deployed publicDir so generated and shipped assets cannot drift.
+fs.writeFileSync("client/public/sitemap.xml", xml)

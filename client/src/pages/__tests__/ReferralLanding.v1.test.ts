@@ -30,7 +30,7 @@ describe("referral landing pages", () => {
   });
 
   it("Learn more links point to the marketing sites", () => {
-    assert.match(page, /https:\/\/www\.boreal\.financial\//);
+    assert.match(page, /https:\/\/boreal\.financial\//);
     assert.match(page, /https:\/\/www\.boreal\.insure\//);
   });
 });

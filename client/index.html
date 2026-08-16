@@ -5,7 +5,19 @@
     <!-- BF_WEBSITE_BOREAL_UI_v1 - approved display and body typefaces. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- BF_WEBSITE_LCP_v14 - the API origin is contacted during first paint;
+         PageSpeed lists it as a preconnect candidate worth ~420ms of LCP. -->
+    <link rel="preconnect" href="https://server.boreal.financial" crossorigin />
+    <!-- BF_WEBSITE_LCP_v14 - load display=swap fonts without blocking paint. -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap"
+      media="print"
+      onload="this.media='all';this.onload=null;"
+    />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    </noscript>
     <!-- Consent Mode v2 — default denied until the consent banner grants -->
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -72,8 +84,7 @@
         });
       }
     </script>
-    <!-- BF_WEBSITE_BLOCK_v84_LUCKY_ORANGE -->
-    <script async defer src="https://tools.luckyorange.com/core/lo.js?site-id=0320c06f"></script>
+    <!-- BF_WEBSITE_LCP_v14 - Lucky Orange removed; Microsoft Clarity remains. -->
     <!-- BF_WEBSITE_BLOCK_v_CLARITY — Microsoft Clarity (project vjz4kr9hqu) -->
     <script type="text/javascript">
       (function(c,l,a,r,i,t,y){
