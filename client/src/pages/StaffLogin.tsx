@@ -1,22 +1,45 @@
-import { SEO } from "@/seo/SEO";
+import SEO from "@/components/SEO";
+
+const STAFF_PORTAL = "https://staff.boreal.financial";
 
 export default function StaffLogin() {
-  const staffDestination = "";
-
   return (
-    <section className="mx-auto max-w-2xl px-4 py-12">
-      <SEO title="Staff Login | Boreal Financial" description="Staff access for Boreal tools and internal systems." />
-      <h1 className="text-3xl font-bold">Staff Login</h1>
-      <p className="mt-2 text-slate-600">Internal access for Boreal team members.</p>
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-        {staffDestination ? (
-          <a href={staffDestination} className="rounded-md bg-slate-900 px-4 py-2 text-center font-semibold text-white">Continue to login</a>
-        ) : (
-          <button type="button" className="rounded-md border px-4 py-2 text-slate-500" disabled>Continue to login</button>
-        )}
-        <a href="/" className="rounded-md border px-4 py-2 text-center font-semibold">Back to home</a>
-      </div>
-      {!staffDestination ? <p className="mt-3 text-sm text-slate-600">Not enabled in this demo build.</p> : null}
-    </section>
+    <main className="bg-white font-sans text-boreal-ink">
+      <SEO
+        title="Staff Login"
+        description="Internal portal access for the Boreal Financial team."
+        noindex
+      />
+      <section className="bg-gradient-to-br from-boreal-ink via-boreal-inkDeep to-[#0d233f]">
+        <div className="mx-auto max-w-[820px] px-6 py-14 md:py-20">
+          <h1 className="font-display text-4xl font-bold text-white md:text-5xl">Staff login</h1>
+          <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-[#c3cfe0]">
+            Internal access for the Boreal Financial team.
+          </p>
+        </div>
+      </section>
+      <section className="mx-auto max-w-[820px] px-6 py-16 md:py-24">
+        <div className="rounded-xl border border-boreal-line bg-white px-6 py-8">
+          <h2 className="font-display text-2xl font-bold">Continue to the staff portal</h2>
+          <p className="mt-3 text-[15px] leading-relaxed text-boreal-body">
+            You will be asked to verify a code sent to your registered mobile number.
+          </p>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <a
+              href={STAFF_PORTAL}
+              className="rounded-lg bg-boreal-gold px-6 py-3.5 text-center text-[15px] font-semibold text-boreal-ink transition hover:bg-[#cfa953]"
+            >
+              Continue to login
+            </a>
+            <a
+              href="/"
+              className="rounded-lg border border-boreal-line px-6 py-3.5 text-center text-[15px] font-semibold text-boreal-ink transition hover:bg-boreal-mist"
+            >
+              Back to home
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
