@@ -44,11 +44,11 @@ export default function SEO(props: Props) {
       <meta property="og:type" content="website" />
       <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
       {canonicalUrl ? <link rel="canonical" href={canonicalUrl} /> : null}
-      {schemaBlocks.map((block, index) => (
-        <script key={index} type="application/ld+json">
-          {JSON.stringify(block)}
+      {schemaBlocks.length > 0 ? (
+        <script type="application/ld+json">
+          {JSON.stringify(schemaBlocks.length === 1 ? schemaBlocks[0] : schemaBlocks)}
         </script>
-      ))}
+      ) : null}
     </Helmet>
   );
 }
