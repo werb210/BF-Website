@@ -8,6 +8,7 @@ const PAGE = "client/src/pages/UnitedStates.tsx";
 test("the US page is routed", () => {
   const router = fs.readFileSync("client/src/router/AppRouter.tsx", "utf8");
   assert.match(router, /path="\/us"/, "/us is not mounted");
+  assert.match(router, /path="\/usa"/, "/usa is not mounted");
   assert.match(router, /UnitedStates/, "the US page is not imported");
 });
 
@@ -28,4 +29,8 @@ test("the US page keeps the locked global claims", () => {
 test("the US page is in the sitemap", () => {
   const xml = fs.readFileSync("client/public/sitemap.xml", "utf8");
   assert.match(xml, /<loc>https:\/\/www\.boreal\.financial\/us<\/loc>/, "/us missing from sitemap");
+
+  const generator = fs.readFileSync("scripts/generate-sitemap.ts", "utf8");
+  assert.match(generator, /"\/us"/, "/us missing from sitemap source");
+  assert.match(generator, /"\/us": "0\.9"/, "/us sitemap priority changed");
 });
