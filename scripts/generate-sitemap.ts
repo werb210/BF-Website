@@ -26,7 +26,6 @@ export const ROUTES: string[] = [
   "/products/po-financing",
   "/products/asset-based-lending",
   "/products/sale-leaseback",
-  "/products/commercial-real-estate",
   "/products/sba",
   "/products/media-financing",
   "/industries/construction",

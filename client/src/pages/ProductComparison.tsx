@@ -19,7 +19,6 @@ const COLLATERAL: Record<string, string> = {
   "asset-based-lending": "Receivables, inventory, equipment",
   "media-financing": "Contracts and receivables",
   "sale-leaseback": "The equipment being sold",
-  "commercial-real-estate": "The property",
   sba: "Varies; personal guarantee usual",
 };
 

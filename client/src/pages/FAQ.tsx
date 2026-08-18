@@ -18,7 +18,7 @@ const GROUPS = [
   ] },
   { heading: "Money and timing", items: [
     { q: "How much can I borrow?", a: "From $10,000 to over $100 million, depending on the product and your business. Most working capital requests land well below the top of that range." },
-    { q: "How fast can I get funded?", a: "Most complete applications reach funding in three to four days. Commercial real estate and SBA take longer — weeks rather than days." },
+    { q: "How fast can I get funded?", a: "Most complete applications reach funding in three to four days. SBA takes longer — weeks rather than days." },
     { q: "What are your rates?", a: "They vary by product, amount, term and your business, so any number quoted here would be misleading. You'll see real terms from real lenders once we've reviewed your file." },
     { q: "What does Boreal charge me?", a: "Nothing to apply or be matched. The lender that funds you pays our fee, unless we agree something different with you in advance and in writing." },
   ] },

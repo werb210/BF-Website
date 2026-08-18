@@ -21,14 +21,15 @@ describe("product pages", () => {
   it("index features the approved product set as cards", () => {
     for (const slug of ["term-loan", "loc", "factoring", "equipment-financing",
                         "asset-based-lending", "sale-leaseback",
-                        "commercial-real-estate", "sba"]) {
+                        "sba"]) {
       assert.ok(index.includes(`slug: "${slug}"`), `Products.tsx is missing ${slug}`);
     }
     assert.ok(!index.includes('slug: "merchant-cash-advance"'),
       "MCA must not be featured on the index");
     // BF_WEBSITE_PRODUCT_DETAIL_v6 - was 8; sale-leaseback,
-    // commercial-real-estate and sba were added because they are linked from
+    // BF_WEBSITE_CRE_v23 - was 11; the real estate product was removed.
+    // sba was added because it is linked from
     // the homepage, products index and industry pages.
-    assert.equal(content.match(/slug:"/g)?.length, 11);
+    assert.equal(content.match(/slug:"/g)?.length, 10);
   });
 });
