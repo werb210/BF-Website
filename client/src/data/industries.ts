@@ -217,11 +217,6 @@ export const industries: Industry[] = [
         "name": "Line of credit",
         "slug": "loc",
         "note": "to smooth reimbursement timing."
-      },
-      {
-        "name": "Commercial real estate",
-        "slug": "commercial-real-estate",
-        "note": "if you're buying the premises rather than renting."
       }
     ],
     "worthKnowing": "Healthcare is a sector lenders generally like — stable demand, professional operators. That usually means better terms than a comparable business in a sector they're wary of.",
@@ -331,11 +326,6 @@ export const industries: Industry[] = [
         "name": "Sale and leaseback",
         "slug": "sale-leaseback",
         "note": "on owned machinery."
-      },
-      {
-        "name": "Commercial real estate",
-        "slug": "commercial-real-estate",
-        "note": "for land and buildings."
       }
     ],
     "worthKnowing": "Some lenders will structure repayment around your harvest rather than the calendar. Not all will, and it's worth asking for.",

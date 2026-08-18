@@ -13,7 +13,6 @@ const PRODUCTS = [
   ["loc", "Line of credit", "Draw what you need, pay interest only on what you use, repay and draw again. The usual answer to seasonal swings and slow-paying customers.", "Revolving"],
   ["factoring", "Invoice factoring", "Get paid now for invoices your customers will settle in 30, 60 or 90 days. Your receivables are the security, so the decision rests on your customers' credit as much as yours.", "Secured by receivables"],
   ["equipment-financing", "Equipment financing", "Finance machinery, vehicles or technology, new or used. The equipment secures the loan, which usually means a lower rate than unsecured borrowing.", "New or used"],
-  ["commercial-real-estate", "Commercial real estate", "Purchase, refinance, construction and bridge financing for owner-occupied and investment property.", "Longer timeline"],
 ] as const;
 
 const STEPS = [

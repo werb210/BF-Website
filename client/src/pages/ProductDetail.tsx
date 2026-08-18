@@ -15,7 +15,7 @@ const SHOW_RANGES = false;
 const slugAliases: Record<string, string> = {
   "line-of-credit": "loc", "lines-of-credit": "loc", "term-loans": "term-loan",
   "purchase-order-financing": "po-financing", "invoice-factoring": "factoring",
-  "sba-loans": "sba", "commercial-mortgage": "commercial-real-estate",
+  "sba-loans": "sba",
 };
 const card = "rounded-2xl border border-boreal-line bg-white p-7";
 const eyebrow = "text-[12px] font-semibold uppercase tracking-[0.14em] text-boreal-gold";

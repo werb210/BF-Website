@@ -15,7 +15,6 @@ const PRODUCTS = [
   ["equipment-financing", "Equipment financing", "Finance machinery, vehicles or technology, new or used. The equipment secures the loan, which usually means a lower rate than unsecured borrowing.", "New or used"],
   ["asset-based-lending", "Asset-based lending", "Borrow against inventory, receivables and equipment together. Suits businesses with a strong balance sheet and lumpy earnings.", "Borrowing base"],
   ["sale-leaseback", "Sale and leaseback", "Free up cash tied in equipment you already own. Sell it to the lender, lease it back, keep using it.", "Releases cash"],
-  ["commercial-real-estate", "Commercial real estate", "Purchase, refinance, construction and bridge financing for owner-occupied and investment property.", "Longer timeline"],
 ] as const;
 
 const STEPS = [
