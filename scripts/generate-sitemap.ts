@@ -19,6 +19,7 @@ export const ROUTES: string[] = [
   "/sms",
   "/terms",
   "/products/loc",
+  "/products/business-loans", // BF_WEBSITE_BUSINESS_LOANS_v24
   "/products/term-loan",
   "/products/equipment-financing",
   "/products/factoring",
