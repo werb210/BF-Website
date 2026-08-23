@@ -89,6 +89,31 @@ export const products: Product[] = [
     relatedIndustries: ["Construction", "Retail", "Restaurant / Food Service", "Technology", "Healthcare", "Transportation", "Professional Services", "Real Estate", "Agriculture", "Energy", "Other"],
   },
   {
+    // BF_WEBSITE_BUSINESS_LOANS_v24 - the head-term landing page. First in the
+    // list so it leads the products index, which matches how people search.
+    slug: "business-loans",
+    name: "Business Loans",
+    category: "Growth Capital",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=80",
+    description: "One application across 80+ lenders. Term loans, lines of credit, equipment finance and working capital for Canadian businesses.",
+    heroSummary: "Business loans from $250K to $5M, matched to the lenders most likely to fund you.",
+    whatItDoes: "A business loan is capital advanced to your company and repaid over an agreed term. Boreal is not a lender - we take one application and put it in front of the lenders on our panel whose credit box fits your business, so you are not applying to each one separately and collecting declines.",
+    useCases: ["Expansion and new locations", "Equipment and vehicles", "Working capital and payroll", "Refinancing existing debt"],
+    term: "3 months to 84 months, by product",
+    typicalRange: "$250K-$5M",
+    rateRange: "Varies by product, term and security",
+    speed: "Fast",
+    collateral: "Depends on the product and the lender",
+    bestUse: "Any defined funding need",
+    repayment: "Fixed, revolving or revenue-based, by product",
+    goodFit: [
+      "You have been trading for at least a year.",
+      "You can supply six months of business banking.",
+      "You want one application rather than eight.",
+    ],
+    relatedIndustries: ["Construction", "Manufacturing", "Retail", "Restaurant / Food Service", "Technology", "Healthcare", "Transportation", "Professional Services", "Real Estate", "Agriculture", "Energy", "Other"],
+  },
+  {
     slug: "term-loan",
     name: "Term Loan",
     category: "Growth Capital",

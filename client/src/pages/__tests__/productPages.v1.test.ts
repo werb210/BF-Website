@@ -28,8 +28,9 @@ describe("product pages", () => {
       "MCA must not be featured on the index");
     // BF_WEBSITE_PRODUCT_DETAIL_v6 - was 8; sale-leaseback,
     // BF_WEBSITE_CRE_v23 - was 11; the real estate product was removed.
+    // BF_WEBSITE_BUSINESS_LOANS_v24 - was 10; the business-loans head-term page added.
     // sba was added because it is linked from
     // the homepage, products index and industry pages.
-    assert.equal(content.match(/slug:"/g)?.length, 10);
+    assert.equal(content.match(/slug:"/g)?.length, 11);
   });
 });
