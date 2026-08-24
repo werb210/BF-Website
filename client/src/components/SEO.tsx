@@ -32,7 +32,10 @@ export default function SEO(props: Props) {
   const { title, description, canonical, url, noindex } = props;
   const schema = getSchema(props);
   const schemaBlocks = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
-  const canonicalUrl = normalizeHref(canonical ?? url ?? (typeof window !== "undefined" ? `${SITE_URL}${window.location.pathname}${window.location.search}` : SITE_URL));
+  // BF_WEBSITE_CANONICAL_NO_QUERY_v25 - a canonical URL must identify the page,
+  // not the visit. window.location.search used to be appended, so ?gclid=... and
+  // every utm_* combination each produced a distinct canonical.
+  const canonicalUrl = normalizeHref(canonical ?? url ?? (typeof window !== "undefined" ? `${SITE_URL}${window.location.pathname}` : SITE_URL));
   const fullTitle = formatTitle(title);
 
   return (

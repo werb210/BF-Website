@@ -18,7 +18,8 @@ function getCanonicalUrl(url?: string) {
     return url.replace("https://www.boreal.financial", BASE_URL).replace("https://www.boreal.financial", BASE_URL);
   }
 
-  const path = typeof window !== "undefined" ? `${window.location.pathname}${window.location.search}` : "/";
+  // BF_WEBSITE_CANONICAL_NO_QUERY_v25 - see components/SEO.tsx. Same bug, second copy.
+  const path = typeof window !== "undefined" ? window.location.pathname : "/";
   return `${BASE_URL}${path}`;
 }
 
