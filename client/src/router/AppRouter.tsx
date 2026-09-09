@@ -41,6 +41,15 @@ export function AppRouter() {
         <Route path="/industries/:slug">
           {(params) => <IndustryDetail slug={params.slug} />}
         </Route>
+        {/* BF_WEBSITE_PRODUCT_404_REDIRECTS_v1 - Search Console 404s.
+            Products render at /products/:slug. These two were linked
+            without the prefix, and the LOC page uses the slug "loc". */}
+        <Route path="/business-line-of-credit">
+          {() => <Redirect to="/products/loc" />}
+        </Route>
+        <Route path="/media-financing">
+          {() => <Redirect to="/products/media-financing" />}
+        </Route>
         <Route path="/products" component={Products} />
         <Route path="/products/:slug">
           {(params) => <ProductDetail slug={params.slug} />}
