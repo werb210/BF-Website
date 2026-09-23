@@ -1,5 +1,5 @@
 // BF_WEBSITE_NODE22_TEST_DISCOVERY_v3
-// This file imported from "vitest", which is not a dependency of this repo and
+// This file imported Vitest APIs, but Vitest is not a dependency of this repo and
 // never has been. Under Node 20 the built-in runner's default file discovery
 // did not reach client/src/pages/__tests__, so `tsx --test` never collected it
 // and the failure was invisible. Node 22 widened that discovery and the missing
