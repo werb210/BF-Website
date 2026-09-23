@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { MayaMessage } from "./mayaMarkdown";
 import { createPortal } from "react-dom";
 import { MessageCircle, X } from "lucide-react";
 import { getReadinessSessionToken } from "@/utils/session";
@@ -317,7 +318,9 @@ export default function FloatingChat() {
                 key={item.id}
                 className={`max-w-[80%] break-words rounded-lg px-3 py-2 ${item.from === "user" ? "ml-8 bg-blue-600 text-white" : "mr-8 bg-[#0f1d3a] text-slate-100"}`}
               >
-                {item.message}
+                {/* BF_WEBSITE_MAYA_MARKDOWN_v440 - was raw text, so visitors saw
+                    **bold** and [label](url) literally on boreal.financial. */}
+                {item.from === "user" ? item.message : <MayaMessage message={item.message} />}
               </div>
             ))}
             {sending ? <p className="text-xs text-slate-400">Maya is typing…</p> : null}
