@@ -1,3 +1,7 @@
+// BF_WEBSITE_TEST_RUNNER_v445 - DEAD: this file imports vitest, which is
+// not installed here, and `tsx --test` does not collect .tsx files, so it
+// has never executed. Left in place rather than deleted - port it to
+// node:test or add vitest, but do not assume it is protecting anything.
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import FloatingChat from "../FloatingChat";
