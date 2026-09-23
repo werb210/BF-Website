@@ -2,22 +2,25 @@
 import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
-const root = process.cwd();
+const app = path.resolve(process.cwd(), "client/src");
 
 describe("v442 the website has exactly one Maya widget", () => {
   it("the unmounted duplicate is gone", () => {
-    expect(existsSync(path.join(root, "src/components/MayaWidget.tsx"))).toBe(false);
+    expect(existsSync(path.join(app, "components/MayaWidget.tsx"))).toBe(false);
+  });
+
+  it("the formatter that existed only for it is gone", () => {
+    expect(existsSync(path.join(app, "core/rateFormatter.ts"))).toBe(false);
   });
 
   it("FloatingChat is the one App mounts", () => {
-    const app = readFileSync(path.join(root, "src/App.tsx"), "utf8");
-    expect(app).toContain("FloatingChat");
-    expect(app).not.toContain("MayaWidget");
+    const source = readFileSync(path.join(app, "App.tsx"), "utf8");
+    expect(source).toContain("FloatingChat");
+    expect(source).not.toContain("MayaWidget");
   });
 
   it("no second chat component has crept back in", () => {
-    const components = readdirSync(path.join(root, "src/components"));
-    const chatLike = components.filter((f) => /^(Maya|FloatingChat|Chat)[A-Za-z]*\.tsx$/.test(f));
-    expect(chatLike).toEqual(["FloatingChat.tsx"]);
+    const files = readdirSync(path.join(app, "components"));
+    expect(files.filter((f) => /^(Maya|FloatingChat|Chat)[A-Za-z]*\.tsx$/.test(f))).toEqual(["FloatingChat.tsx"]);
   });
 });
