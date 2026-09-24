@@ -76,9 +76,15 @@ export default function FloatingChat() {
     return () => ctrl.abort();
   }, [open]);
 
+  // BF_WEBSITE_BLOCK_v486_MAYA_CHAT_SCROLL - the smooth scroll stopped short
+  // when the reply was still laying out; jump after layout, and again when the
+  // typing line toggles, so the newest reply is always in view.
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages]);
+    const el = scrollRef.current;
+    if (!el) return;
+    const frame = requestAnimationFrame(() => { el.scrollTop = el.scrollHeight; });
+    return () => cancelAnimationFrame(frame);
+  }, [messages, sending]);
 
   // BF_WEBSITE_BLOCK_v87_TWO_WAY_MESSENGER_v1 — after escalation, poll the
   // shared thread so staff replies (direction='outbound') land in the same
