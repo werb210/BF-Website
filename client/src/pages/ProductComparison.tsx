@@ -70,7 +70,7 @@ export default function ProductComparison() {
                     <td className="px-5 py-4">
                       <Link
                         href={`/products/${product.slug}`}
-                        className="font-display text-[16px] font-bold text-boreal-ink hover:text-boreal-goldDeep"
+                        className="font-display text-[16px] font-bold text-boreal-ink hover:text-boreal-goldInk"
                       >
                         {product.name}
                       </Link>

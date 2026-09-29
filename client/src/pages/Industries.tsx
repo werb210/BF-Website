@@ -29,7 +29,7 @@ export default function Industries() {
               <Link key={industry.slug} href={`/industries/${industry.slug}`} className="group rounded-2xl border border-boreal-line bg-white p-7 transition hover:border-boreal-gold hover:shadow-[0_12px_30px_rgba(11,31,58,0.08)]">
                 <h2 className="font-display text-[22px] font-bold text-boreal-ink">{industry.title}</h2>
                 <p className="mt-2.5 text-[15px] leading-relaxed text-boreal-body">{industry.summary}</p>
-                <div className="mt-4 border-t border-boreal-line pt-4 text-[13.5px] font-semibold text-boreal-gold">See what fits <span className="ml-2 transition group-hover:ml-3" aria-hidden="true">&rarr;</span></div>
+                <div className="mt-4 border-t border-boreal-line pt-4 text-[13.5px] font-semibold text-boreal-goldInk">See what fits <span className="ml-2 transition group-hover:ml-3" aria-hidden="true">&rarr;</span></div>
               </Link>
             ))}
           </div>

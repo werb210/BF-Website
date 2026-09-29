@@ -154,7 +154,7 @@ export default function Privacy() {
                       key={text.slice(0, 40)}
                       className="flex gap-3 text-[16px] leading-relaxed text-boreal-body"
                     >
-                      <span aria-hidden className="text-boreal-gold">
+                      <span aria-hidden className="text-boreal-goldInk">
                         &bull;
                       </span>
                       <span>{text}</span>

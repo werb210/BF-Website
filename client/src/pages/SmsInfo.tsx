@@ -26,8 +26,8 @@ export default function SmsInfo() {
         <p>{LEGAL_NAME}</p>
         <p>{MAILING_ADDRESS}</p>
         <p>
-          Email: <a className="font-semibold text-boreal-goldDeep hover:underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-          {" "}&middot;{" "}Web: <a className="font-semibold text-boreal-goldDeep hover:underline" href={`https://${WEBSITE}`}>{WEBSITE}</a>
+          Email: <a className="font-semibold text-boreal-goldInk hover:underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+          {" "}&middot;{" "}Web: <a className="font-semibold text-boreal-goldInk hover:underline" href={`https://${WEBSITE}`}>{WEBSITE}</a>
         </p>
       </section>
 
@@ -46,7 +46,7 @@ export default function SmsInfo() {
         <p>
           Reply <strong>STOP</strong> to any message to unsubscribe from marketing texts at no cost.
           Your request is honoured promptly and, in any event, within 10 business days. You can also
-          email <a className="font-semibold text-boreal-goldDeep hover:underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> to
+          email <a className="font-semibold text-boreal-goldInk hover:underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> to
           opt out.
         </p>
         <p>To resume messages after opting out, reply <strong>START</strong>.</p>

@@ -151,7 +151,7 @@ export default function CreditResults() {
                 key={n}
                 className="flex gap-3 rounded-xl border border-boreal-line bg-white px-6 py-4 text-[16px] leading-relaxed text-boreal-ink"
               >
-                <span aria-hidden="true" className="font-semibold text-boreal-gold">
+                <span aria-hidden="true" className="font-semibold text-boreal-goldInk">
                   &#10003;
                 </span>
                 {n}
