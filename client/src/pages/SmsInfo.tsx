@@ -14,6 +14,9 @@ const WEBSITE = "boreal.financial";
 
 export default function SmsInfo() {
   return (
+    // BF_WEBSITE_SMS_READABLE_v161 - the page had no background of its own, so dark text sat on the
+    // site's dark background. Same white panel as the Privacy and Terms pages.
+    <main className="bg-white font-sans text-boreal-ink">
     <div className="mx-auto max-w-[820px] px-6 py-16 font-sans text-boreal-ink">
       <SEO title="SMS Communications & Opt-Out" description="How Boreal Financial sends SMS messages, and how to opt out." url="https://www.boreal.financial/sms" />
       <h1 className="font-display text-4xl font-bold text-boreal-ink">SMS Communications &amp; Opt-Out</h1>
@@ -74,5 +77,6 @@ export default function SmsInfo() {
         </p>
       </section>
     </div>
+    </main>
   );
 }
