@@ -18,6 +18,12 @@ async function sendTwilioSms(messageBody: string) {
     throw new Error("Twilio environment variables are not configured");
   }
 
+  // BF_WEBSITE_NO_PERSONAL_NUMBER_v163 - the alert number comes from the LEAD_ALERT_SMS_TO setting, never from code.
+  const leadAlertTo = String(process.env.LEAD_ALERT_SMS_TO ?? "").trim();
+  if (!leadAlertTo) {
+    console.log("Skipping lead SMS: LEAD_ALERT_SMS_TO is not set");
+    return;
+  }
   const endpoint = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
   const authHeader = Buffer.from(`${accountSid}:${authToken}`).toString("base64");
 
@@ -30,7 +36,7 @@ async function sendTwilioSms(messageBody: string) {
     body: new URLSearchParams({
       Body: messageBody,
       From: fromPhone,
-      To: "+15878881837",
+      To: leadAlertTo, // BF_WEBSITE_NO_PERSONAL_NUMBER_v163
     }),
   });
 

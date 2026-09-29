@@ -241,7 +241,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       if (process.env.NODE_ENV !== "production" && !deduped) {
         console.log("CRM Web Lead:", { companyName, firstName, lastName, email, phone, channel: "website" });
-        console.log("SMS Dispatch:", { to: "+15878881837", message: `New lead from ${companyName} (${firstName} ${lastName})` });
+        console.log("SMS Dispatch:", { to: "LEAD_ALERT_SMS_TO", message: `New lead from ${companyName} (${firstName} ${lastName})` });
       }
       res.status(202).json({ ok: true, deduped });
     } catch (error) {
