@@ -57,6 +57,15 @@ const SECTIONS: Section[] = [
       "We do not sell your personal information, and we do not display third-party advertising on our own websites.",
     ],
   },
+  // BF_WEBSITE_SMS_POLICY_v160 - carrier toll-free requirements for text messaging.
+  {
+    heading: "Text messages (SMS)",
+    paras: [
+      "When you enter your mobile number to start or sign in to your application, Boreal Financial texts you about that application: sign-in codes, status updates, document requests and signing reminders. Up to 10 messages per month. Message and data rates may apply.",
+      "Reply STOP at any time to stop texts, or HELP for help. You can also contact us at " + CONTACT_EMAIL + ". If you opt out, we keep you updated by email and in your client portal instead.",
+      "We do not share, sell or rent your mobile number or your text-messaging consent to third parties or affiliates for their marketing or promotional purposes.",
+    ],
+  },
   {
     heading: "Who we share it with",
     bullets: [

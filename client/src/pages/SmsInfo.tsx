@@ -50,6 +50,21 @@ export default function SmsInfo() {
         <p className="text-sm text-boreal-body">Message and data rates may apply. Message frequency varies.</p>
       </section>
 
+      {/* BF_WEBSITE_SMS_POLICY_v160 - public proof of the opt-in for carrier toll-free verification. */}
+      <section className="mt-10 space-y-4 text-[16px] leading-relaxed text-boreal-body">
+        <h2 className="font-display text-xl font-bold text-boreal-ink">How you opt in</h2>
+        <p>
+          To start or sign in to an application at client.boreal.financial you enter your mobile number
+          and confirm it with a one-time code. This notice is shown right under the number box:
+        </p>
+        <blockquote className="border-l-4 border-boreal-goldDeep pl-4 italic">
+          By entering your mobile number, you agree to receive text messages from Boreal Financial about your application: sign-in codes, status updates, document requests and signing reminders. Up to 10 messages per month. Message and data rates may apply. Reply STOP to opt out or HELP for help.
+        </blockquote>
+        <p>
+          We do not share, sell or rent mobile numbers or text-messaging consent to third parties or
+          affiliates for their marketing purposes.
+        </p>
+      </section>
       <section className="mt-10 space-y-4 text-[16px] leading-relaxed text-boreal-body">
         <h2 className="font-display text-xl font-bold text-boreal-ink">Transactional messages</h2>
         <p>
