@@ -22,7 +22,7 @@ const CLAUSES: { heading: string; body: React.ReactNode }[] = [
     body: (
       <>
         Use of the service is also governed by our{" "}
-        <a href="/privacy" className="font-semibold text-boreal-goldDeep hover:underline">
+        <a href="/privacy" className="font-semibold text-boreal-goldInk hover:underline">
           Privacy Policy
         </a>
         .
@@ -41,7 +41,7 @@ const CLAUSES: { heading: string; body: React.ReactNode }[] = [
         Questions about these terms:{" "}
         <a
           href="mailto:info@boreal.financial"
-          className="font-semibold text-boreal-goldDeep hover:underline"
+          className="font-semibold text-boreal-goldInk hover:underline"
         >
           info@boreal.financial
         </a>

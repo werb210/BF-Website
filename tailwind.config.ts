@@ -21,6 +21,7 @@ const config: Config = {
           mist: "#F5F8FC",
           gold: "#BF9B49",
           goldDeep: "#A8792A",
+          goldInk: "#7A5C1B", // BF_WEBSITE_READABILITY_v165: gold for text on light surfaces
           muted: "#9FB0C6"
         }
       },

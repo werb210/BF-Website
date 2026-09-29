@@ -43,7 +43,7 @@ export default function IndustryDetail({ slug }: { slug: string }) {
           <ul className="mt-5 space-y-3">
             {industry.products.map((product) => (
               <li key={product.slug} className="rounded-xl border border-boreal-line bg-boreal-mist px-6 py-5">
-                <Link href={`/products/${product.slug}`} className="font-display text-[19px] font-bold text-boreal-ink hover:text-boreal-goldDeep">{product.name}</Link>{" "}
+                <Link href={`/products/${product.slug}`} className="font-display text-[19px] font-bold text-boreal-ink hover:text-boreal-goldInk">{product.name}</Link>{" "}
                 <span className="text-[16px] leading-relaxed text-boreal-body">{product.note}</span>
               </li>
             ))}

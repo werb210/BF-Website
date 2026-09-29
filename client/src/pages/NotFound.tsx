@@ -15,7 +15,7 @@ export default function NotFound() {
       />
       <main className="bg-white font-sans text-boreal-ink">
         <div className="mx-auto max-w-[820px] px-6 py-24 text-center">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-boreal-gold">
+          <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-boreal-goldInk">
             404
           </p>
           <h1 className="mt-4 font-display text-4xl font-bold">We can&rsquo;t find that page</h1>
