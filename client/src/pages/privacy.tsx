@@ -1,3 +1,4 @@
+// BF_WEBSITE_MAIN_LINE_866_v162 - public number is the 866 main line.
 // BF_WEBSITE_PRIVACY_v20
 // Drafted against PIPEDA and Alberta PIPA. Counsel has not signed this off yet;
 // the Quebec / Law 25 position in particular is unresolved. It replaces a
@@ -7,7 +8,7 @@ import SEO from "@/components/SEO";
 const LEGAL_NAME = "Boreal Financial Corp.";
 const MAILING_ADDRESS = "450 Sparling Crt SW, Edmonton, AB T6X 1G9";
 const CONTACT_EMAIL = "info@boreal.financial";
-const PHONE_DISPLAY = "+1 (825) 451-1768";
+const PHONE_DISPLAY = "+1 (866) 631-8939";
 const LAST_UPDATED = "August 16, 2026";
 
 type Section = { heading: string; paras?: string[]; bullets?: string[] };

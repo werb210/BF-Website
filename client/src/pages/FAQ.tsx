@@ -1,3 +1,4 @@
+// BF_WEBSITE_MAIN_LINE_866_v162 - public number is the 866 main line.
 // BF_WEBSITE_BOREAL_PAGES_v3
 import SEO from "@/components/SEO";
 import { APPLY_URL } from "@/config/site";
@@ -48,6 +49,6 @@ export default function FAQ() {
     /><main className="bg-white font-sans text-boreal-ink">
     <section className="bg-gradient-to-br from-boreal-ink via-boreal-inkDeep to-[#0d233f]"><div className="mx-auto max-w-[820px] px-6 py-14 md:py-20"><h1 className="font-display text-4xl font-bold text-white md:text-5xl">Common questions</h1></div></section>
     <section className="mx-auto max-w-[820px] px-6 py-16 md:py-24">{GROUPS.map((group) => <div key={group.heading} className="mb-12 last:mb-0"><h2 className="font-display text-2xl font-bold">{group.heading}</h2><div className="mt-5 space-y-3">{group.items.map((item) => <details key={item.q} className="rounded-xl border border-boreal-line bg-white px-6 py-5"><summary className="cursor-pointer list-none font-display text-[19px] font-bold marker:hidden">{item.q}</summary><p className="mt-3 text-[15px] leading-relaxed text-boreal-body">{item.a}</p></details>)}</div></div>)}</section>
-    <section className="border-t border-boreal-line bg-boreal-mist"><div className="mx-auto max-w-[820px] px-6 py-14 text-center"><h2 className="font-display text-2xl font-bold">Still have a question?</h2><p className="mt-3 text-[16px] leading-relaxed text-boreal-body">Call us on +1 (825) 451-1768, or apply and we&rsquo;ll tell you what you qualify for.</p><a href={applyHref} onClick={() => trackConversion("apply_click", { where: "faq_footer" })} className="mt-7 inline-block rounded-lg bg-boreal-gold px-6 py-3.5 text-[15px] font-semibold text-boreal-ink transition hover:bg-[#cfa953]">Apply now</a></div></section>
+    <section className="border-t border-boreal-line bg-boreal-mist"><div className="mx-auto max-w-[820px] px-6 py-14 text-center"><h2 className="font-display text-2xl font-bold">Still have a question?</h2><p className="mt-3 text-[16px] leading-relaxed text-boreal-body">Call us on +1 (866) 631-8939, or apply and we&rsquo;ll tell you what you qualify for.</p><a href={applyHref} onClick={() => trackConversion("apply_click", { where: "faq_footer" })} className="mt-7 inline-block rounded-lg bg-boreal-gold px-6 py-3.5 text-[15px] font-semibold text-boreal-ink transition hover:bg-[#cfa953]">Apply now</a></div></section>
   </main></>;
 }

@@ -1,3 +1,4 @@
+// BF_WEBSITE_MAIN_LINE_866_v162 - public number is the 866 main line.
 // BF_WEBSITE_BOREAL_UI_v1
 import { Link } from "wouter";
 import SEO from "@/components/SEO";
@@ -7,7 +8,7 @@ import { trackConversion } from "@/main";
 // BF_WEBSITE_SCHEMA_v10
 import { organizationJsonLd } from "@/lib/structured-data";
 
-const PHONE_DISPLAY = "+1 (825) 451-1768";
+const PHONE_DISPLAY = "+1 (866) 631-8939";
 const PRODUCTS = [
   ["term-loan", "Term loans", "A lump sum with fixed, predictable payments. For expansion, a build-out, an acquisition, or any one-time investment you'd rather not fund from cash flow.", "Fixed schedule"],
   ["loc", "Line of credit", "Draw what you need, pay interest only on what you use, repay and draw again. The usual answer to seasonal swings and slow-paying customers.", "Revolving"],
@@ -75,7 +76,7 @@ export default function Home() {
       <section id="how-it-works" className="border-y border-boreal-line bg-boreal-mist"><div className="mx-auto max-w-[1200px] px-6 py-16 md:py-24"><Heading title="From application to funded in three steps."/><Cards items={STEPS} numbered /></div></section>
       <section className="mx-auto max-w-[1200px] px-6 py-16 md:py-24"><Heading title="Financing that respects your time and your business."/><Cards items={REASONS}/><div className="mt-10"><Apply where="why_boreal" /></div></section>
       <section className="border-y border-boreal-line bg-boreal-mist"><div className="mx-auto max-w-[820px] px-6 py-16 md:py-24"><Heading title="Common questions"/><div className="mt-8 space-y-3">{FAQS.map(([q,a])=><details key={q} className="rounded-xl border border-boreal-line bg-white px-6 py-5"><summary className="cursor-pointer font-display text-[19px] font-bold">{q}</summary><p className="mt-3 text-[15px] leading-relaxed text-boreal-body">{a}</p></details>)}</div></div></section>
-      <section className="bg-boreal-ink"><div className="mx-auto max-w-[820px] px-6 py-16 text-center md:py-24"><h2 className="font-display text-3xl font-bold text-white md:text-[44px]">Ready to move your business forward?</h2><p className="mx-auto mt-4 max-w-xl text-lg text-[#c3cfe0]">Apply in about five minutes. No cost, no obligation, and no impact on your credit to see what you qualify for.</p><div className="mt-8 flex flex-wrap justify-center gap-3.5"><Apply where="footer_cta"/><a href="tel:+18254511768" onClick={onApply("phone")} className="rounded-lg border border-white/20 bg-white/10 px-6 py-3.5 font-semibold text-white">{PHONE_DISPLAY}</a></div></div></section>
+      <section className="bg-boreal-ink"><div className="mx-auto max-w-[820px] px-6 py-16 text-center md:py-24"><h2 className="font-display text-3xl font-bold text-white md:text-[44px]">Ready to move your business forward?</h2><p className="mx-auto mt-4 max-w-xl text-lg text-[#c3cfe0]">Apply in about five minutes. No cost, no obligation, and no impact on your credit to see what you qualify for.</p><div className="mt-8 flex flex-wrap justify-center gap-3.5"><Apply where="footer_cta"/><a href="tel:+18666318939" onClick={onApply("phone")} className="rounded-lg border border-white/20 bg-white/10 px-6 py-3.5 font-semibold text-white">{PHONE_DISPLAY}</a></div></div></section>
     </main>
   </>;
 }
