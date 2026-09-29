@@ -29,8 +29,13 @@ const CLAUSES: { heading: string; body: React.ReactNode }[] = [
       </>
     ),
   },
+  // BF_WEBSITE_SMS_POLICY_v160
   {
-    heading: "5. Contact",
+    heading: "5. Text messages (SMS)",
+    body: "By entering your mobile number on our application you agree to receive texts from Boreal Financial about your application: sign-in codes, status updates, document requests and signing reminders. Up to 10 messages per month. Message and data rates may apply. Reply STOP to cancel at any time; reply HELP or email info@boreal.financial for help. Carriers are not liable for delayed or undelivered messages. Mobile numbers and text consent are never shared with third parties for marketing.",
+  },
+  {
+    heading: "6. Contact",
     body: (
       <>
         Questions about these terms:{" "}
