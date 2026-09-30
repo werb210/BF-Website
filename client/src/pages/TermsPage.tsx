@@ -7,7 +7,7 @@ import SEO from "@/components/SEO";
 const CLAUSES: { heading: string; body: React.ReactNode }[] = [
   {
     heading: "1. Service description",
-    body: "Boreal Financial operates a lending marketplace that introduces business borrowers to a network of independent lenders. We do not ourselves underwrite, fund, or originate loans. All credit decisions are made by the lender to whom your application is submitted.",
+    body: "Boreal Financial is a commercial financing broker. You apply with us, we prepare your file and submit it on your behalf to the lenders suited to it, and we work with you on the application until it is funded or closed. We do not sell or pass on your information as a lead, and we do not ourselves underwrite, fund, or originate loans. All credit decisions are made by the lender to whom your application is submitted.",
   },
   {
     heading: "2. Eligibility",

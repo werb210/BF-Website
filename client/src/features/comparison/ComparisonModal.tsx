@@ -24,7 +24,7 @@ export default function ComparisonModal() {
           <tr>
             <td className="border p-3">Lender Access</td>
             <td className="border p-3">Single</td>
-            <td className="border p-3">Multi-lender marketplace</td>
+            <td className="border p-3">Multi-lender broker</td>
           </tr>
         </tbody>
       </table>
