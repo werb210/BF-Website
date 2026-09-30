@@ -30,7 +30,7 @@ export const products: Product[] = [
     ],
     howItWorks: [
       "Complete one Boreal application and upload key business documents once",
-      "Boreal packages your file and presents it to suitable term-loan lenders across the marketplace",
+      "Boreal packages your file and presents it to suitable term-loan lenders on our panel",
       "Compare rate options, amortization schedules, fees, and covenant terms before choosing a facility",
     ],
     requirements: [
@@ -51,7 +51,7 @@ export const products: Product[] = [
       "Businesses that need liquidity flexibility but want to borrow only what is required at any moment",
     ],
     howItWorks: [
-      "Submit one marketplace intake with your recent financial and banking profile",
+      "Submit one application with your recent financial and banking profile",
       "Lenders evaluate your operating stability and propose revolving limits with pricing",
       "Once approved, draw funds as needed and repay to restore available credit capacity",
     ],

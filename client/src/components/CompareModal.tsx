@@ -37,7 +37,7 @@ export default function CompareModal({ open, onClose }: CompareModalProps) {
               <td className="p-2">Flexible</td>
             </tr>
             <tr>
-              <td className="p-2">Multi-Lender Marketplace</td>
+              <td className="p-2">Multi-lender broker</td>
               <td className="p-2">No</td>
               <td className="p-2">Yes</td>
             </tr>

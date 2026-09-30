@@ -27,7 +27,7 @@ const FAQS = [
   ["Will applying affect my credit?", "No. We do not pull your credit, at any stage. A lender may run a check once you have signed a term sheet, but not before, and only with your agreement."],
   ["How fast can I get funded?", "Most complete conventional applications reach funding in three to four days. SBA takes considerably longer by design, and we will tell you which yours is early rather than late."],
   ["What does it cost me?", "Nothing to apply and nothing to be matched. We are paid by the lender that funds you, unless we agree otherwise with you in advance and in writing."],
-  ["Do you also work in Canada?", "Yes. Boreal is a Canadian and US marketplace. If your business is Canadian, start on our Canadian page instead."],
+  ["Do you also work in Canada?", "Yes. Boreal works with businesses in Canada and the United States. If your business is Canadian, start on our Canadian page instead."],
 ] as const;
 
 export default function UnitedStates() {

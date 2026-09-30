@@ -14,7 +14,7 @@ export function Footer() {
               <span className="font-semibold text-white">Boreal Financial</span>
             </div>
             <p className="text-sm leading-relaxed text-white/65">
-              Structured lending marketplace helping businesses across Canada and the United States.
+              Commercial financing broker for businesses across Canada and the United States.
             </p>
           </div>
           <div>
