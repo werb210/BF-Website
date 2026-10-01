@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { initJourneyTracking } from "@/utils/journey"; // BF_WEBSITE_VISITOR_JOURNEY_v1
+import { initSiteBehaviour } from "@/utils/siteBehaviour"; // BF_WEBSITE_SITE_BEHAVIOUR_v169
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { initGA } from "./analytics/ga";
@@ -294,6 +295,7 @@ function TrackingProvider() {
     captureAttribution();
     // BF_WEBSITE_VISITOR_JOURNEY_v1 - start anonymous journey tracking.
     try { initJourneyTracking(); } catch { /* tracking must never break the site */ }
+    initSiteBehaviour(); // BF_WEBSITE_SITE_BEHAVIOUR_v169
   }, []);
 
   // BF_WEBSITE_ATTRIBUTION_HANDOFF_v1 - carry utm + gclid to the client app so the

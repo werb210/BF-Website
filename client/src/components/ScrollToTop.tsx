@@ -11,12 +11,14 @@ import { useEffect } from "react";
 import { useLocation } from "wouter";
 import { scrollToTop } from "@/utils/scrollToTop";
 import { trackPageview } from "@/utils/journey"; // BF_WEBSITE_VISITOR_JOURNEY_v1
+import { siteBehaviourPage } from "@/utils/siteBehaviour"; // BF_WEBSITE_SITE_BEHAVIOUR_v169
 
 export default function ScrollToTop(): null {
   const [pathname] = useLocation();
   useEffect(() => {
     scrollToTop();
     trackPageview(pathname); // BF_WEBSITE_VISITOR_JOURNEY_v1
+    siteBehaviourPage(pathname); // BF_WEBSITE_SITE_BEHAVIOUR_v169
   }, [pathname]);
   return null;
 }
