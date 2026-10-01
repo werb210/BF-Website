@@ -48,7 +48,7 @@ export function Footer() {
             <Link href="/privacy" className="text-inherit no-underline">Privacy Policy</Link>
             <Link href="/terms" className="text-inherit no-underline">Terms of Service</Link>
           </div>
-          <div>© {new Date().getFullYear()} Boreal Financial</div>
+          <div>© {new Date().getFullYear()} Boreal Financial, a trade name of 2630108 Alberta Ltd.</div>
         </div>
       </div>
     </footer>
