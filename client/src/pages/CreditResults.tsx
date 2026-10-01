@@ -35,7 +35,7 @@ const TIER_COPY: Record<
     next: [
       "Have six months of business bank statements ready.",
       "Apply once and we'll bring back what you qualify for.",
-      "Most complete files reach funding in three to four days.",
+      "Clean, complete files for smaller term loans can fund in as little as three to four days.",
     ],
     accent: "#2f9e5b",
   },

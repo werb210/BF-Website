@@ -45,7 +45,7 @@ const SECTIONS: Section[] = [
   {
     heading: "Credit checks",
     paras: [
-      "We do not obtain a consumer credit report on you. A lender may obtain one after you have signed a term sheet, and it will do so under its own consent arrangements with you, not ours. We may access commercial credit information about the business itself.",
+      "Boreal does not obtain a consumer credit report on you. A lender may obtain one only with your permission, before making you an offer, under its own consent arrangements with you. We may access commercial credit information about the business itself.",
     ],
   },
   {

@@ -31,7 +31,7 @@ test("it identifies the company and gives a route to complain", () => {
 
 test("it keeps the locked credit claim accurate", () => {
   assert.ok(
-    SRC.includes("We do not obtain a consumer credit report"),
+    SRC.includes("Boreal does not obtain a consumer credit report"),
     "the credit-check position is missing or reworded",
   );
 });

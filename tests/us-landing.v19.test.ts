@@ -21,7 +21,7 @@ test("the US page makes no Canada-specific claim", () => {
 
 test("the US page keeps the locked global claims", () => {
   const src = fs.readFileSync(PAGE, "utf8");
-  assert.match(src, /never pull your credit/, "missing the credit claim");
+  assert.match(src, /never pulls your credit/, "missing the credit claim");
   assert.match(src, /\$10K to \$100M\+/, "missing the amount range");
   assert.ok(!/\bAPR\b|guaranteed approval|pre-approved|approval rate/i.test(src), "US page carries a banned claim");
 });
