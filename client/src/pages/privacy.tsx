@@ -52,7 +52,7 @@ const SECTIONS: Section[] = [
     heading: "Cookies, analytics and advertising",
     paras: [
       "Strictly necessary cookies keep the site working and cannot be switched off.",
-      "Analytics. We use Google Analytics 4 and Microsoft Clarity to understand how the site is used. Clarity records session activity including mouse movement, scrolling and clicks. Both set cookies and receive your IP address.",
+      "Analytics. We use Google Analytics 4 and Microsoft Clarity to understand how the site is used. Clarity records session activity including mouse movement, scrolling and clicks. Both set cookies and receive your IP address. Our own site analytics also record which pages, sections and buttons you view and click, how far you scroll, and which form fields you complete (never what you type in them); if you apply, this is linked to your application.",
       "Advertising. We use Google Ads conversion tracking and remarketing. This sets cookies that let Google recognise your browser across our sites and on other websites, and show you Boreal advertising elsewhere. If you arrive from an advertisement, a Google click identifier is stored in your browser and passed to our application so we can attribute the enquiry.",
       "Consent. We operate Google Consent Mode. Choosing Accept on our banner grants advertising and analytics storage; choosing Decline refuses both. You can change your choice at any time by clearing site data for this site and making a new selection.",
       "We do not sell your personal information, and we do not display third-party advertising on our own websites.",
