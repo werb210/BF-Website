@@ -12,6 +12,7 @@ import ReferralLanding from "../pages/ReferralLanding";
 import FAQ from "../pages/FAQ";
 import HowItWorks from "../pages/HowItWorks";
 import Privacy from "../pages/privacy";
+import DeleteAccount from "../pages/DeleteAccount"; // BF_WEBSITE_DELETE_ACCOUNT_v170
 import NotFound from "../pages/NotFound";
 import StaffLogin from "../pages/StaffLogin";
 import PartnerLogin from "../pages/PartnerLogin";
@@ -73,6 +74,7 @@ export function AppRouter() {
         <Route path="/how-it-works" component={HowItWorks} />
         <Route path="/faq" component={FAQ} />
         <Route path="/privacy" component={Privacy} />
+        <Route path="/delete-account" component={DeleteAccount} />
         <Route path="/terms" component={TermsPage} />
         <Route path="/sms" component={SmsInfo} />
         <Route path="/staff-login" component={StaffLogin} />

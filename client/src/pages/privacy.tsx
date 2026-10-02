@@ -9,7 +9,7 @@ const LEGAL_NAME = "Boreal Financial Corp.";
 const MAILING_ADDRESS = "450 Sparling Crt SW, Edmonton, AB T6X 1G9";
 const CONTACT_EMAIL = "info@boreal.financial";
 const PHONE_DISPLAY = "+1 (866) 631-8939";
-const LAST_UPDATED = "August 16, 2026";
+const LAST_UPDATED = "October 3, 2026"; // BF_WEBSITE_PRIVACY_MATCHED_AUDIENCES_v170
 
 type Section = { heading: string; paras?: string[]; bullets?: string[] };
 
@@ -54,6 +54,7 @@ const SECTIONS: Section[] = [
       "Strictly necessary cookies keep the site working and cannot be switched off.",
       "Analytics. We use Google Analytics 4 and Microsoft Clarity to understand how the site is used. Clarity records session activity including mouse movement, scrolling and clicks. Both set cookies and receive your IP address. Our own site analytics also record which pages, sections and buttons you view and click, how far you scroll, and which form fields you complete (never what you type in them); if you apply, this is linked to your application.",
       "Advertising. We use Google Ads conversion tracking and remarketing. This sets cookies that let Google recognise your browser across our sites and on other websites, and show you Boreal advertising elsewhere. If you arrive from an advertisement, a Google click identifier is stored in your browser and passed to our application so we can attribute the enquiry.",
+      "Matched audiences. If you apply, we may share your email address and phone number with Google in hashed (scrambled, one-way encoded) form, so Google can match them to its users to measure our advertising and show relevant Boreal advertising. Google does not receive the readable details, and you can opt out at any time by emailing us or replying STOP.",
       "Consent. We operate Google Consent Mode. Choosing Accept on our banner grants advertising and analytics storage; choosing Decline refuses both. You can change your choice at any time by clearing site data for this site and making a new selection.",
       "We do not sell your personal information, and we do not display third-party advertising on our own websites.",
     ],
