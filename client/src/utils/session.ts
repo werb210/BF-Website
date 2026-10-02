@@ -10,8 +10,27 @@ export function setReadinessSessionToken(token: string) {
   window.localStorage.setItem(READINESS_SESSION_STORAGE_KEY, token);
 }
 
+// BF_WEBSITE_CONSENT_HANDOFF_v170 - the cookie choice made on this site travels
+// to client.boreal.financial as ?consent=granted|denied (different domains cannot
+// share storage), so the app applies it instead of asking again. Nothing is sent
+// when the visitor has not chosen.
+export const CONSENT_STORAGE_KEY = "boreal_consent_v1";
+export function consentChoice(): "granted" | "denied" | null {
+  try {
+    const v = typeof window === "undefined" ? null : window.localStorage.getItem(CONSENT_STORAGE_KEY);
+    return v === "granted" || v === "denied" ? v : null;
+  } catch {
+    return null;
+  }
+}
+export function addConsentParam(url: URL): void {
+  const c = consentChoice();
+  if (c && !url.searchParams.has("consent")) url.searchParams.set("consent", c);
+}
+
 export function buildApplyUrl(baseUrl: string, readinessSessionToken?: string | null) {
   const url = new URL(baseUrl);
+  addConsentParam(url);
   if (readinessSessionToken) {
     url.searchParams.set("sessionId", readinessSessionToken);
     url.searchParams.set("readinessSession", readinessSessionToken);

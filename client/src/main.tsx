@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { initJourneyTracking } from "@/utils/journey"; // BF_WEBSITE_VISITOR_JOURNEY_v1
 import { initSiteBehaviour } from "@/utils/siteBehaviour"; // BF_WEBSITE_SITE_BEHAVIOUR_v169
+import { addConsentParam } from "@/utils/session"; // BF_WEBSITE_CONSENT_HANDOFF_v170
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { initGA } from "./analytics/ga";
@@ -315,6 +316,7 @@ function TrackingProvider() {
           const v = attr[k];
           if (v && !url.searchParams.has(k)) url.searchParams.set(k, String(v));
         }
+        addConsentParam(url); // BF_WEBSITE_CONSENT_HANDOFF_v170
         a.setAttribute("href", url.toString());
       } catch {
         /* ignore malformed href */
