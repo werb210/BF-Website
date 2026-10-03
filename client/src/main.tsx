@@ -221,7 +221,8 @@ export const trackLeadProfile = (profile: {
 };
 
 // ---- Revenue Value Modeling ----
-const COMMISSION_RATE = 0.03; // Adjust to real average later
+// BF_WEBSITE_COMMISSION_DEFAULT_2PCT_v172 - Boreal's default commission is 2% (conversion value sent to Google).
+const COMMISSION_RATE = 0.02;
 
 export const estimateCommissionValue = (
   capitalRange: string
