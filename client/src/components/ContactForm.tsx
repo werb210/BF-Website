@@ -141,11 +141,12 @@ export default function ContactForm() {
   return (
     <>
       <form onSubmit={handleSubmit} className="mt-8 space-y-4 rounded-xl border border-white/20 bg-[#0a1731] p-6 shadow-sm">
-        <input className="w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3" placeholder="Company Name" required value={formData.companyName} onChange={(e) => setFormData((prev) => ({ ...prev, companyName: e.target.value }))} />
-        <input className="w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3" name="name" placeholder="Full Name" required value={formData.name} onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))} />
-        <input className="w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3" name="email" type="email" placeholder="Email" required value={formData.email} onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))} />
-        <input className="w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3" type="tel" inputMode="tel" placeholder="Mobile Phone" required pattern="[^0-9]*([0-9][^0-9]*){10,11}" title="Enter a 10-digit phone number" value={formData.mobilePhone} onChange={(e) => setFormData((prev) => ({ ...prev, mobilePhone: formatPhone(e.target.value) }))} />
-        <textarea className="min-h-[120px] w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3" name="message" placeholder="How can we help?" required value={formData.message} onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))} />
+        {/* BF_WEBSITE_CONTACT_CONTRAST_v171 - typed text was navy on near-black (1.2:1), effectively invisible */}
+        <input className="w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3 text-white placeholder:text-white/60" placeholder="Company Name" required value={formData.companyName} onChange={(e) => setFormData((prev) => ({ ...prev, companyName: e.target.value }))} />
+        <input className="w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3 text-white placeholder:text-white/60" name="name" placeholder="Full Name" required value={formData.name} onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))} />
+        <input className="w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3 text-white placeholder:text-white/60" name="email" type="email" placeholder="Email" required value={formData.email} onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))} />
+        <input className="w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3 text-white placeholder:text-white/60" type="tel" inputMode="tel" placeholder="Mobile Phone" required pattern="[^0-9]*([0-9][^0-9]*){10,11}" title="Enter a 10-digit phone number" value={formData.mobilePhone} onChange={(e) => setFormData((prev) => ({ ...prev, mobilePhone: formatPhone(e.target.value) }))} />
+        <textarea className="min-h-[120px] w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3 text-white placeholder:text-white/60" name="message" placeholder="How can we help?" required value={formData.message} onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))} />
         <input
           className="hidden"
           aria-hidden="true"
