@@ -76,12 +76,16 @@ export function AppRouter() {
         <Route path="/faq" component={FAQ} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/delete-account" component={DeleteAccount} />
-        <Route path="/book" component={Book} />
+        <Route path="/book">{() => <Book />}</Route>
+        {/* BF_WEBSITE_BOOKING_PER_STAFF_v174 - per-advisor links: /book-todd (and /book/todd) */}
+        <Route path="/book/:slug">{(params: { slug: string }) => <Book slug={params.slug} />}</Route>
         <Route path="/terms" component={TermsPage} />
         <Route path="/sms" component={SmsInfo} />
         <Route path="/staff-login" component={StaffLogin} />
         <Route path="/lender-login" component={PartnerLogin} />
         <Route path="/system-status" component={SystemStatus} />
+        {/* must stay last before NotFound: only book-<name> pages, everything else is still a 404 */}
+        <Route path="/:page">{(params: { page: string }) => (/^book-[a-z0-9]+$/i.test(params.page) ? <Book slug={params.page.slice(5).toLowerCase()} /> : <NotFound />)}</Route>
         <Route component={NotFound} />
       </Switch>
     </MainLayout>
