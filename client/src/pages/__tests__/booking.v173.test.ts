@@ -10,7 +10,7 @@ const r = (p: string) => fs.readFileSync(path.resolve(root, p), "utf8");
 describe("booking page", () => {
   const page = r("pages/Book.tsx");
   it("is routed at /book", () => {
-    assert.ok(r("router/AppRouter.tsx").includes('<Route path="/book" component={Book} />'));
+    assert.ok(r("router/AppRouter.tsx").includes('<Route path="/book">{() => <Book />}</Route>'));
   });
   it("offers a phone call or Microsoft Teams only - no conference calls", () => {
     assert.ok(page.includes(">Phone call</button>"));

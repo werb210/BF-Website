@@ -21,10 +21,14 @@ export function groupByDay(slots: Slot[]): Array<{ day: string; slots: Slot[] }>
 }
 const timeLabel = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: TZ, hour: "numeric", minute: "2-digit" }).format(new Date(iso));
 
-export default function Book() {
+// BF_WEBSITE_BOOKING_PER_STAFF_v174 - each advisor has their own link: boreal.financial/book-todd
+// shows only Todd's free times and never lists the rest of the team. Plain /book books the
+// first free advisor without naming anyone.
+export default function Book({ slug }: { slug?: string } = {}) {
   const [kind, setKind] = useState<"phone" | "teams">("phone");
-  const [staff, setStaff] = useState<Staff[]>([]);
-  const [staffId, setStaffId] = useState("any");
+  const [advisor, setAdvisor] = useState<Staff | null>(null);
+  const [notFound, setNotFound] = useState(false);
+  const [staffId, setStaffId] = useState(slug ? "" : "any");
   const [slots, setSlots] = useState<Slot[] | null>(null);
   const [pick, setPick] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -36,8 +40,14 @@ export default function Book() {
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState<{ startsAt: string; staffFirstName: string | null; joinUrl: string | null } | null>(null);
 
-  useEffect(() => { fetch(API + "/api/booking/staff").then((r) => r.json()).then((d) => setStaff(Array.isArray(d?.staff) ? d.staff : [])).catch(() => setStaff([])); }, []);
   useEffect(() => {
+    if (!slug) return;
+    fetch(API + "/api/booking/staff/" + encodeURIComponent(slug))
+      .then(async (r) => { if (!r.ok) throw new Error("not_found"); const d = await r.json(); setAdvisor(d.staff); setStaffId(d.staff.id); })
+      .catch(() => setNotFound(true));
+  }, [slug]);
+  useEffect(() => {
+    if (!staffId) return;
     setSlots(null); setPick(null);
     fetch(API + "/api/booking/slots?staff=" + encodeURIComponent(staffId))
       .then(async (r) => { const d = await r.json(); if (!r.ok) throw new Error(d?.message || "unavailable"); setSlots(Array.isArray(d?.slots) ? d.slots : []); })
@@ -64,12 +74,14 @@ export default function Book() {
       <main className="bg-white font-sans text-boreal-ink" style={{ color: "#0B1F3A" }}>
         <section className="bg-gradient-to-br from-boreal-ink via-boreal-inkDeep to-[#0d233f]">
           <div className="mx-auto max-w-[820px] px-6 py-12">
-            <h1 className="font-display text-4xl font-bold text-white">Book a call</h1>
+            <h1 className="font-display text-4xl font-bold text-white">{advisor ? "Book a call with " + advisor.firstName : "Book a call"}</h1>
             <p className="mt-3 text-[17px] text-[#e2e8f0]">30 minutes with a Boreal Financial advisor, by phone or Microsoft Teams. Times are Mountain time.</p>
           </div>
         </section>
         <section className="mx-auto max-w-[820px] px-6 py-10" data-testid="booking">
-          {state === "done" && done ? (
+          {notFound ? (
+            <p data-testid="booking-not-found">This booking link isn't active. Please call us at (866) 631-8939 or use <a href="/book" style={{ textDecoration: "underline" }}>boreal.financial/book</a>.</p>
+          ) : state === "done" && done ? (
             <div data-testid="booking-done">
               <h2 className="text-2xl font-bold">You're booked</h2>
               <p className="mt-2">{new Intl.DateTimeFormat("en-CA", { timeZone: TZ, dateStyle: "full", timeStyle: "short" }).format(new Date(done.startsAt))} (Mountain time){done.staffFirstName ? " with " + done.staffFirstName : ""}.</p>
@@ -82,16 +94,7 @@ export default function Book() {
                 <button type="button" style={btn(kind === "phone")} aria-pressed={kind === "phone"} onClick={() => setKind("phone")}>Phone call</button>
                 <button type="button" style={btn(kind === "teams")} aria-pressed={kind === "teams"} onClick={() => setKind("teams")}>Microsoft Teams</button>
               </div>
-              {staff.length > 1 && (
-                <>
-                  <h2 className="mt-8 text-lg font-bold">2. Who would you like to speak with?</h2>
-                  <select aria-label="Advisor" value={staffId} onChange={(e) => setStaffId(e.target.value)} style={{ ...field, maxWidth: 320, marginTop: 12 }}>
-                    <option value="any">First available</option>
-                    {staff.map((s) => <option key={s.id} value={s.id}>{s.firstName}</option>)}
-                  </select>
-                </>
-              )}
-              <h2 className="mt-8 text-lg font-bold">{staff.length > 1 ? "3" : "2"}. Pick a time</h2>
+              <h2 className="mt-8 text-lg font-bold">2. Pick a time</h2>
               {slots === null && <p className="mt-3">Loading times...</p>}
               {slots !== null && !slots.length && <p className="mt-3">{error ?? "No times are open in the next two weeks. Please call (866) 631-8939."}</p>}
               <div className="mt-3 grid gap-5">
