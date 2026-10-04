@@ -3,6 +3,7 @@
 // staff-only and are not offered here.
 import { useEffect, useMemo, useState } from "react";
 import SEO from "@/components/SEO";
+import { dayHeading, dayKey, monthCells, MONTHS, pad2, slotsByDay } from "@/lib/bookingCalendar"; // BF_WEBSITE_BOOKING_CALENDAR_v176
 
 const API = (import.meta.env.VITE_MAYA_API_BASE ?? "https://server.boreal.financial").trim().replace(/[/]+$/, "");
 type Slot = { startsAt: string; staffIds: string[] };
@@ -11,16 +12,6 @@ type Staff = { id: string; firstName: string };
 // time-zone data would see the Edmonton zone fall back an hour on Nov 1; America/Regina is UTC-6 everywhere.
 const TZ = "America/Regina";
 
-export function groupByDay(slots: Slot[]): Array<{ day: string; slots: Slot[] }> {
-  const fmt = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, weekday: "long", month: "long", day: "numeric" });
-  const out: Array<{ day: string; slots: Slot[] }> = [];
-  for (const s of slots) {
-    const day = fmt.format(new Date(s.startsAt));
-    const last = out[out.length - 1];
-    if (last && last.day === day) last.slots.push(s); else out.push({ day, slots: [s] });
-  }
-  return out;
-}
 const timeLabel = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: TZ, hour: "numeric", minute: "2-digit" }).format(new Date(iso));
 
 // BF_WEBSITE_BOOKING_PER_STAFF_v174 - each advisor has their own link: boreal.financial/book-todd
@@ -55,7 +46,17 @@ export default function Book({ slug }: { slug?: string } = {}) {
       .then(async (r) => { const d = await r.json(); if (!r.ok) throw new Error(d?.message || "unavailable"); setSlots(Array.isArray(d?.slots) ? d.slots : []); })
       .catch((e) => { setSlots([]); setError(e instanceof Error ? e.message : "Booking is temporarily unavailable. Please call (866) 631-8939."); });
   }, [staffId]);
-  const days = useMemo(() => groupByDay(slots ?? []), [slots]);
+  const byDay = useMemo(() => slotsByDay(slots ?? []), [slots]);
+  const firstKey = useMemo(() => (slots && slots.length ? dayKey(slots[0]!.startsAt) : null), [slots]);
+  const [day, setDay] = useState<string | null>(null);
+  const [view, setView] = useState<{ y: number; m: number } | null>(null);
+  useEffect(() => { if (firstKey) { setDay(firstKey); setView({ y: Number(firstKey.slice(0, 4)), m: Number(firstKey.slice(5, 7)) }); } }, [firstKey]);
+  const keys = useMemo(() => [...byDay.keys()].sort(), [byDay]);
+  const minMonth = keys.length ? keys[0]!.slice(0, 7) : "";
+  const maxMonth = keys.length ? keys[keys.length - 1]!.slice(0, 7) : "";
+  const viewMonth = view ? view.y + "-" + pad2(view.m) : "";
+  const shiftMonth = (by: number) => setView((v) => { if (!v) return v; const d = new Date(Date.UTC(v.y, v.m - 1 + by, 1)); return { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1 }; });
+  const chooseDay = (k: string) => { setDay(k); if (pick && dayKey(pick) !== k) setPick(null); };
   const ready = pick && name.trim() && /^[^@ ]+@[^@ ]+[.][^@ ]+$/.test(email.trim()) && (kind === "teams" || phone.replace(/[^0-9]/g, "").length >= 10);
 
   const submit = async () => {
@@ -99,16 +100,37 @@ export default function Book({ slug }: { slug?: string } = {}) {
               <h2 className="mt-8 text-lg font-bold">2. Pick a time</h2>
               {slots === null && <p className="mt-3">Loading times...</p>}
               {slots !== null && !slots.length && <p className="mt-3">{error ?? "No times are open in the next two weeks. Please call (866) 631-8939."}</p>}
-              <div className="mt-3 grid gap-5">
-                {days.slice(0, 10).map((d) => (
-                  <div key={d.day}>
-                    <div className="font-semibold">{d.day}</div>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {d.slots.map((s) => <button key={s.startsAt} type="button" aria-pressed={pick === s.startsAt} style={btn(pick === s.startsAt)} onClick={() => setPick(s.startsAt)}>{timeLabel(s.startsAt)}</button>)}
+              {/* BF_WEBSITE_BOOKING_CALENDAR_v176 - calendar on the left (on top on a phone), that day's times on the right. */}
+              {slots !== null && slots.length > 0 && view && (
+                <div data-testid="booking-calendar" className="mt-4 grid gap-6 md:grid-cols-[320px_1fr]">
+                  <div style={{ border: "1px solid #cbd5e1", borderRadius: 12, padding: 14 }}>
+                    <div className="flex items-center justify-between">
+                      <button type="button" aria-label="Previous month" disabled={viewMonth <= minMonth} onClick={() => shiftMonth(-1)} style={{ ...btn(false), padding: "6px 12px", opacity: viewMonth <= minMonth ? 0.35 : 1 }}>&lsaquo;</button>
+                      <div className="font-semibold">{MONTHS[view.m - 1]} {view.y}</div>
+                      <button type="button" aria-label="Next month" disabled={viewMonth >= maxMonth} onClick={() => shiftMonth(1)} style={{ ...btn(false), padding: "6px 12px", opacity: viewMonth >= maxMonth ? 0.35 : 1 }}>&rsaquo;</button>
+                    </div>
+                    <div className="mt-3 grid grid-cols-7 gap-1 text-center" style={{ fontSize: 12, color: "#51617D", fontWeight: 600 }}>
+                      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((w) => <div key={w}>{w}</div>)}
+                    </div>
+                    <div className="mt-1 grid grid-cols-7 gap-1">
+                      {monthCells(view.y, view.m).map((n, i) => {
+                        if (n === null) return <div key={"b" + i} />;
+                        const k = viewMonth + "-" + pad2(n);
+                        const open = byDay.has(k);
+                        const on = day === k;
+                        return <button key={k} type="button" disabled={!open} aria-pressed={on} aria-label={dayHeading(k) + (open ? "" : " - no times")} onClick={() => chooseDay(k)}
+                          style={{ height: 40, borderRadius: 8, border: open ? "1px solid #0B1F3A" : "1px solid transparent", background: on ? "#0B1F3A" : "#fff", color: on ? "#fff" : open ? "#0B1F3A" : "#64748b", fontWeight: open ? 700 : 400, cursor: open ? "pointer" : "default" }}>{n}</button>;
+                      })}
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div data-testid="booking-times">
+                    <div className="font-semibold">{day ? dayHeading(day) : "Pick a day"}</div>
+                    <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                      {(day ? byDay.get(day) ?? [] : []).map((s) => <button key={s.startsAt} type="button" aria-pressed={pick === s.startsAt} style={{ ...btn(pick === s.startsAt), width: "100%" }} onClick={() => setPick(s.startsAt)}>{timeLabel(s.startsAt)}</button>)}
+                    </div>
+                  </div>
+                </div>
+              )}
               <h2 className="mt-8 text-lg font-bold">Your details</h2>
               <div className="mt-3 grid gap-3" style={{ maxWidth: 480 }}>
                 <input aria-label="Full name" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} style={field} />
