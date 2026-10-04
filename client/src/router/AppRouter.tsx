@@ -13,6 +13,7 @@ import FAQ from "../pages/FAQ";
 import HowItWorks from "../pages/HowItWorks";
 import Privacy from "../pages/privacy";
 import DeleteAccount from "../pages/DeleteAccount"; // BF_WEBSITE_DELETE_ACCOUNT_v170
+import Book from "../pages/Book"; // BF_WEBSITE_BOOKING_v173
 import NotFound from "../pages/NotFound";
 import StaffLogin from "../pages/StaffLogin";
 import PartnerLogin from "../pages/PartnerLogin";
@@ -75,6 +76,7 @@ export function AppRouter() {
         <Route path="/faq" component={FAQ} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/delete-account" component={DeleteAccount} />
+        <Route path="/book" component={Book} />
         <Route path="/terms" component={TermsPage} />
         <Route path="/sms" component={SmsInfo} />
         <Route path="/staff-login" component={StaffLogin} />
