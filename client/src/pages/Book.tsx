@@ -7,7 +7,9 @@ import SEO from "@/components/SEO";
 const API = (import.meta.env.VITE_MAYA_API_BASE ?? "https://server.boreal.financial").trim().replace(/[/]+$/, "");
 type Slot = { startsAt: string; staffIds: string[] };
 type Staff = { id: string; firstName: string };
-const TZ = "America/Edmonton";
+// BF_WEBSITE_ALBERTA_TIME_v175 - Alberta is UTC-6 all year since 2026. Visitors whose phone or browser has older
+// time-zone data would see the Edmonton zone fall back an hour on Nov 1; America/Regina is UTC-6 everywhere.
+const TZ = "America/Regina";
 
 export function groupByDay(slots: Slot[]): Array<{ day: string; slots: Slot[] }> {
   const fmt = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, weekday: "long", month: "long", day: "numeric" });
@@ -75,7 +77,7 @@ export default function Book({ slug }: { slug?: string } = {}) {
         <section className="bg-gradient-to-br from-boreal-ink via-boreal-inkDeep to-[#0d233f]">
           <div className="mx-auto max-w-[820px] px-6 py-12">
             <h1 className="font-display text-4xl font-bold text-white">{advisor ? "Book a call with " + advisor.firstName : "Book a call"}</h1>
-            <p className="mt-3 text-[17px] text-[#e2e8f0]">30 minutes with a Boreal Financial advisor, by phone or Microsoft Teams. Times are Mountain time.</p>
+            <p className="mt-3 text-[17px] text-[#e2e8f0]">30 minutes with a Boreal Financial advisor, by phone or Microsoft Teams. Times are Alberta time.</p>
           </div>
         </section>
         <section className="mx-auto max-w-[820px] px-6 py-10" data-testid="booking">
@@ -84,7 +86,7 @@ export default function Book({ slug }: { slug?: string } = {}) {
           ) : state === "done" && done ? (
             <div data-testid="booking-done">
               <h2 className="text-2xl font-bold">You're booked</h2>
-              <p className="mt-2">{new Intl.DateTimeFormat("en-CA", { timeZone: TZ, dateStyle: "full", timeStyle: "short" }).format(new Date(done.startsAt))} (Mountain time){done.staffFirstName ? " with " + done.staffFirstName : ""}.</p>
+              <p className="mt-2">{new Intl.DateTimeFormat("en-CA", { timeZone: TZ, dateStyle: "full", timeStyle: "short" }).format(new Date(done.startsAt))} (Alberta time){done.staffFirstName ? " with " + done.staffFirstName : ""}.</p>
               <p className="mt-2">{kind === "teams" ? "A calendar invitation with the Teams link is on its way to your email." : "We'll call you at " + phone + ". A calendar invitation is on its way to your email."}</p>
             </div>
           ) : (

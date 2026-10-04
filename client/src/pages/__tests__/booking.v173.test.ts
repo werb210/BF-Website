@@ -22,7 +22,7 @@ describe("booking page", () => {
     assert.ok(page.includes('website: trap'));
     assert.ok(page.includes('(kind === "teams" || phone.replace(/[^0-9]/g, "").length >= 10)'));
   });
-  it("shows times in Mountain time", () => {
-    assert.ok(page.includes('const TZ = "America/Edmonton";'));
+  it("shows times in Alberta time", () => {
+    assert.ok(page.includes('const TZ = "America/Regina";')); // BF_WEBSITE_ALBERTA_TIME_v175 - UTC-6 all year
   });
 });
