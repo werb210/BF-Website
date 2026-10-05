@@ -7,8 +7,10 @@ import { dayKey, slotsByDay, timeIn, visitorTimeZone, zoneLabel, BOOKING_TZ } fr
 test("a 9:00 a.m. Alberta slot reads as the visitor's own clock time", () => {
   const nineAlberta = "2026-12-07T15:00:00Z";
   assert.match(timeIn(nineAlberta, BOOKING_TZ), /^9:00/);
-  assert.match(timeIn(nineAlberta, "America/Toronto"), /^10:00/);
-  assert.match(timeIn(nineAlberta, "America/Vancouver"), /^7:00/);
+  // BF_WEBSITE_STABLE_ZONES_v178 - zones whose offset never changes. Vancouver was used here and broke
+  // when newer time-zone data put BC on UTC-7 all year; the page itself was right (it uses the browser's data).
+  assert.match(timeIn(nineAlberta, "Etc/GMT+5"), /^10:00/);
+  assert.match(timeIn(nineAlberta, "America/Phoenix"), /^8:00/);
 });
 
 test("days group in the visitor's zone", () => {
