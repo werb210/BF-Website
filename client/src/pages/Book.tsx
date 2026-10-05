@@ -3,7 +3,7 @@
 // staff-only and are not offered here.
 import { useEffect, useMemo, useState } from "react";
 import SEO from "@/components/SEO";
-import { dayHeading, dayKey, monthCells, MONTHS, pad2, slotsByDay } from "@/lib/bookingCalendar"; // BF_WEBSITE_BOOKING_CALENDAR_v176
+import { dayHeading, dayKey, monthCells, MONTHS, pad2, slotsByDay, timeIn, visitorTimeZone, zoneLabel } from "@/lib/bookingCalendar"; // BF_WEBSITE_BOOKING_CALENDAR_v176 / BF_WEBSITE_LOCAL_TIME_v177
 
 const API = (import.meta.env.VITE_MAYA_API_BASE ?? "https://server.boreal.financial").trim().replace(/[/]+$/, "");
 type Slot = { startsAt: string; staffIds: string[] };
@@ -11,8 +11,6 @@ type Staff = { id: string; firstName: string };
 // BF_WEBSITE_ALBERTA_TIME_v175 - Alberta is UTC-6 all year since 2026. Visitors whose phone or browser has older
 // time-zone data would see the Edmonton zone fall back an hour on Nov 1; America/Regina is UTC-6 everywhere.
 const TZ = "America/Regina";
-
-const timeLabel = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: TZ, hour: "numeric", minute: "2-digit" }).format(new Date(iso));
 
 // BF_WEBSITE_BOOKING_PER_STAFF_v174 - each advisor has their own link: boreal.financial/book-todd
 // shows only Todd's free times and never lists the rest of the team. Plain /book books the
@@ -32,6 +30,10 @@ export default function Book({ slug }: { slug?: string } = {}) {
   const [state, setState] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState<{ startsAt: string; staffFirstName: string | null; joinUrl: string | null } | null>(null);
+  // BF_WEBSITE_LOCAL_TIME_v177 - show times in the visitor's own zone; one tap switches to Alberta time.
+  const localTz = useMemo(() => visitorTimeZone(), []);
+  const [tz, setTz] = useState(localTz);
+  const zoneName = zoneLabel(tz);
 
   useEffect(() => {
     if (!slug) return;
@@ -46,8 +48,8 @@ export default function Book({ slug }: { slug?: string } = {}) {
       .then(async (r) => { const d = await r.json(); if (!r.ok) throw new Error(d?.message || "unavailable"); setSlots(Array.isArray(d?.slots) ? d.slots : []); })
       .catch((e) => { setSlots([]); setError(e instanceof Error ? e.message : "Booking is temporarily unavailable. Please call (866) 631-8939."); });
   }, [staffId]);
-  const byDay = useMemo(() => slotsByDay(slots ?? []), [slots]);
-  const firstKey = useMemo(() => (slots && slots.length ? dayKey(slots[0]!.startsAt) : null), [slots]);
+  const byDay = useMemo(() => slotsByDay(slots ?? [], tz), [slots, tz]);
+  const firstKey = useMemo(() => (slots && slots.length ? dayKey(slots[0]!.startsAt, tz) : null), [slots, tz]);
   const [day, setDay] = useState<string | null>(null);
   const [view, setView] = useState<{ y: number; m: number } | null>(null);
   useEffect(() => { if (firstKey) { setDay(firstKey); setView({ y: Number(firstKey.slice(0, 4)), m: Number(firstKey.slice(5, 7)) }); } }, [firstKey]);
@@ -56,7 +58,7 @@ export default function Book({ slug }: { slug?: string } = {}) {
   const maxMonth = keys.length ? keys[keys.length - 1]!.slice(0, 7) : "";
   const viewMonth = view ? view.y + "-" + pad2(view.m) : "";
   const shiftMonth = (by: number) => setView((v) => { if (!v) return v; const d = new Date(Date.UTC(v.y, v.m - 1 + by, 1)); return { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1 }; });
-  const chooseDay = (k: string) => { setDay(k); if (pick && dayKey(pick) !== k) setPick(null); };
+  const chooseDay = (k: string) => { setDay(k); if (pick && dayKey(pick, tz) !== k) setPick(null); };
   const ready = pick && name.trim() && /^[^@ ]+@[^@ ]+[.][^@ ]+$/.test(email.trim()) && (kind === "teams" || phone.replace(/[^0-9]/g, "").length >= 10);
 
   const submit = async () => {
@@ -78,7 +80,7 @@ export default function Book({ slug }: { slug?: string } = {}) {
         <section className="bg-gradient-to-br from-boreal-ink via-boreal-inkDeep to-[#0d233f]">
           <div className="mx-auto max-w-[820px] px-6 py-12">
             <h1 className="font-display text-4xl font-bold text-white">{advisor ? "Book a call with " + advisor.firstName : "Book a call"}</h1>
-            <p className="mt-3 text-[17px] text-[#e2e8f0]">30 minutes with a Boreal Financial advisor, by phone or Microsoft Teams. Times are Alberta time.</p>
+            <p className="mt-3 text-[17px] text-[#e2e8f0]">30 minutes with a Boreal Financial advisor, by phone or Microsoft Teams. Times are shown in your time zone.</p>
           </div>
         </section>
         <section className="mx-auto max-w-[820px] px-6 py-10" data-testid="booking">
@@ -87,7 +89,7 @@ export default function Book({ slug }: { slug?: string } = {}) {
           ) : state === "done" && done ? (
             <div data-testid="booking-done">
               <h2 className="text-2xl font-bold">You're booked</h2>
-              <p className="mt-2">{new Intl.DateTimeFormat("en-CA", { timeZone: TZ, dateStyle: "full", timeStyle: "short" }).format(new Date(done.startsAt))} (Alberta time){done.staffFirstName ? " with " + done.staffFirstName : ""}.</p>
+              <p className="mt-2">{new Intl.DateTimeFormat("en-CA", { timeZone: tz, dateStyle: "full", timeStyle: "short" }).format(new Date(done.startsAt))} ({zoneName}){tz !== TZ ? " - " + timeIn(done.startsAt, TZ) + " Alberta time" : ""}{done.staffFirstName ? " with " + done.staffFirstName : ""}.</p>
               <p className="mt-2">{kind === "teams" ? "A calendar invitation with the Teams link is on its way to your email." : "We'll call you at " + phone + ". A calendar invitation is on its way to your email."}</p>
             </div>
           ) : (
@@ -98,6 +100,14 @@ export default function Book({ slug }: { slug?: string } = {}) {
                 <button type="button" style={btn(kind === "teams")} aria-pressed={kind === "teams"} onClick={() => setKind("teams")}>Microsoft Teams</button>
               </div>
               <h2 className="mt-8 text-lg font-bold">2. Pick a time</h2>
+              <p data-testid="booking-zone" className="mt-2" style={{ fontSize: 14, color: "#334155" }}>
+                Times are in {zoneName}.
+                {localTz !== TZ && (
+                  <button type="button" onClick={() => setTz(tz === TZ ? localTz : TZ)} style={{ marginLeft: 8, background: "none", border: 0, padding: 0, color: "#0B1F3A", fontWeight: 600, textDecoration: "underline", cursor: "pointer" }}>
+                    {tz === TZ ? "Show my time zone" : "Show Alberta time"}
+                  </button>
+                )}
+              </p>
               {slots === null && <p className="mt-3">Loading times...</p>}
               {slots !== null && !slots.length && <p className="mt-3">{error ?? "No times are open in the next two weeks. Please call (866) 631-8939."}</p>}
               {/* BF_WEBSITE_BOOKING_CALENDAR_v176 - calendar on the left (on top on a phone), that day's times on the right. */}
@@ -126,7 +136,7 @@ export default function Book({ slug }: { slug?: string } = {}) {
                   <div data-testid="booking-times">
                     <div className="font-semibold">{day ? dayHeading(day) : "Pick a day"}</div>
                     <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                      {(day ? byDay.get(day) ?? [] : []).map((s) => <button key={s.startsAt} type="button" aria-pressed={pick === s.startsAt} style={{ ...btn(pick === s.startsAt), width: "100%" }} onClick={() => setPick(s.startsAt)}>{timeLabel(s.startsAt)}</button>)}
+                      {(day ? byDay.get(day) ?? [] : []).map((s) => <button key={s.startsAt} type="button" aria-pressed={pick === s.startsAt} style={{ ...btn(pick === s.startsAt), width: "100%" }} onClick={() => setPick(s.startsAt)}>{timeIn(s.startsAt, tz)}</button>)}
                     </div>
                   </div>
                 </div>
