@@ -65,7 +65,7 @@ export default function TermsPage() {
               Terms of Service
             </h1>
             <p className="mt-4 text-sm text-boreal-muted">
-              Last updated: {new Date().toISOString().slice(0, 10)}
+              Last updated: October 7, 2026{/* BF_WEBSITE_LEGAL_NAME_v179 - a fixed date; it showed today's date on every visit */}
             </p>
           </div>
         </section>

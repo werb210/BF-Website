@@ -5,11 +5,13 @@
 // two-sentence placeholder that disclosed none of the tracking the site runs.
 import SEO from "@/components/SEO";
 
-const LEGAL_NAME = "Boreal Financial Corp.";
+// BF_WEBSITE_LEGAL_NAME_v179 - the legal entity is 2630108 Alberta Ltd. (the old name used here was not a registered company). Carriers and
+// regulators compare this with the business registration, the terms of service and the Twilio/RCS forms.
+const LEGAL_NAME = "Boreal Financial, a trade name of 2630108 Alberta Ltd.";
 const MAILING_ADDRESS = "450 Sparling Crt SW, Edmonton, AB T6X 1G9";
 const CONTACT_EMAIL = "info@boreal.financial";
 const PHONE_DISPLAY = "+1 (866) 631-8939";
-const LAST_UPDATED = "October 3, 2026"; // BF_WEBSITE_PRIVACY_MATCHED_AUDIENCES_v170
+const LAST_UPDATED = "October 7, 2026"; // BF_WEBSITE_LEGAL_NAME_v179 - legal name corrected // BF_WEBSITE_PRIVACY_MATCHED_AUDIENCES_v170
 
 type Section = { heading: string; paras?: string[]; bullets?: string[] };
 
@@ -122,7 +124,7 @@ export default function Privacy() {
     <>
       <SEO
         title="Privacy Policy"
-        description="How Boreal Financial Corp. collects, uses, shares and protects personal information, including cookies, analytics and advertising."
+        description="How Boreal Financial (2630108 Alberta Ltd.) collects, uses, shares and protects personal information, including cookies, analytics and advertising."
         url="https://www.boreal.financial/privacy"
       />
       <main className="bg-white font-sans text-boreal-ink">
