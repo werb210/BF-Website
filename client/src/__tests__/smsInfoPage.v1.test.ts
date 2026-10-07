@@ -61,7 +61,7 @@ describe("/sms is the CASL identification page every SMS footer links to", () =>
   });
 
   it("carries the identification CASL requires", () => {
-    assert.equal(smsPage.includes("Boreal Financial Corp."), true);
+    assert.equal(smsPage.includes("2630108 Alberta Ltd."), true); // BF_WEBSITE_LEGAL_NAME_v179
     assert.equal(smsPage.includes("info@boreal.financial"), true);
   });
 

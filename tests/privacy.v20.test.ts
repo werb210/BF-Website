@@ -20,7 +20,7 @@ test("the policy discloses what the site actually runs", () => {
 });
 
 test("it identifies the company and gives a route to complain", () => {
-  assert.ok(SRC.includes("Boreal Financial Corp."), "legal name missing");
+  assert.ok(SRC.includes("2630108 Alberta Ltd."), "legal name missing") /* BF_WEBSITE_LEGAL_NAME_v179 */;
   assert.ok(SRC.includes("Edmonton, AB"), "mailing address missing");
   assert.ok(SRC.includes("info@boreal.financial"), "contact address missing");
   assert.ok(
@@ -39,7 +39,7 @@ test("it keeps the locked credit claim accurate", () => {
 test("the legal name matches the CASL identification on /sms", () => {
   const sms = fs.readFileSync("client/src/pages/SmsInfo.tsx", "utf8");
   const name = sms.match(/const LEGAL_NAME = "([^"]+)"/)?.[1];
-  assert.equal(name, "Boreal Financial Corp.", "CASL legal name changed");
+  assert.equal(name, "Boreal Financial, a trade name of 2630108 Alberta Ltd.", "CASL legal name changed") /* BF_WEBSITE_LEGAL_NAME_v179 */;
   assert.ok(SRC.includes(name as string), "privacy policy contradicts /sms");
 });
 
