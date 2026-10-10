@@ -16,6 +16,11 @@ const PRODUCTS = [
   ["equipment-financing", "Equipment financing", "Finance machinery, vehicles or technology, new or used. The equipment secures the loan, which usually means a lower rate than unsecured borrowing.", "New or used"],
   ["asset-based-lending", "Asset-based lending", "Borrow against inventory, receivables and equipment together. Suits businesses with a strong balance sheet and lumpy earnings.", "Borrowing base"],
   ["sale-leaseback", "Sale and leaseback", "Free up cash tied in equipment you already own. Sell it to the lender, lease it back, keep using it.", "Releases cash"],
+  // BF_WEBSITE_TEN_PRODUCTS_v510 - the home page said "Seven ways" and showed six; the site has ten products.
+  ["merchant-cash-advance", "Merchant cash advance", "A lump sum advanced against your future sales, repaid as a small fixed slice of revenue. The fastest option, at a higher cost.", "Repaid from sales"],
+  ["po-financing", "Purchase order financing", "Funding that pays your supplier directly so you can fill a confirmed customer order you'd otherwise have to turn down.", "Pays your supplier"],
+  ["media-financing", "Media and production financing", "Structured capital for film, TV, advertising and content teams, built around production timelines and contract-backed receivables.", "Contract-backed"],
+  ["sba", "SBA loans", "SBA 7(a) and 504 financing for US businesses: government-backed lending with longer terms and lower down payments. Start-ups can apply.", "United States only"],
 ] as const;
 
 const STEPS = [
@@ -36,8 +41,12 @@ const FAQS = [
   ["How fast can I get funded?", "Clean, complete files for smaller term loans can fund in as little as three to four days. Complex files and larger amounts take longer, and we'll tell you which yours is early rather than late."],
   ["What does it cost me?", "Nothing to apply and nothing to be matched. We're paid by the lender that funds you, unless we agree otherwise with you in advance."],
   ["What documents do I need?", "To start: six months of business bank statements and basic details about the company. Larger amounts and some products need financial statements, a rent roll, equipment lists or similar. We'll ask for what your file actually needs rather than everything up front."],
-  ["Do you lend in the United States?", "Yes, including SBA 7(a) and 504 through lenders on our US panel. See our US financing page at /us."],
+  ["Do you lend in the United States?", "Yes, including SBA 7(a) and 504 through lenders on our US panel. See our US financing page."],
 ] as const;
+// BF_WEBSITE_US_LINK_v510 - "/us" was printed as plain text; it is now a link (and a full URL in the search-engine FAQ data).
+const FAQ_LINKS: Record<string, { href: string; label: string }> = {
+  "Do you lend in the United States?": { href: "/us", label: "US financing page" },
+};
 
 export default function Home() {
   const applyHref = buildApplyUrl(APPLY_URL, getReadinessSessionToken());
@@ -58,7 +67,7 @@ export default function Home() {
             mainEntity: FAQS.map(([q, a]) => ({
               "@type": "Question",
               name: q,
-              acceptedAnswer: { "@type": "Answer", text: a },
+              acceptedAnswer: { "@type": "Answer", text: FAQ_LINKS[q] ? a + " https://www.boreal.financial" + FAQ_LINKS[q].href : a },
             })),
           },
         ]}
@@ -72,10 +81,10 @@ export default function Home() {
         </div>
       </section>
       <section className="border-b border-boreal-line bg-boreal-mist"><div className="mx-auto grid max-w-[1200px] grid-cols-2 gap-6 px-6 py-8 lg:grid-cols-4">{[["80+","Canadian lenders on our panel"],["3–4 days","Fastest time to funding"],["$10K–$100M+","Financing arranged"],["$0","Cost to apply or be matched"]].map(([a,b])=><div key={b}><div className="font-display text-3xl font-bold md:text-4xl">{a}</div><div className="mt-1 text-sm text-boreal-body">{b}</div></div>)}</div></section>
-      <section className="mx-auto max-w-[1200px] px-6 py-16 md:py-24"><Heading title="The right kind of capital for the job." body="Seven ways to fund payroll, growth, equipment or a gap in cash flow. Not sure which fits? Apply once and we’ll tell you what you qualify for."/><div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{PRODUCTS.map(([slug,name,body,meta])=><Link key={slug} href={`/products/${slug}`} className="group rounded-2xl border border-boreal-line p-7 transition hover:border-boreal-gold hover:shadow-lg"><h3 className="font-display text-[22px] font-bold">{name}</h3><p className="mt-2.5 text-[15px] leading-relaxed text-boreal-body">{body}</p><div className="mt-4 border-t border-boreal-line pt-4 text-sm font-semibold">{meta} <span className="text-boreal-goldInk">→</span></div></Link>)}</div></section>
+      <section className="mx-auto max-w-[1200px] px-6 py-16 md:py-24"><Heading title="The right kind of capital for the job." body="Ten ways to fund payroll, growth, equipment or a gap in cash flow. Not sure which fits? Apply once and we’ll tell you what you qualify for."/><div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{PRODUCTS.map(([slug,name,body,meta])=><Link key={slug} href={`/products/${slug}`} className="group rounded-2xl border border-boreal-line p-7 transition hover:border-boreal-gold hover:shadow-lg"><h3 className="font-display text-[22px] font-bold">{name}</h3><p className="mt-2.5 text-[15px] leading-relaxed text-boreal-body">{body}</p><div className="mt-4 border-t border-boreal-line pt-4 text-sm font-semibold">{meta} <span className="text-boreal-goldInk">→</span></div></Link>)}</div></section>
       <section id="how-it-works" className="border-y border-boreal-line bg-boreal-mist"><div className="mx-auto max-w-[1200px] px-6 py-16 md:py-24"><Heading title="From application to funded in three steps."/><Cards items={STEPS} numbered /></div></section>
       <section className="mx-auto max-w-[1200px] px-6 py-16 md:py-24"><Heading title="Financing that respects your time and your business."/><Cards items={REASONS}/><div className="mt-10"><Apply where="why_boreal" /></div></section>
-      <section className="border-y border-boreal-line bg-boreal-mist"><div className="mx-auto max-w-[820px] px-6 py-16 md:py-24"><Heading title="Common questions"/><div className="mt-8 space-y-3">{FAQS.map(([q,a])=><details key={q} className="rounded-xl border border-boreal-line bg-white px-6 py-5"><summary className="cursor-pointer font-display text-[19px] font-bold">{q}</summary><p className="mt-3 text-[15px] leading-relaxed text-boreal-body">{a}</p></details>)}</div></div></section>
+      <section className="border-y border-boreal-line bg-boreal-mist"><div className="mx-auto max-w-[820px] px-6 py-16 md:py-24"><Heading title="Common questions"/><div className="mt-8 space-y-3">{FAQS.map(([q,a])=><details key={q} className="rounded-xl border border-boreal-line bg-white px-6 py-5"><summary className="cursor-pointer font-display text-[19px] font-bold">{q}</summary><p className="mt-3 text-[15px] leading-relaxed text-boreal-body">{FAQ_LINKS[q] ? <>{a.replace(/See our US financing page\.$/, "See our ")}<Link href={FAQ_LINKS[q].href} className="font-semibold text-boreal-goldInk underline">{FAQ_LINKS[q].label}</Link>.</> : a}</p></details>)}</div></div></section>
       <section className="bg-boreal-ink"><div className="mx-auto max-w-[820px] px-6 py-16 text-center md:py-24"><h2 className="font-display text-3xl font-bold text-white md:text-[44px]">Ready to move your business forward?</h2><p className="mx-auto mt-4 max-w-xl text-lg text-[#c3cfe0]">Apply in about five minutes. No cost, no obligation, and no impact on your credit to see what you qualify for.</p><div className="mt-8 flex flex-wrap justify-center gap-3.5"><Apply where="footer_cta"/><a href="tel:+18666318939" onClick={onApply("phone")} className="rounded-lg border border-white/20 bg-white/10 px-6 py-3.5 font-semibold text-white">{PHONE_DISPLAY}</a></div></div></section>
     </main>
   </>;
