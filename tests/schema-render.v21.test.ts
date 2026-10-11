@@ -25,8 +25,12 @@ test("no other Helmet child is a mapped array", () => {
 });
 
 test("the contact phone field validates a real number", () => {
+  // BF_WEBSITE_v789_PHONE_RULE - the pattern moved to utils/formatters.ts and
+  // is shared with the readiness check.
   const form = fs.readFileSync("client/src/components/ContactForm.tsx", "utf8");
-  assert.match(form, /pattern="\[\^0-9\]/, "phone field accepts any non-empty string");
+  const rule = fs.readFileSync("client/src/utils/formatters.ts", "utf8");
+  assert.match(form, /pattern=\{PHONE_PATTERN\}/, "phone field accepts any non-empty string");
+  assert.match(rule, /PHONE_PATTERN = "\[\^0-9\]/, "phone rule no longer requires digits");
 });
 
 test("reassurance copy under the CTA is not 12px", () => {

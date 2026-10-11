@@ -2,11 +2,13 @@
 import { FormEvent, useState } from "react";
 import { safeFetch } from "@/lib/safeFetch";
 import { trackEvent } from "@/utils/analytics";
-import { WEBSITE_API_BASE } from "@/config/api";
+import { apiUrl } from "@/config/env"; // BF_WEBSITE_v789_ONE_API_BASE
 // BF_WEBSITE_BLOCK_v129c_PHONE_NORMALIZATION_v1
-import { formatPhone, toE164 } from "@/utils/formatters";
+import { formatPhone, PHONE_PATTERN, PHONE_TITLE, toE164 } from "@/utils/formatters";
 // BF_WEBSITE_CONTACT_REDIRECT_v151
 import { readStoredAttribution, resolveContactRedirect } from "@shared/applyRedirect";
+import { caslFields } from "@/lib/casl"; // BF_WEBSITE_v789_CASL
+import CaslConsent from "@/components/CaslConsent";
 
 type ContactFormData = {
   companyName: string;
@@ -35,6 +37,11 @@ function splitName(name: string) {
   return { firstName, lastName };
 }
 
+// BF_WEBSITE_v789_FORM_LABELS - visible labels sit above each field on the
+// navy form panel (#e2e8f0 on #0a1731 is 14:1).
+const labelClass = "mb-1.5 block text-sm font-medium text-[#e2e8f0]";
+const fieldClass = "w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3 text-white placeholder:text-white/60";
+
 const isValidEmail = (email: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -43,6 +50,7 @@ export default function ContactForm() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [caslConsent, setCaslConsent] = useState(false); // BF_WEBSITE_v789_CASL
   // BF_WEBSITE_BLOCK_v130c_READINESS_HANDOFF_REPAIR_v1 — server returns
   // { success, leadId, redirect: "https://client.boreal.financial/apply?continue=<token>" }.
   // Capture the redirect so the success modal's Continue button can take
@@ -91,7 +99,7 @@ export default function ContactForm() {
       // lastName as well for any future consumer that wants them.
       const fullNameJoined = [firstName, lastName].filter(Boolean).join(" ").trim();
       // BF_WEBSITE_BLOCK_v130c_READINESS_HANDOFF_REPAIR_v1
-      const submitResponse = await safeFetch(`${WEBSITE_API_BASE}/api/website/contact`, {
+      const submitResponse = await safeFetch(apiUrl("/website/contact"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         // BF_WEBSITE_BLOCK_v129c_PHONE_NORMALIZATION_v1
@@ -106,6 +114,7 @@ export default function ContactForm() {
           // if normalization returns "" on malformed input.
           phone: toE164(formData.mobilePhone) || formData.mobilePhone,
           message: formData.message,
+          ...caslFields(caslConsent), // BF_WEBSITE_v789_CASL
         }),
       });
 
@@ -131,6 +140,7 @@ export default function ContactForm() {
 
       setShowSuccess(true);
       setFormData(initialForm);
+      setCaslConsent(false);
     } catch {
       setError("Unable to submit request. Please try again.");
     } finally {
@@ -142,11 +152,28 @@ export default function ContactForm() {
     <>
       <form onSubmit={handleSubmit} className="mt-8 space-y-4 rounded-xl border border-white/20 bg-[#0a1731] p-6 shadow-sm">
         {/* BF_WEBSITE_CONTACT_CONTRAST_v171 - typed text was navy on near-black (1.2:1), effectively invisible */}
-        <input className="w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3 text-white placeholder:text-white/60" placeholder="Company Name" required value={formData.companyName} onChange={(e) => setFormData((prev) => ({ ...prev, companyName: e.target.value }))} />
-        <input className="w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3 text-white placeholder:text-white/60" name="name" placeholder="Full Name" required value={formData.name} onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))} />
-        <input className="w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3 text-white placeholder:text-white/60" name="email" type="email" placeholder="Email" required value={formData.email} onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))} />
-        <input className="w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3 text-white placeholder:text-white/60" type="tel" inputMode="tel" placeholder="Mobile Phone" required pattern="[^0-9]*([0-9][^0-9]*){10,11}" title="Enter a 10-digit phone number" value={formData.mobilePhone} onChange={(e) => setFormData((prev) => ({ ...prev, mobilePhone: formatPhone(e.target.value) }))} />
-        <textarea className="min-h-[120px] w-full rounded-lg border border-white/20 bg-[#050B1A] px-3 py-3 text-white placeholder:text-white/60" name="message" placeholder="How can we help?" required value={formData.message} onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))} />
+        <div>
+          <label htmlFor="contact-company" className={labelClass}>Company name</label>
+          <input id="contact-company" className={fieldClass} name="companyName" autoComplete="organization" placeholder="Company Name" required value={formData.companyName} onChange={(e) => setFormData((prev) => ({ ...prev, companyName: e.target.value }))} />
+        </div>
+        <div>
+          <label htmlFor="contact-name" className={labelClass}>Full name</label>
+          <input id="contact-name" className={fieldClass} name="name" autoComplete="name" placeholder="Full Name" required value={formData.name} onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))} />
+        </div>
+        <div>
+          <label htmlFor="contact-email" className={labelClass}>Email</label>
+          <input id="contact-email" className={fieldClass} name="email" type="email" autoComplete="email" placeholder="Email" required value={formData.email} onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))} />
+        </div>
+        <div>
+          <label htmlFor="contact-phone" className={labelClass}>Mobile phone</label>
+          <input id="contact-phone" className={fieldClass} name="mobilePhone" type="tel" inputMode="tel" autoComplete="tel" placeholder="Mobile Phone" required pattern={PHONE_PATTERN} title={PHONE_TITLE} value={formData.mobilePhone} onChange={(e) => setFormData((prev) => ({ ...prev, mobilePhone: formatPhone(e.target.value) }))} />
+        </div>
+        <div>
+          <label htmlFor="contact-message" className={labelClass}>How can we help?</label>
+          <textarea id="contact-message" className={`min-h-[120px] ${fieldClass}`} name="message" placeholder="How can we help?" required value={formData.message} onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))} />
+        </div>
+        {/* BF_WEBSITE_v789_CASL */}
+        <CaslConsent id="contact-casl-consent" tone="dark" checked={caslConsent} onChange={setCaslConsent} />
         <input
           className="hidden"
           aria-hidden="true"

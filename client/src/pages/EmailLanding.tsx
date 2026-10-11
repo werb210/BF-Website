@@ -5,8 +5,8 @@
 // Tailwind preflight bleed into the email markup. Rendering it in an iframe via
 // srcDoc gives it its own document + CSS scope, exactly like an email client.
 import { useEffect, useState, type CSSProperties } from "react";
+import { apiUrl } from "@/config/env"; // BF_WEBSITE_v789_ONE_API_BASE
 
-const API_BASE = (import.meta.env.VITE_API_URL as string | undefined) || "https://server.boreal.financial";
 
 export default function EmailLanding({ slug }: { slug?: string }) {
   const [html, setHtml] = useState<string>("");
@@ -15,7 +15,7 @@ export default function EmailLanding({ slug }: { slug?: string }) {
   useEffect(() => {
     let cancelled = false;
     if (!slug) { setState("notfound"); return; }
-    fetch(`${API_BASE}/api/public/landing/${encodeURIComponent(slug)}`)
+    fetch(apiUrl(`/public/landing/${encodeURIComponent(slug)}`))
       .then(async (r) => {
         if (r.status === 404) { if (!cancelled) setState("notfound"); return; }
         if (!r.ok) { if (!cancelled) setState("error"); return; }
@@ -37,8 +37,13 @@ export default function EmailLanding({ slug }: { slug?: string }) {
   if (state === "notfound") return <div style={shell}><p style={msg}>This page is no longer available.</p></div>;
   if (state === "error") return <div style={shell}><p style={{ ...msg, color: "#b91c1c" }}>Something went wrong. Please try again later.</p></div>;
   return (
+    // BF_WEBSITE_v789_IFRAME_SANDBOX - the stored HTML comes from the server and
+    // is rendered as-is. Without allow-scripts it cannot run code, and without
+    // allow-same-origin it cannot read this site's storage or cookies. Links
+    // still open (popups) and may navigate the tab when the visitor clicks one.
     <iframe
       title="Boreal Financial email"
+      sandbox="allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
       srcDoc={html}
       style={{ display: "block", width: "100%", height: "100vh", border: 0, background: "#f4f5f7" }}
     />

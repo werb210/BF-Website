@@ -1,42 +1,12 @@
-import { defineConfig, type Plugin } from "vite";
-import type { OutputBundle } from "rollup";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { fileURLToPath } from "url";
-import { brotliCompressSync } from "zlib";
 import viteCompression from "vite-plugin-compression";
 import { imagetools } from "vite-imagetools";
 // import prerender from "vite-plugin-prerender"; // disabled — fails in Azure Oryx
 import { visualizer } from "rollup-plugin-visualizer";
 
-
-const brotliBundlePlugin: Plugin = {
-  name: "emit-brotli-assets",
-  generateBundle(_options, bundle: OutputBundle) {
-    for (const fileName of Object.keys(bundle)) {
-      const chunk = bundle[fileName];
-      if (!chunk || !("code" in chunk || "source" in chunk)) {
-        continue;
-      }
-
-      const source = "code" in chunk ? chunk.code : chunk.source;
-      if (!source || fileName.endsWith(".br") || fileName.endsWith(".gz")) {
-        continue;
-      }
-
-      const buffer = Buffer.isBuffer(source) ? source : Buffer.from(source.toString());
-      if (buffer.length < 10240) {
-        continue;
-      }
-
-      this.emitFile({
-        type: "asset",
-        fileName: `${fileName}.br`,
-        source: brotliCompressSync(buffer),
-      });
-    }
-  },
-};
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,6 +17,9 @@ export default defineConfig({
   plugins: [
     react(),
     imagetools(),
+    // BF_WEBSITE_v789_REAL_PACKAGES - the upstream vite-plugin-compression now
+    // writes both the .br and .gz files; the hand-rolled brotli plugin that
+    // stood in for the vendored stub (which only did gzip) is gone.
     viteCompression({
       algorithm: "brotliCompress",
       ext: ".br",
@@ -70,7 +43,6 @@ export default defineConfig({
           }),
         ]
       : []),
-    brotliBundlePlugin,
   ],
   resolve: {
     alias: {
@@ -90,7 +62,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           react: ["react", "react-dom"],
-          router: ["react-router-dom"],
           vendor: ["framer-motion", "recharts", "zod"],
         },
       },

@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MayaMessage } from "./mayaMarkdown";
 import { createPortal } from "react-dom";
 import { MessageCircle, X } from "lucide-react";
@@ -11,6 +11,15 @@ import {
   postConversationMessage,
   type MayaWebsiteResponse,
 } from "@/services/mayaService";
+import {
+  CHAT_SESSION_ENDED_MESSAGE,
+  clearConversation,
+  isSessionEndedError,
+  loadConversation,
+  saveConversation,
+} from "@/lib/conversationToken"; // BF_WEBSITE_v789_CONVERSATION_TOKEN
+import { caslFields } from "@/lib/casl"; // BF_WEBSITE_v789_CASL
+import CaslConsent from "./CaslConsent";
 
 type ChatMessage = {
   id: string;
@@ -29,13 +38,17 @@ export default function FloatingChat() {
   const [lead, setLead] = useState<{ name: string; email: string; phone: string } | null>(null);
   const [leadDraft, setLeadDraft] = useState<{ name: string; email: string; phone: string }>({ name: "", email: "", phone: "" });
   const [leadError, setLeadError] = useState<string | null>(null);
+  // BF_WEBSITE_v789_CASL - unticked by default; the chat works either way.
+  const [leadConsent, setLeadConsent] = useState(false);
   const [issue, setIssue] = useState("");
   const [issueShot, setIssueShot] = useState<string | null>(null);
   const [issueShotBusy, setIssueShotBusy] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [sending, setSending] = useState(false);
   // BF_WEBSITE_BLOCK_v87_TWO_WAY_MESSENGER_v1
-  const [conversationId, setConversationId] = useState<string | null>(null);
+  // BF_WEBSITE_v789_CONVERSATION_TOKEN - a reload in the same tab resumes the
+  // thread (the id and its visitor token are kept in sessionStorage).
+  const [conversationId, setConversationId] = useState<string | null>(() => loadConversation()?.conversationId ?? null);
   const seenStaffIds = useRef<Set<string>>(new Set());
   const [isOnline, setIsOnline] = useState<boolean | null>(null);
   const [healthChecked, setHealthChecked] = useState(false);
@@ -86,6 +99,20 @@ export default function FloatingChat() {
     return () => cancelAnimationFrame(frame);
   }, [messages, sending]);
 
+  // BF_WEBSITE_v789_CONVERSATION_TOKEN - the server refused the thread (401 or
+  // 403: token missing, expired or for another conversation). Forget it and
+  // tell the visitor how to start a new one; never keep polling a dead thread.
+  const endChatSession = useCallback(() => {
+    clearConversation();
+    seenStaffIds.current.clear();
+    setConversationId(null);
+    setMessages((prev) =>
+      prev.length && prev[prev.length - 1]?.message === CHAT_SESSION_ENDED_MESSAGE
+        ? prev
+        : [...prev, { id: createSessionId(), from: "system", message: CHAT_SESSION_ENDED_MESSAGE }],
+    );
+  }, []);
+
   // BF_WEBSITE_BLOCK_v87_TWO_WAY_MESSENGER_v1 — after escalation, poll the
   // shared thread so staff replies (direction='outbound') land in the same
   // window. Dedup by message id.
@@ -106,17 +133,22 @@ export default function FloatingChat() {
             ...fresh.map((m) => ({ id: m.id, from: "system" as const, message: m.body })),
           ]);
         }
-      } catch {
-        /* transient — next tick retries */
+      } catch (err) {
+        if (active && isSessionEndedError(err)) {
+          active = false;
+          clearInterval(timer);
+          endChatSession();
+        }
+        /* anything else is transient - next tick retries */
       }
     };
-    void poll();
     const timer = setInterval(poll, 4000);
+    void poll();
     return () => {
       active = false;
       clearInterval(timer);
     };
-  }, [conversationId]);
+  }, [conversationId, endChatSession]);
 
   async function handleSend(e?: FormEvent) {
     e?.preventDefault();
@@ -137,6 +169,10 @@ export default function FloatingChat() {
         (res?.reply ?? "").toString().trim() || "Thanks — a Boreal advisor will reach out.";
       setMessages((prev) => [...prev, { id: createSessionId(), from: "system", message: reply }]);
     } catch (err) {
+      if (conversationId && isSessionEndedError(err)) {
+        endChatSession();
+        return;
+      }
       // BF_WEBSITE_BLOCK_v153_MOBILE_FIRST_LAUNCH_v1 — surface a more
       // diagnostic message in dev, keep the user-friendly fallback in
       // production. Pre-fix the same line fired regardless of cause.
@@ -194,6 +230,7 @@ export default function FloatingChat() {
         silo: "BF",
         contact,
         conversationId: conversationId ?? undefined,
+        casl: caslFields(leadConsent), // BF_WEBSITE_v789_CASL
         summary: messages
           .slice(-6)
           .map((m) => `${m.from === "user" ? "Visitor" : "Maya"}: ${m.message}`)
@@ -201,7 +238,12 @@ export default function FloatingChat() {
       });
       // BF_WEBSITE_BLOCK_v87_TWO_WAY_MESSENGER_v1 — capturing the thread id
       // flips the widget into two-way mode (poll + posts go to the thread).
-      if (esc?.conversation_id) setConversationId(esc.conversation_id);
+      // BF_WEBSITE_v789_CONVERSATION_TOKEN - keep visitor_token with the id;
+      // every poll and post sends it back as X-Conversation-Token.
+      if (esc?.conversation_id) {
+        saveConversation(esc.conversation_id, esc.visitor_token ?? null);
+        setConversationId(esc.conversation_id);
+      }
       // BFW_BLOCK_v152_TALK_HUMAN_COPY_AND_ISSUE_ROUTE_v1 — escalation always
       // logs to BF-Server's conversations table even if no staff is online
       // (the SMS notify is best-effort + has env-fallback). Show a real
@@ -236,13 +278,10 @@ export default function FloatingChat() {
     setIssueShot(null);
     setIssueShotBusy(true);
     try {
-      // BFW_BLOCK_v151_HTML2CANVAS_TYPE_CAST_v1 — the vendored
-      // html2canvas/index.d.ts only declares (element). Runtime impl
-      // accepts options. Cast once at import so the call site stays clean.
-      const html2canvas = (await import("html2canvas")).default as unknown as (
-        element: HTMLElement,
-        options?: Record<string, unknown>,
-      ) => Promise<HTMLCanvasElement>;
+      // BF_WEBSITE_v789_REAL_PACKAGES - the real html2canvas. The vendored
+      // stand-in drew "Screenshot fallback mode" on a blank canvas instead of
+      // capturing the page, so every issue report shipped a useless image.
+      const html2canvas = (await import("html2canvas")).default;
       const target = (document.body.querySelector("main") as HTMLElement) ?? document.body;
       const canvas = await html2canvas(target, { useCORS: true, backgroundColor: "#0b1226", scale: Math.min(window.devicePixelRatio || 1, 2), logging: false });
       const MAX_W = 1600;
@@ -337,9 +376,11 @@ export default function FloatingChat() {
               <div className="text-xs text-slate-300">
                 A Boreal advisor will text you back. A mobile number is best:
               </div>
-              <input className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Your name" value={leadDraft.name} onChange={(e) => setLeadDraft({ ...leadDraft, name: e.target.value })} />
-              <input className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Mobile number" type="tel" value={leadDraft.phone} onChange={(e) => setLeadDraft({ ...leadDraft, phone: e.target.value })} autoFocus />
-              <input className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Email (optional if you gave a number)" type="email" value={leadDraft.email} onChange={(e) => setLeadDraft({ ...leadDraft, email: e.target.value })} />
+              <input aria-label="Your name" autoComplete="name" className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Your name" value={leadDraft.name} onChange={(e) => setLeadDraft({ ...leadDraft, name: e.target.value })} />
+              <input aria-label="Mobile number" autoComplete="tel" className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Mobile number" type="tel" value={leadDraft.phone} onChange={(e) => setLeadDraft({ ...leadDraft, phone: e.target.value })} autoFocus />
+              <input aria-label="Email" autoComplete="email" className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Email (optional if you gave a number)" type="email" value={leadDraft.email} onChange={(e) => setLeadDraft({ ...leadDraft, email: e.target.value })} />
+              {/* BF_WEBSITE_v789_CASL */}
+              <CaslConsent id="maya-casl-consent" tone="dark" checked={leadConsent} onChange={setLeadConsent} />
               {leadError ? <div className="text-xs text-red-400">{leadError}</div> : null}
               <div className="flex gap-2">
                 <button type="button" onClick={() => setMode("chat")} className="flex-1 rounded border border-white/20 px-3 py-2 text-sm">Cancel</button>
@@ -349,6 +390,7 @@ export default function FloatingChat() {
           ) : mode === "report" ? (
             <div className="flex flex-col gap-2 border-t border-white/10 px-3 py-2 md:px-4">
               <textarea
+                aria-label="Describe the issue"
                 className="w-full rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white"
                 rows={3}
                 value={issue}
@@ -404,6 +446,7 @@ export default function FloatingChat() {
               {/* BF_WEBSITE_BLOCK_v85_MAYA_WIRING_FIX_v1 */}
               <form onSubmit={handleSend} className="flex gap-2 border-t border-white/10 px-3 py-3 md:px-4">
                 <input
+                  aria-label="Message Maya"
                   className="flex-1 rounded-xl border border-white/15 bg-[#0f1d3a] px-4 py-2.5 text-sm text-white placeholder:text-slate-400 focus:border-blue-500 focus:outline-none"
                   placeholder={isOnline === false ? "Maya is offline — your message will be saved" : "Type a message…"}
                   value={input}

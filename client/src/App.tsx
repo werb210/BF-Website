@@ -3,6 +3,7 @@ import { useLocation } from "wouter"
 import { AppRouter as Router } from "@/router/AppRouter"
 import FloatingChat from "./components/FloatingChat"
 import ConsentBanner from "./components/ConsentBanner"
+import RouteHead from "./components/RouteHead" // BF_WEBSITE_v789_ROUTE_META
 
 function App() {
   const [location] = useLocation()
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <>
+      <RouteHead />
       <Router />
       <FloatingChat />
       <ConsentBanner />

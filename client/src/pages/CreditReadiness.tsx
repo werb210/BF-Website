@@ -2,12 +2,14 @@
 import { FormEvent, useEffect, useState } from "react";
 import { estimateCommissionValue, trackConversion, trackEvent, trackLeadProfile } from "@/main";
 import { useLocation } from "wouter";
-import { WEBSITE_API_BASE } from "@/config/api";
+import { apiUrl } from "@/config/env"; // BF_WEBSITE_v789_ONE_API_BASE
 import { scoreCreditReadiness } from "@/lib/creditReadinessScore";
 // BF_WEBSITE_SWA_FALLBACK_v13
 import SEO from "@/components/SEO";
 // BF_WEBSITE_BLOCK_v129c_PHONE_NORMALIZATION_v1
-import { formatPhone, formatCurrency, unformatCurrency, toE164 } from "@/utils/formatters";
+import { formatPhone, formatCurrency, unformatCurrency, toE164, PHONE_PATTERN, PHONE_TITLE } from "@/utils/formatters";
+import { caslFields } from "@/lib/casl"; // BF_WEBSITE_v789_CASL
+import CaslConsent from "@/components/CaslConsent";
 
 // BF_WEBSITE_BLOCK_1_13_V2 — V1 14-field form aligned with BF-client
 // Step1_KYC.tsx canonical schema (see client-app/src/schemas/v1WizardSchema.ts).
@@ -110,11 +112,18 @@ const FIXED_ASSETS = [
 
 const CREDIT_RESULT_STORAGE_KEY = "boreal.credit-readiness.result";
 
+// BF_WEBSITE_v789_FORM_LABELS - every field has a visible label. Placeholders
+// are #6b7280 (4.8:1 on white); the browser default grey failed.
+const labelClass = "mb-1.5 block text-sm font-semibold text-boreal-ink";
+const fieldClass =
+  "w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition placeholder:text-[#6b7280] focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20";
+
 export default function CreditReadiness() {
   const [, navigate] = useLocation();
   const [form, setForm] = useState<ReadinessForm>(initialForm);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [caslConsent, setCaslConsent] = useState(false); // BF_WEBSITE_v789_CASL
 
   useEffect(() => {
     trackEvent("funnel_stage", { stage: "credit_readiness_start" });
@@ -143,8 +152,9 @@ export default function CreditReadiness() {
         ...form,
         phone: e164Phone || form.phone,
         requestedAmount: unformatCurrency(form.requestedAmount),
+        ...caslFields(caslConsent), // BF_WEBSITE_v789_CASL
       };
-      const response = await fetch(`${WEBSITE_API_BASE}/api/website/credit-readiness`, {
+      const response = await fetch(apiUrl("/website/credit-readiness"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(submitPayload),
@@ -241,50 +251,95 @@ export default function CreditReadiness() {
           className="rounded-2xl border border-boreal-line bg-white p-6 md:p-8"
         >
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <input required type="text" autoComplete="organization" placeholder="Company Name" value={form.companyName} onChange={(e) => update("companyName", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20" />
-            <input required type="text" autoComplete="name" placeholder="Full Name" value={form.fullName} onChange={(e) => update("fullName", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20" />
-            <input required type="email" autoComplete="email" inputMode="email" placeholder="Email" value={form.email} onChange={(e) => update("email", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20" />
-            <input required type="tel" autoComplete="tel" inputMode="tel" placeholder="Mobile Phone" value={form.phone} onChange={(e) => update("phone", formatPhone(e.target.value))} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20" />
+            <div>
+              <label htmlFor="readiness-company-name" className={labelClass}>Company name</label>
+              <input id="readiness-company-name" name="companyName" required type="text" autoComplete="organization" placeholder="Company Name" value={form.companyName} onChange={(e) => update("companyName", e.target.value)} className={fieldClass} />
+            </div>
+            <div>
+              <label htmlFor="readiness-full-name" className={labelClass}>Full name</label>
+              <input id="readiness-full-name" name="fullName" required type="text" autoComplete="name" placeholder="Full Name" value={form.fullName} onChange={(e) => update("fullName", e.target.value)} className={fieldClass} />
+            </div>
+            <div>
+              <label htmlFor="readiness-email" className={labelClass}>Email</label>
+              <input id="readiness-email" name="email" required type="email" autoComplete="email" inputMode="email" placeholder="Email" value={form.email} onChange={(e) => update("email", e.target.value)} className={fieldClass} />
+            </div>
+            <div>
+              <label htmlFor="readiness-phone" className={labelClass}>Mobile phone</label>
+              <input id="readiness-phone" name="phone" required type="tel" autoComplete="tel" inputMode="tel" placeholder="Mobile Phone" pattern={PHONE_PATTERN} title={PHONE_TITLE} value={form.phone} onChange={(e) => update("phone", formatPhone(e.target.value))} className={fieldClass} />
+            </div>
 
-            <select required value={form.industry} onChange={(e) => update("industry", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
-              <option value="">Industry</option>
-              {INDUSTRIES.map((opt) => <option key={opt}>{opt}</option>)}
-            </select>
-            <select required value={form.businessLocation} onChange={(e) => update("businessLocation", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
-              <option value="">Business Location</option>
-              {LOCATIONS.map((opt) => <option key={opt}>{opt}</option>)}
-            </select>
+            <div>
+              <label htmlFor="readiness-industry" className={labelClass}>Industry</label>
+              <select id="readiness-industry" name="industry" required value={form.industry} onChange={(e) => update("industry", e.target.value)} className={fieldClass}>
+                <option value="">Industry</option>
+                {INDUSTRIES.map((opt) => <option key={opt}>{opt}</option>)}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="readiness-business-location" className={labelClass}>Business location</label>
+              <select id="readiness-business-location" name="businessLocation" required value={form.businessLocation} onChange={(e) => update("businessLocation", e.target.value)} className={fieldClass}>
+                <option value="">Business Location</option>
+                {LOCATIONS.map((opt) => <option key={opt}>{opt}</option>)}
+              </select>
+            </div>
 
-            <input required type="text" inputMode="numeric" placeholder="Requested Amount ($)" value={form.requestedAmount} onChange={(e) => update("requestedAmount", formatCurrency(e.target.value))} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20" />
+            <div>
+              <label htmlFor="readiness-requested-amount" className={labelClass}>Requested amount ($)</label>
+              <input id="readiness-requested-amount" name="requestedAmount" required type="text" inputMode="numeric" placeholder="Requested Amount ($)" value={form.requestedAmount} onChange={(e) => update("requestedAmount", formatCurrency(e.target.value))} className={fieldClass} />
+            </div>
 
-            <select required value={form.purposeOfFunds} onChange={(e) => update("purposeOfFunds", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
-              <option value="">Purpose of Funds</option>
-              {PURPOSES.map((opt) => <option key={opt}>{opt}</option>)}
-            </select>
+            <div>
+              <label htmlFor="readiness-purpose-of-funds" className={labelClass}>Purpose of funds</label>
+              <select id="readiness-purpose-of-funds" name="purposeOfFunds" required value={form.purposeOfFunds} onChange={(e) => update("purposeOfFunds", e.target.value)} className={fieldClass}>
+                <option value="">Purpose of Funds</option>
+                {PURPOSES.map((opt) => <option key={opt}>{opt}</option>)}
+              </select>
+            </div>
 
-            <select required value={form.salesHistoryYears} onChange={(e) => update("salesHistoryYears", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
-              <option value="">Years in Business</option>
-              {SALES_HISTORY.map((opt) => <option key={opt}>{opt}</option>)}
-            </select>
-            <select required value={form.annualRevenueRange} onChange={(e) => update("annualRevenueRange", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
-              <option value="">Annual Revenue</option>
-              {ANNUAL_REV.map((opt) => <option key={opt}>{opt}</option>)}
-            </select>
-            <select required value={form.avgMonthlyRevenueRange} onChange={(e) => update("avgMonthlyRevenueRange", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
-              <option value="">Average Monthly Revenue</option>
-              {MONTHLY_REV.map((opt) => <option key={opt}>{opt}</option>)}
-            </select>
-            <select required value={form.accountsReceivableRange} onChange={(e) => update("accountsReceivableRange", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
-              <option value="">Accounts Receivable</option>
-              {AR.map((opt) => <option key={opt}>{opt}</option>)}
-            </select>
-            <select required value={form.fixedAssetsValueRange} onChange={(e) => update("fixedAssetsValueRange", e.target.value)} className="w-full rounded-lg border border-boreal-line bg-white p-3 text-boreal-ink outline-none transition focus:border-boreal-gold focus:ring-2 focus:ring-boreal-gold/20">
-              <option value="">Fixed Assets Value</option>
-              {FIXED_ASSETS.map((opt) => <option key={opt}>{opt}</option>)}
-            </select>
+            <div>
+              <label htmlFor="readiness-sales-history-years" className={labelClass}>Years in business</label>
+              <select id="readiness-sales-history-years" name="salesHistoryYears" required value={form.salesHistoryYears} onChange={(e) => update("salesHistoryYears", e.target.value)} className={fieldClass}>
+                <option value="">Years in Business</option>
+                {SALES_HISTORY.map((opt) => <option key={opt}>{opt}</option>)}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="readiness-annual-revenue-range" className={labelClass}>Annual revenue</label>
+              <select id="readiness-annual-revenue-range" name="annualRevenueRange" required value={form.annualRevenueRange} onChange={(e) => update("annualRevenueRange", e.target.value)} className={fieldClass}>
+                <option value="">Annual Revenue</option>
+                {ANNUAL_REV.map((opt) => <option key={opt}>{opt}</option>)}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="readiness-avg-monthly-revenue-range" className={labelClass}>Average monthly revenue</label>
+              <select id="readiness-avg-monthly-revenue-range" name="avgMonthlyRevenueRange" required value={form.avgMonthlyRevenueRange} onChange={(e) => update("avgMonthlyRevenueRange", e.target.value)} className={fieldClass}>
+                <option value="">Average Monthly Revenue</option>
+                {MONTHLY_REV.map((opt) => <option key={opt}>{opt}</option>)}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="readiness-accounts-receivable-range" className={labelClass}>Accounts receivable</label>
+              <select id="readiness-accounts-receivable-range" name="accountsReceivableRange" required value={form.accountsReceivableRange} onChange={(e) => update("accountsReceivableRange", e.target.value)} className={fieldClass}>
+                <option value="">Accounts Receivable</option>
+                {AR.map((opt) => <option key={opt}>{opt}</option>)}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="readiness-fixed-assets-value-range" className={labelClass}>Fixed assets value</label>
+              <select id="readiness-fixed-assets-value-range" name="fixedAssetsValueRange" required value={form.fixedAssetsValueRange} onChange={(e) => update("fixedAssetsValueRange", e.target.value)} className={fieldClass}>
+                <option value="">Fixed Assets Value</option>
+                {FIXED_ASSETS.map((opt) => <option key={opt}>{opt}</option>)}
+              </select>
+            </div>
           </div>
 
-          {error ? <p className="mt-4 text-sm text-red-300">{error}</p> : null}
+          {/* BF_WEBSITE_v789_CASL */}
+          <div className="mt-6">
+            <CaslConsent id="readiness-casl-consent" checked={caslConsent} onChange={setCaslConsent} />
+          </div>
+
+          {/* BF_WEBSITE_v789_READABILITY - was a pale red (red-300) on white, 1.9:1; #b91c1c is 6.5:1. */}
+          {error ? <p role="alert" className="mt-4 text-sm font-medium text-[#b91c1c]">{error}</p> : null}
 
           <button
             type="submit"

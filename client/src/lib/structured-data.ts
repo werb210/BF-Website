@@ -1,11 +1,16 @@
-const BASE_URL = import.meta.env.VITE_SITE_URL ?? "https://www.boreal.financial";
+const BASE_URL = (import.meta.env ?? {}).VITE_SITE_URL ?? "https://www.boreal.financial";
+
+// BF_WEBSITE_v789_LOGO - /images/og-image.png never existed, so the
+// Organization logo Google reads was a 404. This is the 512px app icon, copied
+// into public/images; tests/v789.test.ts checks the file is there.
+export const ORGANIZATION_LOGO_PATH = "/images/boreal-logo-512.png";
 
 export const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Boreal Financial",
   url: BASE_URL,
-  logo: `${BASE_URL}/images/og-image.png`,
+  logo: `${BASE_URL}${ORGANIZATION_LOGO_PATH}`,
   sameAs: ["https://www.linkedin.com/company/borealfinancial"],
 };
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { grantAnalyticsConsent } from "@/analytics/consent"; // BF_WEBSITE_v789_CONSENT
 
 const KEY = "boreal_consent_v1";
 
@@ -28,7 +29,9 @@ export default function ConsentBanner() {
   useEffect(() => {
     let stored: string | null = null;
     try { stored = localStorage.getItem(KEY); } catch { stored = null; }
-    if (stored === "granted") { applyConsent(true); return; }
+    // BF_WEBSITE_v789_CONSENT - a stored Accept also loads Clarity and starts
+    // the journey / site-behaviour tracking; a stored Decline loads neither.
+    if (stored === "granted") { applyConsent(true); grantAnalyticsConsent(); return; }
     if (stored === "denied") { applyConsent(false); return; }
     setShow(true);
   }, []);
@@ -38,6 +41,7 @@ export default function ConsentBanner() {
   const choose = (granted: boolean) => {
     try { localStorage.setItem(KEY, granted ? "granted" : "denied"); } catch { /* ignore */ }
     applyConsent(granted);
+    if (granted) grantAnalyticsConsent(); // BF_WEBSITE_v789_CONSENT
     setShow(false);
   };
 

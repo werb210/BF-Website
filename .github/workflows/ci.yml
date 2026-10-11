@@ -1,11 +1,16 @@
 name: BF Website CI
 
+# BF_WEBSITE_v789_CI - every pull request to main is typechecked, linted,
+# tested and built. The Static Web Apps workflow calls this same workflow on
+# push to main and deploys only after it passes.
 on:
-  push:
+  pull_request:
     branches: [ main ]
+  workflow_call:
 
 jobs:
-  ci:
+  checks:
+    name: Typecheck, lint, test, build
     runs-on: ubuntu-24.04
 
     steps:
@@ -14,9 +19,12 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
+          cache: npm
 
       - run: npm ci
-      - run: npm run check
-      - run: npm run generate:sitemap
+      - run: npm run typecheck
+      - run: npm run lint
       - run: npm test
       - run: npm run build
+      - name: Build output exists
+        run: test -f dist/index.html && test -f dist/contact/index.html

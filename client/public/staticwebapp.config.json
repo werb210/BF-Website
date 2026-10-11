@@ -39,5 +39,14 @@
   "mimeTypes": {
     ".json": "application/json",
     ".webmanifest": "application/manifest+json"
+  },
+  "trailingSlash": "never",
+  "globalHeaders": {
+    "Content-Security-Policy": "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://*.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://www.google.com https://www.clarity.ms https://*.clarity.ms; connect-src 'self' https://server.boreal.financial https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.google.com https://google.com https://www.googleadservices.com https://*.g.doubleclick.net https://pagead2.googlesyndication.com https://*.clarity.ms https://c.bing.com; img-src 'self' data: blob: https:; font-src 'self' data: https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; frame-src https://td.doubleclick.net https://bid.g.doubleclick.net https://www.googletagmanager.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
   }
 }

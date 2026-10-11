@@ -5,13 +5,20 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [closed]
     branches:
       - main
 
 jobs:
+  # BF_WEBSITE_v789_CI - typecheck, lint, tests and build (ci.yml) must pass
+  # before anything is deployed. Pull requests run ci.yml directly.
+  checks:
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/ci.yml
+
   build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    needs: checks
+    if: github.event_name == 'push'
     runs-on: ubuntu-24.04
     name: Build and Deploy Job
     steps:
@@ -22,20 +29,9 @@ jobs:
       # BF_WEBSITE_PR_PREVIEW_SKIP_v1
       # Azure Static Web Apps allocates one staging environment per open PR
       # and rejects the deploy once the plan limit is hit, which failed every
-      # PR in the repo with a BadRequest that looks like a build error. These
-      # branches are short-lived and nobody opens the preview URLs; the build
-      # above is the real gate. main still deploys.
-
-      # With the deploy skipped on PRs, nothing else proves the site compiles.
-      - name: Verify build output
-        if: github.event_name == 'pull_request'
-        run: |
-          npm ci
-          npm run build
-          test -f dist/index.html
-
+      # PR in the repo with a BadRequest that looks like a build error. PRs
+      # are not deployed; ci.yml is their gate. main still deploys.
       - name: Build And Deploy
-        if: github.event_name != 'pull_request'
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
