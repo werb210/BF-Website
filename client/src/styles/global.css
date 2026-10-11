@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* BF_WEBSITE_v789_READABILITY - Tailwind's default placeholder grey (#9ca3af)
+   is 2.5:1 on white. #6b7280 is 4.8:1. Dark panels set their own lighter
+   placeholder with a placeholder: utility, which wins over this base rule. */
+@layer base {
+  input::placeholder,
+  textarea::placeholder {
+    color: #6b7280;
+    opacity: 1;
+  }
+}
+
 :root {
   --max-width: 1120px;
   --section-padding: clamp(48px, 6vw, 96px);

@@ -41,12 +41,6 @@
       ],
       "@shared/*": [
         "./shared/*"
-      ],
-      "react-helmet": [
-        "./vendor/react-helmet/index.d.ts"
-      ],
-      "react-helmet-async": [
-        "./vendor/react-helmet-async/index.d.ts"
       ]
     },
     "noImplicitAny": true,

@@ -27,3 +27,9 @@ export function formatCurrency(input: string): string {
 export function unformatCurrency(input: string): string {
   return input.replace(/[^0-9.]/g, "");
 }
+
+// BF_WEBSITE_v789_PHONE_RULE - one browser-side phone rule for the contact
+// form and the readiness check: 10 or 11 digits, with any
+// formatting characters around them.
+export const PHONE_PATTERN = "[^0-9]*([0-9][^0-9]*){10,11}";
+export const PHONE_TITLE = "Enter a 10-digit phone number";

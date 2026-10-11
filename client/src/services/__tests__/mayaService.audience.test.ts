@@ -5,7 +5,7 @@ import api from "@/core/apiClient";
 import {
   sendMessage,
   escalateToFundingSpecialist,
-  fetchFaq,
+  reportIssue,
 } from "@/services/mayaService";
 
 // captureAttribution() reads window/document at call time; provide minimal
@@ -63,15 +63,17 @@ describe("BF_WEBSITE_BLOCK_v_MAYA_AUDIENCE_HEADER_v1", () => {
     assert.equal(headers?.["X-Maya-Audience"], "visitor");
   });
 
-  it("fetchFaq sends X-Maya-Audience: visitor on GET", async () => {
-    getMock.mock.mockImplementationOnce(() => Promise.resolve({ data: { faqs: [] } }));
-    await fetchFaq();
-    assert.equal(getMock.mock.calls.length, 1);
-    const [path, headers] = getMock.mock.calls[0].arguments as [
+  it("reportIssue sends X-Maya-Audience: visitor", async () => {
+    postMock.mock.mockImplementationOnce(() => Promise.resolve({ data: { ok: true } }));
+    await reportIssue({ message: "broken" });
+    assert.equal(postMock.mock.calls.length, 1);
+    const [path, body, headers] = postMock.mock.calls[0].arguments as [
       string,
+      { kind: string },
       Record<string, string>,
     ];
-    assert.equal(path, "/maya/faq");
+    assert.equal(path, "/maya/escalate");
+    assert.equal(body.kind, "report_issue");
     assert.equal(headers?.["X-Maya-Audience"], "visitor");
   });
 });

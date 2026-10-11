@@ -1,7 +1,0 @@
-{
-  "name": "html2canvas",
-  "version": "1.4.1",
-  "type": "module",
-  "main": "index.js",
-  "types": "index.d.ts"
-}

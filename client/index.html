@@ -9,29 +9,23 @@
          PageSpeed lists it as a preconnect candidate worth ~420ms of LCP. -->
     <link rel="preconnect" href="https://server.boreal.financial" crossorigin />
     <!-- BF_WEBSITE_LCP_v14 - load display=swap fonts without blocking paint. -->
+    <!-- BF_WEBSITE_v789_CSP - the media swap that was an inline onload= handler
+         now runs in /js/head-init.js, so the CSP needs no inline script. -->
     <link
+      id="bf-fonts"
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap"
       media="print"
-      onload="this.media='all';this.onload=null;"
     />
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     </noscript>
-    <!-- Consent Mode v2 — default denied until the consent banner grants -->
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('consent', 'default', {
-        ad_storage: 'denied',
-        analytics_storage: 'granted', /* BF_WEBSITE_CONSENT_GTAG_FORMAT_FIX_v1: implied consent (CA); banner Decline still turns this off */
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        functionality_storage: 'granted',
-        security_storage: 'granted',
-        wait_for_update: 500
-      });
-    </script>
+    <!-- BF_WEBSITE_v789_CONSENT - Consent Mode v2 defaults are all DENIED
+         (analytics_storage, ad_storage, ad_user_data, ad_personalization) until
+         the visitor clicks Accept. They, the Ads tag config, the font swap and
+         the service worker registration live in /js/head-init.js so the CSP can
+         forbid inline script. It must stay above the gtag.js tag. -->
+    <script src="/js/head-init.js"></script>
     <!-- BF_WEBSITE_ADS_TAG_v152
      The Google Ads tag lived only on client.boreal.financial, never on this
      domain, even though every ad lands here first. Consequences: no _gcl_aw
@@ -45,19 +39,16 @@
      supported cross-domain mechanism. It is additive: the explicit gclid
      forwarding already in main.tsx keeps working.
 
-     This sits ABOVE the GTM snippet but BELOW the consent defaults, so
-     Consent Mode v2 still gates it - ad_storage is denied until the banner
-     grants. -->
+     This sits BELOW the consent defaults (/js/head-init.js, which also
+     holds the gtag config call), so Consent Mode v2 still gates it -
+     ad_storage is denied until the banner grants. -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18248196538"></script>
-    <script>
-      gtag('js', new Date());
-      gtag('config', 'AW-18248196538', {
-        linker: { domains: ['boreal.financial', 'client.boreal.financial'], accept_incoming: true }
-      });
-    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Boreal Financial</title>
+    <!-- BF_WEBSITE_v789_ROUTE_META - data-rh lets react-helmet-async replace
+         this tag instead of adding a second description. -->
     <meta
+      data-rh="true"
       name="description"
       content="Boreal Financial provides fast business financing including term loans, lines of credit, factoring, and equipment financing for Canadian businesses."
     />
@@ -74,22 +65,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180x180.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png" />
-    <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", function () {
-          navigator.serviceWorker.register("/sw.js").catch(function () {});
-        });
-      }
-    </script>
-    <!-- BF_WEBSITE_LCP_v14 - Lucky Orange removed; Microsoft Clarity remains. -->
-    <!-- BF_WEBSITE_BLOCK_v_CLARITY — Microsoft Clarity (project vjz4kr9hqu) -->
-    <script type="text/javascript">
-      (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-      })(window, document, "clarity", "script", "vjz4kr9hqu");
-    </script>
+    <!-- BF_WEBSITE_v789_CONSENT - Microsoft Clarity is no longer loaded here.
+         It loads only after Accept (client/src/analytics/consent.ts). -->
   </head>
   <body>
     <div id="root"></div>

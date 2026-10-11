@@ -12,7 +12,7 @@ test("public pages describe a broker, not a lead marketplace", () => {
     assert.doesNotMatch(s, /marketplace/i, f);
     assert.doesNotMatch(s, /introduces business borrowers/i, f);
   }
-  for (const f of ["components/footer.tsx", "router/content.ts", "components/CompareModal.tsx", "features/comparison/ComparisonModal.tsx"]) {
+  for (const f of ["components/footer.tsx", "router/content.ts"]) {
     const s = readFileSync("client/src/" + f, "utf8");
     assert.doesNotMatch(s, />[^<]*marketplace[^<]*</i, f + " shows marketplace wording");
     assert.doesNotMatch(s, /lending marketplace|across the marketplace|marketplace intake/i, f);

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { initJourneyTracking } from "@/utils/journey"; // BF_WEBSITE_VISITOR_JOURNEY_v1
 import { initSiteBehaviour } from "@/utils/siteBehaviour"; // BF_WEBSITE_SITE_BEHAVIOUR_v169
 import { addConsentParam } from "@/utils/session"; // BF_WEBSITE_CONSENT_HANDOFF_v170
+import { onAnalyticsConsent } from "@/analytics/consent"; // BF_WEBSITE_v789_CONSENT
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { initGA } from "./analytics/ga";
@@ -18,17 +19,23 @@ interface BeforeInstallPromptEvent extends Event {
 
 let deferredInstallPrompt: BeforeInstallPromptEvent | null = null;
 
-window.addEventListener("beforeinstallprompt", (e: Event) => {
-  const evt = e as BeforeInstallPromptEvent;
-  evt.preventDefault();
-  deferredInstallPrompt = evt;
-  window.dispatchEvent(new CustomEvent("bf-pwa-installable", { detail: true }));
-});
+// BF_WEBSITE_v789_NODE_SAFE - pages import tracking helpers from this module,
+// so it must load under the node test runner too (no window there).
+const IN_BROWSER = typeof window !== "undefined" && typeof document !== "undefined";
 
-window.addEventListener("appinstalled", () => {
-  deferredInstallPrompt = null;
-  window.dispatchEvent(new CustomEvent("bf-pwa-installable", { detail: false }));
-});
+if (IN_BROWSER) {
+  window.addEventListener("beforeinstallprompt", (e: Event) => {
+    const evt = e as BeforeInstallPromptEvent;
+    evt.preventDefault();
+    deferredInstallPrompt = evt;
+    window.dispatchEvent(new CustomEvent("bf-pwa-installable", { detail: true }));
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    window.dispatchEvent(new CustomEvent("bf-pwa-installable", { detail: false }));
+  });
+}
 
 // Exposed helper any component can call from a real user gesture:
 declare global {
@@ -36,13 +43,15 @@ declare global {
     __bfPromptInstall?: () => Promise<{ ok: boolean; reason?: string; outcome?: "accepted" | "dismissed" }>;
   }
 }
-window.__bfPromptInstall = async () => {
-  if (!deferredInstallPrompt) return { ok: false, reason: "not-available" };
-  await deferredInstallPrompt.prompt();
-  const choice = await deferredInstallPrompt.userChoice;
-  deferredInstallPrompt = null;
-  return { ok: true, outcome: choice.outcome };
-};
+if (IN_BROWSER) {
+  window.__bfPromptInstall = async () => {
+    if (!deferredInstallPrompt) return { ok: false, reason: "not-available" };
+    await deferredInstallPrompt.prompt();
+    const choice = await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    return { ok: true, outcome: choice.outcome };
+  };
+}
 
 
 // ---- Advanced Tracking Layer ----
@@ -290,14 +299,24 @@ function useScrollTracking() {
   }, []);
 }
 
+// BF_WEBSITE_v789_CONSENT - journey and site-behaviour tracking record what a
+// visitor does, so they start only after the visitor clicks Accept (or on a
+// later visit when the stored choice is Accept). Once per page load.
+let behaviourTrackingStarted = false;
+function startBehaviourTracking() {
+  if (behaviourTrackingStarted) return;
+  behaviourTrackingStarted = true;
+  // BF_WEBSITE_VISITOR_JOURNEY_v1 - start anonymous journey tracking.
+  try { initJourneyTracking(); } catch { /* tracking must never break the site */ }
+  initSiteBehaviour(); // BF_WEBSITE_SITE_BEHAVIOUR_v169
+}
+
 function TrackingProvider() {
   useScrollTracking();
 
   useEffect(() => {
     captureAttribution();
-    // BF_WEBSITE_VISITOR_JOURNEY_v1 - start anonymous journey tracking.
-    try { initJourneyTracking(); } catch { /* tracking must never break the site */ }
-    initSiteBehaviour(); // BF_WEBSITE_SITE_BEHAVIOUR_v169
+    return onAnalyticsConsent(startBehaviourTracking);
   }, []);
 
   // BF_WEBSITE_ATTRIBUTION_HANDOFF_v1 - carry utm + gclid to the client app so the
@@ -407,17 +426,19 @@ function TrackingProvider() {
   return <App />;
 }
 
-try {
-  initGA(); // BF_WEBSITE_GA4_INIT_v1 — start GA4 (G-D1Y4105RXP) before render
-  ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
-      <HelmetProvider>
-        <ErrorBoundary>
-          <TrackingProvider />
-        </ErrorBoundary>
-      </HelmetProvider>
-    </React.StrictMode>
-  );
-} catch (error) {
-  console.warn("UI snapshot mode", error);
+if (IN_BROWSER) {
+  try {
+    initGA(); // BF_WEBSITE_GA4_INIT_v1 - start GA4 (G-D1Y4105RXP) before render
+    ReactDOM.createRoot(document.getElementById("root")!).render(
+      <React.StrictMode>
+        <HelmetProvider>
+          <ErrorBoundary>
+            <TrackingProvider />
+          </ErrorBoundary>
+        </HelmetProvider>
+      </React.StrictMode>
+    );
+  } catch (error) {
+    console.warn("UI snapshot mode", error);
+  }
 }

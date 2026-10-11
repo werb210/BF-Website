@@ -11,7 +11,8 @@ const LEGAL_NAME = "Boreal Financial, a trade name of 2630108 Alberta Ltd.";
 const MAILING_ADDRESS = "450 Sparling Crt SW, Edmonton, AB T6X 1G9";
 const CONTACT_EMAIL = "info@boreal.financial";
 const PHONE_DISPLAY = "+1 (866) 631-8939";
-const LAST_UPDATED = "October 7, 2026"; // BF_WEBSITE_LEGAL_NAME_v179 - legal name corrected // BF_WEBSITE_PRIVACY_MATCHED_AUDIENCES_v170
+// BF_WEBSITE_v789_CONSENT - cookie section rewritten to match what the site does.
+const LAST_UPDATED = "October 11, 2026"; // BF_WEBSITE_LEGAL_NAME_v179 - legal name corrected // BF_WEBSITE_PRIVACY_MATCHED_AUDIENCES_v170
 
 type Section = { heading: string; paras?: string[]; bullets?: string[] };
 
@@ -53,11 +54,15 @@ const SECTIONS: Section[] = [
   {
     heading: "Cookies, analytics and advertising",
     paras: [
-      "Strictly necessary cookies keep the site working and cannot be switched off.",
-      "Analytics. We use Google Analytics 4 and Microsoft Clarity to understand how the site is used. Clarity records session activity including mouse movement, scrolling and clicks. Both set cookies and receive your IP address. Our own site analytics also record which pages, sections and buttons you view and click, how far you scroll, and which form fields you complete (never what you type in them); if you apply, this is linked to your application.",
-      "Advertising. We use Google Ads conversion tracking and remarketing. This sets cookies that let Google recognise your browser across our sites and on other websites, and show you Boreal advertising elsewhere. If you arrive from an advertisement, a Google click identifier is stored in your browser and passed to our application so we can attribute the enquiry.",
+      "Strictly necessary storage keeps the site working and cannot be switched off. It includes remembering your cookie choice and keeping an open chat with an advisor connected while the tab is open.",
+      // BF_WEBSITE_v789_CONSENT - this paragraph describes exactly what index.html,
+      // /js/head-init.js, analytics/consent.ts and main.tsx do. Change them together.
+      "Before you choose, and if you choose Decline. Our banner asks before anything non-essential runs. Until you click Accept, Google Consent Mode keeps analytics storage, ad storage, ad user data and ad personalisation all set to denied. Google Analytics 4 and Google Ads then set no analytics or advertising cookies and receive only cookieless signals (for example that a page was viewed), with no identifier that recognises your browser. Microsoft Clarity is not loaded at all, and our own site analytics described below do not run.",
+      "If you click Accept. Those four Consent Mode settings change to granted, Microsoft Clarity loads, and our own site analytics start. Your choice is stored in your browser. On later visits it is applied automatically: Clarity and our own site analytics load again only if the stored choice is Accept.",
+      "Analytics. With your consent we use Google Analytics 4 and Microsoft Clarity to understand how the site is used. Clarity records session activity including mouse movement, scrolling and clicks. Both set cookies and receive your IP address. With your consent, our own site analytics also record which pages, sections and buttons you view and click, how far you scroll, and which form fields you complete (never what you type in them); if you apply, this is linked to your application.",
+      "Advertising. With your consent we use Google Ads conversion tracking and remarketing. This sets cookies that let Google recognise your browser across our sites and on other websites, and show you Boreal advertising elsewhere. Separately, if you arrive from an advertisement, the Google click identifier and campaign parameters in the link you clicked are stored in your browser and passed to our application so we can attribute the enquiry. This happens whether or not you accept, because it is part of the link you followed.",
       "Matched audiences. If you apply, we may share your email address and phone number with Google in hashed (scrambled, one-way encoded) form, so Google can match them to its users to measure our advertising and show relevant Boreal advertising. Google does not receive the readable details, and you can opt out at any time by emailing us or replying STOP.",
-      "Consent. We operate Google Consent Mode. Choosing Accept on our banner grants advertising and analytics storage; choosing Decline refuses both. You can change your choice at any time by clearing site data for this site and making a new selection.",
+      "Consent. We operate Google Consent Mode. Choosing Accept on our banner grants advertising and analytics storage and turns on Clarity and our own site analytics; choosing Decline refuses all of them. You can change your choice at any time by clearing site data for this site and making a new selection.",
       "We do not sell your personal information, and we do not display third-party advertising on our own websites.",
     ],
   },

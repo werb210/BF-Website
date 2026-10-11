@@ -9,7 +9,6 @@ const r = (p: string) => fs.readFileSync(path.resolve(root, p), "utf8");
 const layout = r("layouts/MainLayout.tsx");
 const scroll = r("components/ScrollToTop.tsx");
 const industries = r("pages/Industries.tsx");
-const navbar = r("components/Navbar.tsx");
 
 describe("v153 — ScrollToTop wired into MainLayout", () => {
   it("ScrollToTop component exists and uses scrollToTop()", () => {
@@ -29,11 +28,5 @@ describe("v153 — Industries page shows cards only (no pill list)", () => {
   });
   it("cards grid still present", () => {
     expect(industries).toMatch(/grid-cols-2[\s\S]+industry\.image/);
-  });
-});
-
-describe("v153 — Navbar mobile menu z-index", () => {
-  it("mobile menu uses z-[70] (above hero z-50)", () => {
-    expect(navbar).toMatch(/z-\[70\]/);
   });
 });

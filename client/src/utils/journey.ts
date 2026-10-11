@@ -1,3 +1,4 @@
+import { apiUrl } from "@/config/env"; // BF_WEBSITE_v789_ONE_API_BASE
 // BF_WEBSITE_VISITOR_JOURNEY_v1 - anonymous journey tracker. Assigns a durable session id
 // on first visit, records each pageview with dwell time, and flushes beacons to
 // BF-Server. The same session id is forwarded to the client wizard on Apply, so the
@@ -5,7 +6,7 @@
 // Fails silently: tracking must never break the site.
 const SESSION_KEY = "boreal_journey_session";
 const ATTRIBUTION_KEY = "boreal_attribution";
-const ENDPOINT = "https://server.boreal.financial/api/track/journey";
+const ENDPOINT = apiUrl("/track/journey");
 
 type JourneyEvent = { type: string; path?: string; title?: string; step?: string; dwellMs?: number; meta?: unknown };
 

@@ -3,10 +3,12 @@
 // staff-only and are not offered here.
 import { useEffect, useMemo, useState } from "react";
 import SEO from "@/components/SEO";
+import { apiUrl } from "@/config/env"; // BF_WEBSITE_v789_ONE_API_BASE
+import { caslFields } from "@/lib/casl"; // BF_WEBSITE_v789_CASL
+import CaslConsent from "@/components/CaslConsent";
 import { formatPhoneInput, toE164 } from "@/lib/bookingPhone"; // BF_WEBSITE_v786_BOOK_PHONE
 import { dayHeading, dayKey, monthCells, MONTHS, pad2, slotsByDay, timeIn, visitorTimeZone, zoneLabel } from "@/lib/bookingCalendar"; // BF_WEBSITE_BOOKING_CALENDAR_v176 / BF_WEBSITE_LOCAL_TIME_v177
 
-const API = (import.meta.env.VITE_MAYA_API_BASE ?? "https://server.boreal.financial").trim().replace(/[/]+$/, "");
 type Slot = { startsAt: string; staffIds: string[] };
 type Staff = { id: string; firstName: string };
 // BF_WEBSITE_ALBERTA_TIME_v175 - Alberta is UTC-6 all year since 2026. Visitors whose phone or browser has older
@@ -28,6 +30,7 @@ export default function Book({ slug }: { slug?: string } = {}) {
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [trap, setTrap] = useState("");
+  const [caslConsent, setCaslConsent] = useState(false); // BF_WEBSITE_v789_CASL
   const [state, setState] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState<{ startsAt: string; staffFirstName: string | null; joinUrl: string | null } | null>(null);
@@ -38,14 +41,14 @@ export default function Book({ slug }: { slug?: string } = {}) {
 
   useEffect(() => {
     if (!slug) return;
-    fetch(API + "/api/booking/staff/" + encodeURIComponent(slug))
+    fetch(apiUrl("/booking/staff/" + encodeURIComponent(slug)))
       .then(async (r) => { if (!r.ok) throw new Error("not_found"); const d = await r.json(); setAdvisor(d.staff); setStaffId(d.staff.id); })
       .catch(() => setNotFound(true));
   }, [slug]);
   useEffect(() => {
     if (!staffId) return;
     setSlots(null); setPick(null);
-    fetch(API + "/api/booking/slots?staff=" + encodeURIComponent(staffId))
+    fetch(apiUrl("/booking/slots?staff=" + encodeURIComponent(staffId)))
       .then(async (r) => { const d = await r.json(); if (!r.ok) throw new Error(d?.message || "unavailable"); setSlots(Array.isArray(d?.slots) ? d.slots : []); })
       .catch((e) => { setSlots([]); setError(e instanceof Error ? e.message : "Booking is temporarily unavailable. Please call (866) 631-8939."); });
   }, [staffId]);
@@ -69,7 +72,7 @@ export default function Book({ slug }: { slug?: string } = {}) {
   const submit = async () => {
     setState("saving"); setError(null);
     try {
-      const r = await fetch(API + "/api/booking", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind, startsAt: pick, staffId, name: name.trim(), email: email.trim(), phone: phoneE164 ?? "", notes: notes.trim(), website: trap }) });
+      const r = await fetch(apiUrl("/booking"), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind, startsAt: pick, staffId, name: name.trim(), email: email.trim(), phone: phoneE164 ?? "", notes: notes.trim(), website: trap, ...caslFields(caslConsent) }) });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) { setError(d?.message || "That didn't go through. Please try another time or call (866) 631-8939."); setState("idle"); if (r.status === 409) setStaffId((s) => s); return; }
       setDone(d.booking ?? null); setState("done");
@@ -153,6 +156,8 @@ export default function Book({ slug }: { slug?: string } = {}) {
                 <input aria-label="Phone" type="tel" placeholder={kind === "phone" ? "Phone number we should call" : "Phone (optional)"} value={phone} aria-invalid={phoneError} aria-describedby={phoneError ? "booking-phone-error" : undefined} onChange={(e) => setPhone(formatPhoneInput(e.target.value))} style={{ ...field, borderColor: phoneError ? "#b91c1c" : "#cbd5e1" }} />
                 {phoneError && <p id="booking-phone-error" data-testid="booking-phone-error" style={{ color: "#b91c1c", fontSize: 14, fontWeight: 600, marginTop: -6 }}>Enter a 10-digit phone number</p>}
                 <textarea aria-label="Notes" placeholder="What would you like to talk about? (optional)" value={notes} onChange={(e) => setNotes(e.target.value)} style={{ ...field, minHeight: 80 }} />
+                {/* BF_WEBSITE_v789_CASL */}
+                <CaslConsent id="booking-casl-consent" checked={caslConsent} onChange={setCaslConsent} />
                 <input tabIndex={-1} autoComplete="off" aria-hidden="true" value={trap} onChange={(e) => setTrap(e.target.value)} style={{ position: "absolute", left: -9999, width: 1, height: 1 }} />
                 {error && slots && slots.length > 0 && <p role="alert" style={{ color: "#b91c1c" }}>{error}</p>}
                 <button type="button" disabled={!ready || state === "saving"} onClick={() => void submit()} style={{ ...btn(true), opacity: ready ? 1 : 0.5 }}>{state === "saving" ? "Booking..." : "Book it"}</button>

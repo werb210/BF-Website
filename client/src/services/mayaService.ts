@@ -1,5 +1,7 @@
 import api from "@/core/apiClient";
 import { captureAttribution } from "@/core/attribution";
+import { conversationHeaders } from "@/lib/conversationToken";
+import type { CaslFields } from "@/lib/casl";
 
 const MAYA_HEADERS: Record<string, string> = {
   "X-Maya-Audience": "visitor",
@@ -22,6 +24,8 @@ type EscalationOptions = {
   silo?: string;
   summary?: string;
   contact?: { name?: string; email?: string; phone?: string };
+  // BF_WEBSITE_v789_CASL - recorded with the lead the escalation creates.
+  casl?: CaslFields;
 };
 
 type ReportIssueOptions = {
@@ -53,10 +57,14 @@ export async function sendMessage(
 // body. Server fires Twilio SMS to available staff (or MAYA_FALLBACK_SMS_NUMBERS
 // env CSV after-hours) and persists to communications_conversations so the
 // handoff appears in the staff portal Messages tab.
+// BF_WEBSITE_v789_CONVERSATION_TOKEN - BF-Server v789 adds visitor_token,
+// which gates the public conversation endpoints below.
+export type EscalationResult = { ok: boolean; conversation_id?: string; visitor_token?: string };
+
 export async function escalateToFundingSpecialist(
   opts: EscalationOptions & { conversationId?: string } = {},
-): Promise<{ ok: boolean; conversation_id?: string }> {
-  const response = await api.post<{ ok: boolean; conversation_id?: string }>(
+): Promise<EscalationResult> {
+  const response = await api.post<EscalationResult>(
     "/maya/escalate",
     {
       kind: "talk_to_human",
@@ -72,6 +80,7 @@ export async function escalateToFundingSpecialist(
       surface: opts.surface,
       silo: opts.silo,
       attribution: captureAttribution(),
+      ...(opts.casl ?? {}),
     },
     MAYA_HEADERS,
   );
@@ -129,7 +138,10 @@ export async function fetchConversationMessages(
     status?: string;
     data?: { messages?: ConversationMessage[] };
     messages?: ConversationMessage[];
-  }>(`/public/conversation/${encodeURIComponent(conversationId)}/messages`);
+  }>(
+    `/public/conversation/${encodeURIComponent(conversationId)}/messages`,
+    conversationHeaders(conversationId), // BF_WEBSITE_v789_CONVERSATION_TOKEN
+  );
   const payload = r.data;
   return payload?.data?.messages ?? payload?.messages ?? [];
 }
@@ -141,36 +153,6 @@ export async function postConversationMessage(
   await api.post(
     `/public/conversation/${encodeURIComponent(conversationId)}/message`,
     { body },
+    conversationHeaders(conversationId), // BF_WEBSITE_v789_CONVERSATION_TOKEN
   );
-}
-
-export async function trackMarketingLead() {
-  if (import.meta.env.DEV) {
-    return { data: { ok: true } };
-  }
-
-  return api.post<{ ok: boolean }>("/marketing/track-lead", {
-    utm: captureAttribution(),
-    timestamp: Date.now(),
-    channel: "website",
-  });
-}
-
-export async function fetchFaq() {
-  return api.get<{ faqs: Array<{ question: string; answer: string }> }>(
-    "/maya/faq",
-    MAYA_HEADERS,
-  );
-}
-
-export async function joinStartupWaitlist(payload: {
-  email: string;
-  companyName?: string;
-}) {
-  return api.post<{ ok: boolean }>("/crm/startup-waitlist", {
-    ...payload,
-    startup_interest: true,
-    channel: "website",
-    utm_source: captureAttribution().utm_source,
-  });
 }

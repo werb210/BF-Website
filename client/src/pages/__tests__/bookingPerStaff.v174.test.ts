@@ -17,7 +17,7 @@ describe("per-advisor booking pages", () => {
   it("never lists the team: no advisor picker, one advisor looked up by link", () => {
     assert.ok(!page.includes("First available"));
     assert.ok(!page.includes('"/api/booking/staff"'));
-    assert.ok(page.includes('API + "/api/booking/staff/" + encodeURIComponent(slug)'));
+    assert.ok(page.includes('apiUrl("/booking/staff/" + encodeURIComponent(slug))')); // BF_WEBSITE_v789_ONE_API_BASE
     assert.ok(page.includes('"Book a call with " + advisor.firstName'));
   });
   it("the book-<name> catch route sits last, so /terms, /sms and the logins still work", () => {
