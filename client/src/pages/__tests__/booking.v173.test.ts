@@ -20,7 +20,7 @@ describe("booking page", () => {
   it("uses the server's booking API with a bot trap, and needs a phone number for phone calls", () => {
     assert.ok(page.includes('API + "/api/booking/slots?staff="'));
     assert.ok(page.includes('website: trap'));
-    assert.ok(page.includes('(kind === "teams" || phone.replace(/[^0-9]/g, "").length >= 10)'));
+    assert.ok(page.includes('kind === "teams" ? !phone.trim() || phoneE164 !== null : phoneE164 !== null')); // BF_WEBSITE_v786_BOOK_PHONE
   });
   it("shows times in Alberta time", () => {
     assert.ok(page.includes('const TZ = "America/Regina";')); // BF_WEBSITE_ALBERTA_TIME_v175 - UTC-6 all year

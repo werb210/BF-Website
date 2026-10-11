@@ -3,6 +3,7 @@
 // staff-only and are not offered here.
 import { useEffect, useMemo, useState } from "react";
 import SEO from "@/components/SEO";
+import { formatPhoneInput, toE164 } from "@/lib/bookingPhone"; // BF_WEBSITE_v786_BOOK_PHONE
 import { dayHeading, dayKey, monthCells, MONTHS, pad2, slotsByDay, timeIn, visitorTimeZone, zoneLabel } from "@/lib/bookingCalendar"; // BF_WEBSITE_BOOKING_CALENDAR_v176 / BF_WEBSITE_LOCAL_TIME_v177
 
 const API = (import.meta.env.VITE_MAYA_API_BASE ?? "https://server.boreal.financial").trim().replace(/[/]+$/, "");
@@ -59,12 +60,16 @@ export default function Book({ slug }: { slug?: string } = {}) {
   const viewMonth = view ? view.y + "-" + pad2(view.m) : "";
   const shiftMonth = (by: number) => setView((v) => { if (!v) return v; const d = new Date(Date.UTC(v.y, v.m - 1 + by, 1)); return { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1 }; });
   const chooseDay = (k: string) => { setDay(k); if (pick && dayKey(pick, tz) !== k) setPick(null); };
-  const ready = pick && name.trim() && /^[^@ ]+@[^@ ]+[.][^@ ]+$/.test(email.trim()) && (kind === "teams" || phone.replace(/[^0-9]/g, "").length >= 10);
+  // BF_WEBSITE_v786_BOOK_PHONE - only 10 digits (or 11 starting with 1) count; sent as +1XXXXXXXXXX.
+  const phoneE164 = toE164(phone);
+  const phoneOk = kind === "teams" ? !phone.trim() || phoneE164 !== null : phoneE164 !== null;
+  const phoneError = phone.trim() !== "" && phoneE164 === null;
+  const ready = pick && name.trim() && /^[^@ ]+@[^@ ]+[.][^@ ]+$/.test(email.trim()) && phoneOk;
 
   const submit = async () => {
     setState("saving"); setError(null);
     try {
-      const r = await fetch(API + "/api/booking", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind, startsAt: pick, staffId, name: name.trim(), email: email.trim(), phone: phone.trim(), notes: notes.trim(), website: trap }) });
+      const r = await fetch(API + "/api/booking", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind, startsAt: pick, staffId, name: name.trim(), email: email.trim(), phone: phoneE164 ?? "", notes: notes.trim(), website: trap }) });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) { setError(d?.message || "That didn't go through. Please try another time or call (866) 631-8939."); setState("idle"); if (r.status === 409) setStaffId((s) => s); return; }
       setDone(d.booking ?? null); setState("done");
@@ -145,7 +150,8 @@ export default function Book({ slug }: { slug?: string } = {}) {
               <div className="mt-3 grid gap-3" style={{ maxWidth: 480 }}>
                 <input aria-label="Full name" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} style={field} />
                 <input aria-label="Email" type="email" placeholder="Email (for the calendar invitation)" value={email} onChange={(e) => setEmail(e.target.value)} style={field} />
-                <input aria-label="Phone" type="tel" placeholder={kind === "phone" ? "Phone number we should call" : "Phone (optional)"} value={phone} onChange={(e) => setPhone(e.target.value)} style={field} />
+                <input aria-label="Phone" type="tel" placeholder={kind === "phone" ? "Phone number we should call" : "Phone (optional)"} value={phone} aria-invalid={phoneError} aria-describedby={phoneError ? "booking-phone-error" : undefined} onChange={(e) => setPhone(formatPhoneInput(e.target.value))} style={{ ...field, borderColor: phoneError ? "#b91c1c" : "#cbd5e1" }} />
+                {phoneError && <p id="booking-phone-error" data-testid="booking-phone-error" style={{ color: "#b91c1c", fontSize: 14, fontWeight: 600, marginTop: -6 }}>Enter a 10-digit phone number</p>}
                 <textarea aria-label="Notes" placeholder="What would you like to talk about? (optional)" value={notes} onChange={(e) => setNotes(e.target.value)} style={{ ...field, minHeight: 80 }} />
                 <input tabIndex={-1} autoComplete="off" aria-hidden="true" value={trap} onChange={(e) => setTrap(e.target.value)} style={{ position: "absolute", left: -9999, width: 1, height: 1 }} />
                 {error && slots && slots.length > 0 && <p role="alert" style={{ color: "#b91c1c" }}>{error}</p>}
