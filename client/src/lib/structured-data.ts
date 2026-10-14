@@ -65,10 +65,10 @@ export const homeFaqJsonLd = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "How does Boreal's lending marketplace work?",
+      name: "How does applying with Boreal work?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "You submit one application and Boreal routes it to fit-matched lenders for structured offers.",
+        text: "You apply once with Boreal. Your Boreal advisor prepares your file and, with your approval, presents it to the lenders suited to it, then brings the offers back to you.",
       },
     },
     {

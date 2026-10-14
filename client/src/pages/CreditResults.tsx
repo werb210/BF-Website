@@ -29,7 +29,7 @@ const TIER_COPY: Record<
 > = {
   green: {
     label: "Well positioned",
-    headline: "Most of our panel will want to look at this.",
+    headline: "Most of the lenders we work with will want to look at this.",
     blurb:
       "Your trading history and revenue put you inside the credit box for the majority of lenders we work with. That usually means a real choice of offers rather than one take-it-or-leave-it.",
     next: [
@@ -41,7 +41,7 @@ const TIER_COPY: Record<
   },
   yellow: {
     label: "Fundable, with the right lender",
-    headline: "There's a real path here — it just needs the right match.",
+    headline: "There's a real path here — it just needs the right lender.",
     blurb:
       "Some lenders will decline on the numbers alone. Others weigh revenue, receivables or the asset you're financing more heavily, and fund businesses exactly like yours. Knowing which is which is the whole job.",
     next: [

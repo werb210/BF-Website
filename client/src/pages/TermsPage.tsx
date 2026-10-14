@@ -1,7 +1,8 @@
 // BF_WEBSITE_LEGAL_v8
-// Restyled to the approved design system. Every clause is reproduced verbatim,
-// including the placeholder note - legal copy is counsel's to write, and the
-// note is there to stop the placeholder shipping unnoticed.
+// Restyled to the approved design system. Every clause is reproduced verbatim.
+// BF_WEBSITE_v806_TFV - the placeholder note (replace with counsel's text) is gone: carriers reviewing our
+// toll-free number read this page, and a placeholder made the Terms look unfinished. Counsel's text still
+// replaces these clauses when it arrives.
 import SEO from "@/components/SEO";
 
 const CLAUSES: { heading: string; body: React.ReactNode }[] = [
@@ -15,7 +16,7 @@ const CLAUSES: { heading: string; body: React.ReactNode }[] = [
   },
   {
     heading: "3. Information accuracy",
-    body: "You agree that all information you submit is accurate, current, and complete to the best of your knowledge. You authorize Boreal Financial and its lender network to verify any information submitted, including through credit bureau lookups where applicable and consented to.",
+    body: "You agree that all information you submit is accurate, current, and complete to the best of your knowledge. You authorize Boreal Financial, and the lenders you ask us to present your application to, to verify any information submitted, including through credit bureau lookups where applicable and consented to.",
   },
   {
     heading: "4. Privacy",
@@ -32,7 +33,8 @@ const CLAUSES: { heading: string; body: React.ReactNode }[] = [
   // BF_WEBSITE_SMS_POLICY_v160
   {
     heading: "5. Text messages (SMS)",
-    body: "By entering your mobile number on our application you agree to receive texts from Boreal Financial about your application: sign-in codes, status updates, document requests and signing reminders. Up to 10 messages per month. Message and data rates may apply. Reply STOP to cancel at any time; reply HELP or email info@boreal.financial for help. Carriers are not liable for delayed or undelivered messages. Mobile numbers and text consent are never shared with third parties for marketing.",
+    // BF_WEBSITE_v806_TFV - named program, carrier wording for STOP/HELP, and the required no-sharing statements.
+    body: "Program: Boreal Financial Application Updates. By entering your mobile number on our application you agree to receive texts from Boreal Financial about your application: sign-in codes, status updates, document requests and signing reminders. Up to 10 messages per month. Message and data rates may apply. Reply STOP to opt out, HELP for help. Support: info@boreal.financial or (866) 631-8939. Carriers are not liable for delayed or undelivered messages. No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. Text messaging opt-in data and consent will not be shared with any third parties.",
   },
   {
     heading: "6. Contact",
@@ -84,10 +86,6 @@ export default function TermsPage() {
             </div>
           ))}
 
-          <p className="mt-12 rounded-xl border border-boreal-line bg-boreal-mist px-6 py-4 text-[13px] leading-relaxed text-boreal-body">
-            [Placeholder &mdash; replace this Terms body with the full text supplied by counsel
-            before public launch.]
-          </p>
         </section>
       </main>
     </>

@@ -33,7 +33,7 @@ const STATIC_ROUTES: Record<string, Entry> = {
   "/": {
     title: "Business Financing Canada | 80+ Lenders, One Application | Boreal Financial",
     description:
-      "One application matches your business to 80+ Canadian lenders. Term loans, lines of credit, equipment and working capital. Funding in as little as 3-4 days. Boreal never pulls your credit.",
+      "One application, handled by a Boreal advisor, with access to 80+ Canadian lenders. Term loans, lines of credit, equipment and working capital. Funding in as little as 3-4 days. Boreal never pulls your credit.",
   },
   "/us": {
     title: "Business Financing USA | One Application, Many Lenders | Boreal Financial",

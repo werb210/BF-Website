@@ -17,7 +17,7 @@ test("the page exists as a real route", () => {
 });
 
 test("it answers the query rather than inventing a product", () => {
-  assert.ok(CONTENT.includes("marketplace, not a lender"), "does not state the model");
+  assert.ok(CONTENT.includes("broker, not a lender"), "does not state the model"); // BF_WEBSITE_v806_TFV - a broker, not a marketplace
   assert.ok(PRODUCTS.includes("Boreal is not a lender"), "does not state the model");
 });
 
@@ -29,7 +29,7 @@ test("it leads with the head term", () => {
 });
 
 test("the claims match what the rest of the site says", () => {
-  assert.ok(CONTENT.includes("does not pull credit"), "credit claim missing");
+  assert.ok(CONTENT.includes("does not pull your credit"), "credit claim missing");
   assert.ok(CONTENT.includes("paid by the lender"), "fee claim missing");
 });
 
