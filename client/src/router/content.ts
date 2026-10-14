@@ -30,7 +30,7 @@ export const products: Product[] = [
     ],
     howItWorks: [
       "Complete one Boreal application and upload key business documents once",
-      "Boreal packages your file and presents it to suitable term-loan lenders on our panel",
+      "Boreal packages your file and presents it on your behalf to suitable term-loan lenders",
       "Compare rate options, amortization schedules, fees, and covenant terms before choosing a facility",
     ],
     requirements: [

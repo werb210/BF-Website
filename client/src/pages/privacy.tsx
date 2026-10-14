@@ -30,14 +30,14 @@ const SECTIONS: Section[] = [
       "Information you give us. When you use the credit readiness check, the contact form or the application, you provide business and personal details. Depending on how far you go, that can include your name, business name, email address, telephone number, business address, industry, revenue figures, the amount and purpose of the financing you are seeking, ownership details, and the business bank statements and financial documents you upload.",
       "Information about owners and guarantors. Where a financing request requires it, we collect information about business owners, directors and personal guarantors, including name, date of birth, home address and, where a lender requires it, government identification numbers. Where you give us information about another person, you confirm you are authorised to do so.",
       "Information collected automatically. IP address, browser and device type, pages viewed, time on page, referring URL, and the advertising click identifiers described below.",
-      "Information from other sources. Business information from public registries and commercial credit reference agencies, and information from the lenders and partners involved in your file.",
+      "Information from other sources. Business information from public registries and commercial credit reference agencies, and information from the lenders you ask us to present your application to.",
     ],
   },
   {
     heading: "Why we use it",
     bullets: [
-      "To assess your request and match it to lenders on our panel",
-      "To send your file to lenders you have asked us to approach",
+      "To review your request and recommend financing options",
+      "To send your application, on your behalf, to the lenders you ask us to approach",
       "To communicate with you about your application by phone, email or SMS",
       "To meet legal, regulatory, anti-money-laundering and record-keeping obligations",
       "To detect and prevent fraud",
@@ -61,7 +61,7 @@ const SECTIONS: Section[] = [
       "If you click Accept. Those four Consent Mode settings change to granted, Microsoft Clarity loads, and our own site analytics start. Your choice is stored in your browser. On later visits it is applied automatically: Clarity and our own site analytics load again only if the stored choice is Accept.",
       "Analytics. With your consent we use Google Analytics 4 and Microsoft Clarity to understand how the site is used. Clarity records session activity including mouse movement, scrolling and clicks. Both set cookies and receive your IP address. With your consent, our own site analytics also record which pages, sections and buttons you view and click, how far you scroll, and which form fields you complete (never what you type in them); if you apply, this is linked to your application.",
       "Advertising. With your consent we use Google Ads conversion tracking and remarketing. This sets cookies that let Google recognise your browser across our sites and on other websites, and show you Boreal advertising elsewhere. Separately, if you arrive from an advertisement, the Google click identifier and campaign parameters in the link you clicked are stored in your browser and passed to our application so we can attribute the enquiry. This happens whether or not you accept, because it is part of the link you followed.",
-      "Matched audiences. If you apply, we may share your email address and phone number with Google in hashed (scrambled, one-way encoded) form, so Google can match them to its users to measure our advertising and show relevant Boreal advertising. Google does not receive the readable details, and you can opt out at any time by emailing us or replying STOP.",
+      "Matched audiences. If you apply and accept advertising cookies, we may share your email address with Google in hashed (scrambled, one-way encoded) form, so Google can measure our advertising and show relevant Boreal advertising. Google does not receive the readable address, and you can opt out at any time by emailing us. We never share your mobile number with Google or any other advertiser.", // BF_WEBSITE_v806_TFV
       "Consent. We operate Google Consent Mode. Choosing Accept on our banner grants advertising and analytics storage and turns on Clarity and our own site analytics; choosing Decline refuses all of them. You can change your choice at any time by clearing site data for this site and making a new selection.",
       "We do not sell your personal information, and we do not display third-party advertising on our own websites.",
     ],
@@ -73,12 +73,15 @@ const SECTIONS: Section[] = [
       "When you enter your mobile number to start or sign in to your application, Boreal Financial texts you about that application: sign-in codes, status updates, document requests and signing reminders. Up to 10 messages per month. Message and data rates may apply.",
       "Reply STOP at any time to stop texts, or HELP for help. You can also contact us at " + CONTACT_EMAIL + ". If you opt out, we keep you updated by email and in your client portal instead.",
       "We do not share, sell or rent your mobile number or your text-messaging consent to third parties or affiliates for their marketing or promotional purposes.",
+      // BF_WEBSITE_v806_TFV - the carriers' required statements, word for word.
+      "No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. Text messaging opt-in data and consent will not be shared with any third parties.",
+      "Boreal Financial collects your consent to text you directly, on our own application. We do not buy, receive or use phone numbers from lead sellers or other third parties, and we do not send texts on behalf of lenders or anyone else.",
     ],
   },
   {
     heading: "Who we share it with",
     bullets: [
-      "Lenders and funding partners, so they can assess your request. Once a lender receives your file it handles that information under its own privacy policy, which we do not control.",
+      "Lenders you ask us to present your application to, so they can make a credit decision. They receive your application file, not your consent to be texted or marketed to. Once a lender receives your file it handles that information under its own privacy policy, which we do not control.",
       "Service providers who host, secure and operate our systems, including Microsoft Azure for hosting and document storage, Twilio for telephony and SMS, SignNow for document signing, SendGrid for email, and Google and Microsoft for the analytics and advertising described above.",
       "Professional advisers, regulators and law enforcement, where we are required or permitted by law.",
       "A purchaser, if the business or its assets are sold.",

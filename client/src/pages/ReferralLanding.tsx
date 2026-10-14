@@ -47,7 +47,7 @@ function FundingCard({ code, framed }: { code: string; framed?: boolean }) {
     <div className={framed ? "rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8" : ""}>
       <h2 className="text-2xl font-semibold">Business funding</h2>
       <p className="mt-3 text-white/70">
-        Boreal Financial matches Canadian businesses with the right capital -
+        Boreal Financial arranges the right capital for Canadian businesses -
         commercial term loans, lines of credit, equipment and leasing - across
         40+ lenders, with a single application.
       </p>
@@ -110,7 +110,7 @@ export default function ReferralLanding({
       {variant === "funding" ? (
         <>
           <h1 className="mt-3 text-3xl font-bold sm:text-4xl">
-            Funding for your business, matched in minutes
+            Funding for your business, arranged by a Boreal advisor
           </h1>
           <div className="mt-8">
             <FundingCard code={refCode} />

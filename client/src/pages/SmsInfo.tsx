@@ -23,6 +23,8 @@ export default function SmsInfo() {
 
       <section className="mt-8 space-y-4 text-[16px] leading-relaxed text-boreal-body">
         <h2 className="font-display text-xl font-bold text-boreal-ink">Who is sending you messages</h2>
+        {/* BF_WEBSITE_v806_TFV - the program name carriers look for. */}
+        <p>Program: <strong>Boreal Financial Application Updates</strong></p>
         <p>{LEGAL_NAME}</p>
         <p>{MAILING_ADDRESS}</p>
         <p>
@@ -44,13 +46,13 @@ export default function SmsInfo() {
       <section className="mt-10 space-y-4 text-[16px] leading-relaxed text-boreal-body">
         <h2 className="font-display text-xl font-bold text-boreal-ink">How to opt out</h2>
         <p>
-          Reply <strong>STOP</strong> to any message to unsubscribe from marketing texts at no cost.
+          Reply <strong>STOP</strong> to any message to opt out, at no cost. Reply <strong>HELP</strong> for help.
           Your request is honoured promptly and, in any event, within 10 business days. You can also
           email <a className="font-semibold text-boreal-goldInk hover:underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> to
           opt out.
         </p>
         <p>To resume messages after opting out, reply <strong>START</strong>.</p>
-        <p className="text-sm text-boreal-body">Message and data rates may apply. Message frequency varies.</p>
+        <p className="text-sm text-boreal-body">Message and data rates may apply. Up to 10 messages per month. Support: {CONTACT_EMAIL} or (866) 631-8939.</p>
       </section>
 
       {/* BF_WEBSITE_SMS_POLICY_v160 - public proof of the opt-in for carrier toll-free verification. */}
@@ -64,16 +66,20 @@ export default function SmsInfo() {
           By entering your mobile number, you agree to receive text messages from Boreal Financial about your application: sign-in codes, status updates, document requests and signing reminders. Up to 10 messages per month. Message and data rates may apply. Reply STOP to opt out or HELP for help.
         </blockquote>
         <p>
-          We do not share, sell or rent mobile numbers or text-messaging consent to third parties or
-          affiliates for their marketing purposes.
+          No mobile information will be shared with third parties or affiliates for marketing or
+          promotional purposes. Text messaging opt-in data and consent will not be shared with any third
+          parties. We collect your consent ourselves, on our own application; we never buy or receive phone
+          numbers from lead sellers or other third parties, and we never text on behalf of lenders or anyone else.
         </p>
       </section>
       <section className="mt-10 space-y-4 text-[16px] leading-relaxed text-boreal-body">
         <h2 className="font-display text-xl font-bold text-boreal-ink">Transactional messages</h2>
         <p>
-          Some messages are service-related (for example, one-time verification codes, application
-          updates, or document-signing links). These support a service you requested and are separate
-          from marketing messages.
+          Texts about your application (one-time verification codes, application updates, document
+          requests and signing links) support a service you asked for. Our toll-free number,
+          (866) 631-8939, sends only these application messages. If you are an existing Canadian client who
+          has agreed to hear from us, we may occasionally text you about Boreal products from our Canadian
+          number; reply STOP to any of them to opt out.
         </p>
       </section>
     </div>

@@ -8,7 +8,7 @@ import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 const GROUPS = [
   { heading: "Applying", items: [
     { q: "Who qualifies?", a: "Canadian businesses trading at least six months with around $10,000 a month in revenue. Beyond that it depends on your revenue, your industry and what the money is for." },
-    { q: "Do you fund start-ups?", a: "Not in Canada at present. Our panel funds businesses already trading. In the United States some SBA products are available to newer businesses." },
+    { q: "Do you fund start-ups?", a: "Not in Canada at present. The lenders we work with fund businesses already trading. In the United States some SBA products are available to newer businesses." },
     { q: "How long does applying take?", a: "About five minutes for the form. Gathering six months of bank statements is usually the longer part." },
     { q: "What documents do I need?", a: "To start, six months of business bank statements and basic company details. Depending on the amount and product we may need financial statements, an accounts receivable ageing report, an equipment list, or property documents. We ask for what your file needs rather than everything up front." },
   ] },
@@ -21,7 +21,7 @@ const GROUPS = [
     { q: "How much can I borrow?", a: "From $10,000 to over $100 million, depending on the product and your business. Most working capital requests land well below the top of that range." },
     { q: "How fast can I get funded?", a: "Clean, complete files for smaller term loans can fund in as little as three to four days. SBA takes longer — weeks rather than days." },
     { q: "What are your rates?", a: "They vary by product, amount, term and your business, so any number quoted here would be misleading. You'll see real terms from real lenders once we've reviewed your file." },
-    { q: "What does Boreal charge me?", a: "Nothing to apply or be matched. The lender that funds you pays our fee, unless we agree something different with you in advance and in writing." },
+    { q: "What does Boreal charge me?", a: "Nothing to apply. The lender that funds you pays our fee, unless we agree something different with you in advance and in writing." },
   ] },
   { heading: "Working with us", items: [
     { q: "Do I deal with one person?", a: "You have one point of contact through the process. Our team works the file together, so nothing stalls because someone's away." },

@@ -1,7 +1,8 @@
 # Boreal Financial
 
-> Boreal Financial is a Canadian and US commercial finance marketplace. One
-> application is matched against 80+ lenders. Funding typically completes in
+> Boreal Financial is a Canadian and US commercial financing broker. A business
+> applies once with Boreal; a Boreal advisor prepares the file and, with the
+> client's approval, presents it to the lenders suited to it (80+). Funding typically completes in
 > three to four days on amounts from $10,000 to $100M+. Boreal never pulls a
 > business owner's credit; underwriting uses soft data only until a term sheet
 > is signed. Lenders pay Boreal, unless otherwise agreed with the client in
@@ -10,7 +11,7 @@
 ## Core pages
 
 - [Home](https://www.boreal.financial/): What Boreal does and who it serves.
-- [How it works](https://www.boreal.financial/how-it-works): The application, matching and funding process.
+- [How it works](https://www.boreal.financial/how-it-works): The application, lender review and funding process.
 - [Products](https://www.boreal.financial/products): Every financing product offered, with a detail page each.
 - [Industries](https://www.boreal.financial/industries): Sector-specific financing guidance.
 - [Compare](https://www.boreal.financial/compare): Side-by-side comparison of financing products.

@@ -1,7 +1,7 @@
 // BF_WEBSITE_BLOCK_v153_MOBILE_FIRST_LAUNCH_v1
 // Scrolls window to top on every wouter route change. Mounted once in
 // MainLayout. Pre-fix: scrollToTop() existed (in src/utils/scrollToTop.ts)
-// but was only called by VerticalPage.tsx, so navigating to /products or
+// but was only called by VerticalPage.tsx (removed in v806), so navigating to /products or
 // /industries from a footer link landed at the previous page's scroll
 // position, which made the new page look like it was rendering from
 // mid-content. Particularly visible after submitting /credit-readiness

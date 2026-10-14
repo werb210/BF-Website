@@ -26,10 +26,11 @@ describe("delete-account page (Google Play)", () => {
 });
 
 describe("privacy policy", () => {
-  it("discloses hashed contact details shared with Google", () => {
+  it("discloses the hashed email shared with Google, and never the mobile number (v806)", () => {
     const p = r("pages/privacy.tsx");
     assert.match(p, /hashed/);
-    assert.match(p, /share your email address and phone number with Google/);
+    assert.match(p, /share your email address with Google/);
+    assert.match(p, /We never share your mobile number with Google or any other advertiser/);
   });
 });
 
