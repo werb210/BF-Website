@@ -70,7 +70,9 @@ const SECTIONS: Section[] = [
   {
     heading: "Text messages (SMS)",
     paras: [
-      "When you enter your mobile number to start or sign in to your application, Boreal Financial texts you about that application: sign-in codes, status updates, document requests and signing reminders. Up to 10 messages per month. Message and data rates may apply.",
+      // BF_WEBSITE_v809_SMS_UPDATES_CONSENT - texting is the applicant's choice: separate, unticked boxes.
+      "When you enter your mobile number to start or sign in to your application, we text you a one-time sign-in code. We text you updates about your application (status updates, document requests and signing reminders) only if you tick the optional \"Text me updates about my application\" box. Message frequency varies. Message and data rates may apply.",
+      "Marketing texts are sent only if you tick the separate, optional \"Text me news, tips and offers from Boreal Financial\" box (up to 4 messages per month). Neither box is required to apply.",
       "Reply STOP at any time to stop texts, or HELP for help. You can also contact us at " + CONTACT_EMAIL + ". If you opt out, we keep you updated by email and in your client portal instead.",
       "We do not share, sell or rent your mobile number or your text-messaging consent to third parties or affiliates for their marketing or promotional purposes.",
       // BF_WEBSITE_v806_TFV - the carriers' required statements, word for word.

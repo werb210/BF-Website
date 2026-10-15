@@ -35,11 +35,12 @@ export default function SmsInfo() {
 
       <section className="mt-10 space-y-4 text-[16px] leading-relaxed text-boreal-body">
         <h2 className="font-display text-xl font-bold text-boreal-ink">Why you received a message</h2>
+        {/* BF_WEBSITE_v809_SMS_UPDATES_CONSENT */}
         <p>
-          You received a text from {LEGAL_NAME} because you have an existing business relationship
-          with us or provided your consent to be contacted (for example, when you submitted an
-          application). We only send messages where we have a lawful basis to do so under Canada&apos;s
-          Anti-Spam Legislation (CASL).
+          You received a text from {LEGAL_NAME} because you asked for a sign-in code, ticked a box to receive
+          texts from us (see &ldquo;How you opt in&rdquo; below), or are in a conversation with one of our staff.
+          We only send messages where we have a lawful basis to do so under Canada&apos;s Anti-Spam Legislation
+          (CASL) and US rules.
         </p>
       </section>
 
@@ -52,18 +53,32 @@ export default function SmsInfo() {
           opt out.
         </p>
         <p>To resume messages after opting out, reply <strong>START</strong>.</p>
-        <p className="text-sm text-boreal-body">Message and data rates may apply. Up to 10 messages per month. Support: {CONTACT_EMAIL} or (866) 631-8939.</p>
+        <p className="text-sm text-boreal-body">Message frequency varies. Message and data rates may apply. Support: {CONTACT_EMAIL} or (866) 631-8939.</p>
       </section>
 
       {/* BF_WEBSITE_SMS_POLICY_v160 - public proof of the opt-in for carrier toll-free verification. */}
       <section className="mt-10 space-y-4 text-[16px] leading-relaxed text-boreal-body">
         <h2 className="font-display text-xl font-bold text-boreal-ink">How you opt in</h2>
+        {/* BF_WEBSITE_v809_SMS_UPDATES_CONSENT - texting is the applicant's own choice: unticked, optional boxes. */}
         <p>
-          To start or sign in to an application at client.boreal.financial you enter your mobile number
-          and confirm it with a one-time code. This notice is shown right under the number box:
+          To start or sign in to an application at client.boreal.financial you enter your mobile number and we
+          text you a one-time sign-in code. Under the number box there is a separate checkbox, which is not
+          ticked for you and is not required to apply:
         </p>
         <blockquote className="border-l-4 border-boreal-goldDeep pl-4 italic">
-          By entering your mobile number, you agree to receive text messages from Boreal Financial about your application: sign-in codes, status updates, document requests and signing reminders. Up to 10 messages per month. Message and data rates may apply. Reply STOP to opt out or HELP for help.
+          &#9744; Text me updates about my application: status updates, document requests and signing reminders. Message frequency varies. Message and data rates may apply. Reply STOP to opt out, HELP for help. Not required to apply.
+        </blockquote>
+        <p>
+          Only applicants who tick this box get texts about their application. Everyone else is kept up to
+          date by email and in their client portal. You can change your choice at any time in the Settings of
+          your client portal, or reply STOP.
+        </p>
+        <p>
+          On the last step of the application there is a second, separate checkbox for marketing texts, also
+          not ticked for you and not required to apply:
+        </p>
+        <blockquote className="border-l-4 border-boreal-goldDeep pl-4 italic">
+          &#9744; Optional: Text me news, tips and offers from Boreal Financial. Up to 4 messages per month. Message and data rates may apply. Reply STOP to opt out at any time. Not required to apply.
         </blockquote>
         <p>
           No mobile information will be shared with third parties or affiliates for marketing or
@@ -75,11 +90,10 @@ export default function SmsInfo() {
       <section className="mt-10 space-y-4 text-[16px] leading-relaxed text-boreal-body">
         <h2 className="font-display text-xl font-bold text-boreal-ink">Transactional messages</h2>
         <p>
-          Texts about your application (one-time verification codes, application updates, document
-          requests and signing links) support a service you asked for. Our toll-free number,
-          (866) 631-8939, sends only these application messages. If you are an existing Canadian client who
-          has agreed to hear from us, we may occasionally text you about Boreal products from our Canadian
-          number; reply STOP to any of them to opt out.
+          Texts about your application (one-time sign-in codes, application updates, document requests and
+          signing links) support a service you asked for. Our toll-free number, (866) 631-8939, sends only these
+          application messages. Marketing texts go only to people who tick the separate, optional
+          &ldquo;Text me news, tips and offers from Boreal Financial&rdquo; box; reply STOP to any of them to opt out.
         </p>
       </section>
     </div>
