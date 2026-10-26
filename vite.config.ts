@@ -14,6 +14,9 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   root: path.resolve(__dirname, "client"),
   publicDir: path.resolve(__dirname, "client/public"),
+  // BF_WEBSITE_v859_DEP_SECURITY - Vite 6 stops looking for postcss.config.cjs at client/package.json, so point it at
+  // the repo root explicitly (otherwise Tailwind never runs and the CSS ships as raw @tailwind directives).
+  css: { postcss: __dirname },
   plugins: [
     react(),
     imagetools(),

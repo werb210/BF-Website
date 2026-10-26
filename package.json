@@ -81,8 +81,8 @@
     "vaul": "^1.1.2",
     "vite-plugin-sitemap": "file:vendor/vite-plugin-sitemap",
     "wouter": "^3.3.5",
-    "zod": "^3.24.2",
-    "zod-validation-error": "^3.4.0"
+    "zod": "^4.6.7",
+    "zod-validation-error": "^4.0.2"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",
@@ -91,7 +91,7 @@
     "@types/react-dom": "^18.3.1",
     "@typescript-eslint/eslint-plugin": "^8.46.0",
     "@typescript-eslint/parser": "^8.46.0",
-    "@vitejs/plugin-react": "4.3.2",
+    "@vitejs/plugin-react": "4.7.0",
     "autoprefixer": "10.4.20",
     "eslint": "^8.57.1",
     "eslint-plugin-import": "^2.32.0",
@@ -99,24 +99,25 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "postcss": "^8.4.38",
     "rollup-plugin-visualizer": "file:vendor/rollup-plugin-visualizer",
-    "sharp": "^0.34.4",
+    "sharp": "^0.35.5",
     "tailwindcss": "3.4.17",
     "tailwindcss-animate": "^1.0.7",
     "ts-node": "file:vendor/ts-node-shim",
-    "tsx": "^4.19.1",
+    "tsx": "^4.23.15",
     "typescript": "5.6.3",
-    "vite": "^5.1.4",
+    "vite": "^6.4.5",
     "vite-imagetools": "file:vendor/vite-imagetools",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-prerender": "file:vendor/vite-plugin-prerender"
   },
   "overrides": {
-    "vite": "^5.1.4",
-    "esbuild": "^0.21.5",
+    "vite": "^6.4.5",
     "postcss": "^8.4.38",
     "qs": "^6.16.0",
     "lodash": "^4.18.1",
-    "shell-quote": "^1.12.0"
+    "shell-quote": "^1.12.0",
+    "postcss-selector-parser": "^7.1.6"
   },
-  "engineStrict": true
+  "engineStrict": true,
+  "x-v859": "BF_WEBSITE_v859_DEP_SECURITY"
 }
