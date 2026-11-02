@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- the test builds a fake browser window whose shape varies per check */
 // BF_WEBSITE_v868_QUEBEC_CONSENT - Google consent waits for Accept only for visitors in Quebec (Law 25).
 // head-init.js is run as the browser runs it (in a sandbox with a fake window); the banner's helpers are run directly.
 import { afterEach, describe, it } from "node:test";
