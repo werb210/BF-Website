@@ -4,6 +4,9 @@
 // Before a choice (and after Decline): Google Consent Mode stays at the
 // denied defaults set in /js/head-init.js, Microsoft Clarity is not loaded,
 // and our own journey / site-behaviour tracking does not start.
+// BF_WEBSITE_v868_QUEBEC_CONSENT - outside Quebec, head-init.js grants Google
+// Analytics and Google Ads measurement before a choice (on notice; Decline
+// revokes it). Clarity and our own tracking still wait for Accept everywhere.
 // After Accept (now, or on a later visit when the stored choice is Accept):
 // Consent Mode is updated to granted, Clarity is loaded, and every callback
 // registered with onAnalyticsConsent() runs once.
@@ -68,3 +71,4 @@ export function onAnalyticsConsent(fn: () => void): () => void {
     if (i >= 0) waiting.splice(i, 1);
   };
 }
+
