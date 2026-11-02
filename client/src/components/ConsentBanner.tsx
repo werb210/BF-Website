@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { grantAnalyticsConsent } from "@/analytics/consent"; // BF_WEBSITE_v789_CONSENT
+import { consentNotice, knownRegion, waitForRegion, type ConsentRegion } from "@/analytics/region"; // BF_WEBSITE_v868_QUEBEC_CONSENT
 
 const KEY = "boreal_consent_v1";
 
@@ -25,6 +26,9 @@ function applyConsent(granted: boolean) {
 
 export default function ConsentBanner() {
   const [show, setShow] = useState(false);
+  // BF_WEBSITE_v868_QUEBEC_CONSENT - the wording depends on whether the visitor is in Quebec (head-init.js asks
+  // BF-Server), so the banner waits for that answer: usually already known, 1.6 s at most.
+  const [region, setRegion] = useState<ConsentRegion | null>(() => knownRegion());
 
   useEffect(() => {
     let stored: string | null = null;
@@ -34,9 +38,12 @@ export default function ConsentBanner() {
     if (stored === "granted") { applyConsent(true); grantAnalyticsConsent(); return; }
     if (stored === "denied") { applyConsent(false); return; }
     setShow(true);
+    let live = true;
+    if (!knownRegion()) void waitForRegion().then((r) => { if (live) setRegion(r); });
+    return () => { live = false; };
   }, []);
 
-  if (!show) return null;
+  if (!show || !region) return null;
 
   const choose = (granted: boolean) => {
     try { localStorage.setItem(KEY, granted ? "granted" : "denied"); } catch { /* ignore */ }
@@ -46,14 +53,15 @@ export default function ConsentBanner() {
   };
 
   return (
-    <div style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 80, background: "#0B1320", color: "#fff", borderTop: "1px solid rgba(255,255,255,0.12)", padding: "16px 20px calc(16px + env(safe-area-inset-bottom))", display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", justifyContent: "center" }}>
-      <p style={{ margin: 0, fontSize: 13, maxWidth: 640, lineHeight: 1.5 }}>
-        We use cookies to analyze traffic and improve your experience. You can accept or decline analytics and advertising cookies.
+    <div data-testid="consent-banner" data-region={region} style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 80, background: "#0B1320", color: "#fff", borderTop: "1px solid rgba(255,255,255,0.12)", padding: "16px 20px calc(16px + env(safe-area-inset-bottom))", display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", justifyContent: "center" }}>
+      <p style={{ margin: 0, fontSize: 15, maxWidth: 640, lineHeight: 1.5 }}>
+        {consentNotice(region)}
       </p>
       <div style={{ display: "flex", gap: 8 }}>
-        <button onClick={() => choose(false)} style={{ background: "transparent", color: "#fff", border: "1px solid rgba(255,255,255,0.4)", borderRadius: 8, padding: "8px 16px", fontSize: 13, cursor: "pointer" }}>Decline</button>
-        <button onClick={() => choose(true)} style={{ background: "#2563eb", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Accept</button>
+        <button onClick={() => choose(false)} style={{ background: "transparent", color: "#fff", border: "1px solid rgba(255,255,255,0.4)", borderRadius: 8, padding: "8px 16px", fontSize: 15, cursor: "pointer" }}>Decline</button>
+        <button onClick={() => choose(true)} style={{ background: "#2563eb", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>Accept</button>
       </div>
     </div>
   );
 }
+
