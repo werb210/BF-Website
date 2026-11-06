@@ -26,6 +26,8 @@ import Industries from "../pages/Industries";
 import IndustryDetail from "../pages/IndustryDetail";
 import Products from "../pages/Products";
 import ProductDetail from "../pages/ProductDetail";
+import GetTheApp from "../pages/GetTheApp"; // BF_WEBSITE_APP_LAUNCH_v1
+import AppDrawRules from "../pages/AppDrawRules"; // BF_WEBSITE_APP_LAUNCH_v1
 
 export function AppRouter() {
   return (
@@ -81,6 +83,8 @@ export function AppRouter() {
         <Route path="/book/:slug">{(params: { slug: string }) => <Book slug={params.slug} />}</Route>
         <Route path="/terms" component={TermsPage} />
         <Route path="/sms" component={SmsInfo} />
+        <Route path="/app" component={GetTheApp} />
+        <Route path="/app-draw-rules" component={AppDrawRules} />
         <Route path="/staff-login" component={StaffLogin} />
         <Route path="/lender-login" component={PartnerLogin} />
         <Route path="/system-status" component={SystemStatus} />
