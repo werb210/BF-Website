@@ -9,7 +9,7 @@ import { APPLY_URL } from "@/config/site";
 import { trackConversion } from "@/main";
 import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 
-import { ASSET_KINDS, TAX_RATES, calculate, type AssetKind } from "@/lib/equipmentTax";
+import { ASSET_KINDS, PROVINCES, RATE_TYPES, calculate, pct, provinceRate, type AssetKind } from "@/lib/equipmentTax";
 
 const money = (n: number) => n.toLocaleString("en-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 });
 const num = (v: string) => {
@@ -23,6 +23,7 @@ const label = "block text-[14px] font-semibold text-boreal-ink";
 export default function EquipmentTax2026() {
   const [cost, setCost] = useState("250000");
   const [kind, setKind] = useState("construction");
+  const [province, setProvince] = useState("AB");
   const [taxId, setTaxId] = useState("general");
   const [customTax, setCustomTax] = useState("15");
   const [financeRate, setFinanceRate] = useState("9.5");
@@ -30,7 +31,7 @@ export default function EquipmentTax2026() {
   const [down, setDown] = useState("0");
 
   const asset: AssetKind = ASSET_KINDS.find((a) => a.id === kind) ?? (ASSET_KINDS[0] as AssetKind);
-  const taxRate = taxId === "custom" ? num(customTax) / 100 : TAX_RATES.find((t) => t.id === taxId)?.rate ?? 0;
+  const taxRate = taxId === "custom" ? num(customTax) / 100 : provinceRate(province, taxId);
   const r = useMemo(
     () => calculate({ cost: num(cost), previousRate: asset.previousRate, taxRate, financeRatePct: num(financeRate), termMonths: Math.round(num(term)), downPayment: num(down) }),
     [cost, asset.previousRate, taxRate, financeRate, term, down],
@@ -76,12 +77,23 @@ export default function EquipmentTax2026() {
               <span className="mt-1 block text-[13px] font-normal text-boreal-body">For example: {asset.examples}.</span>
             </label>
             <label className={label}>
-              Your business's tax rate
-              <select className={field} value={taxId} onChange={(e) => setTaxId(e.target.value)}>
-                {TAX_RATES.map((t) => (
-                  <option key={t.id} value={t.id}>{t.label}</option>
+              Province
+              <select className={field} value={province} onChange={(e) => setProvince(e.target.value)} data-testid="province">
+                {PROVINCES.map((p) => (
+                  <option key={p.id} value={p.id}>{p.label}</option>
                 ))}
               </select>
+            </label>
+            <label className={label}>
+              Your business's tax rate
+              <select className={field} value={taxId} onChange={(e) => setTaxId(e.target.value)}>
+                {RATE_TYPES.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.id === "custom" ? t.label : `${t.label} (about ${pct(provinceRate(province, t.id))})`}
+                  </option>
+                ))}
+              </select>
+              <span className="mt-1 block text-[13px] font-normal text-boreal-body">Combined federal and provincial rate. Most smaller corporations pay the small business rate on their first $500,000 of active business income.</span>
             </label>
             {taxId === "custom" ? (
               <label className={label}>
@@ -148,7 +160,7 @@ export default function EquipmentTax2026() {
             </ul>
             <a href={applyHref} onClick={() => apply("footer")} className="mt-7 inline-block rounded-lg bg-boreal-gold px-6 py-3.5 text-[15px] font-semibold text-boreal-ink transition hover:bg-[#cfa953]">Apply now</a>
             <p className="mt-8 text-[13px] leading-relaxed text-boreal-body">
-              Illustrative estimate only, not tax advice. "Previous rules" uses approximate year-one capital cost allowance rates for each kind of equipment; actual classes and rates vary. The proposed
+              Illustrative estimate only, not tax advice. "Previous rules" uses approximate year-one capital cost allowance rates for each kind of equipment; actual classes and rates vary. Tax rates are approximate combined federal and provincial corporate rates. The proposed
               treatment is subject to legislation being passed, and the Canada Revenue Agency will decide whether specific assets qualify. Consult your tax advisor. Financing is subject to lender approval.
               Source: Federal Budget 2026, "Canada's Investment Supercycle".
             </p>

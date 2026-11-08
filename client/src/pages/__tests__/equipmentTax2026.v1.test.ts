@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { calculate, monthlyPayment } from "../../lib/equipmentTax";
+import { calculate, monthlyPayment, provinceRate, PROVINCES } from "../../lib/equipmentTax";
 
 const root = path.resolve(__dirname, "../..");
 const r = (p: string) => fs.readFileSync(path.resolve(root, p), "utf8");
@@ -21,6 +21,12 @@ describe("Budget 2026 equipment tax calculator", () => {
   it("handles a fully paid purchase and a zero rate", () => {
     assert.equal(calculate({ cost: 100000, previousRate: 0.2, taxRate: 0.11, financeRatePct: 9, termMonths: 60, downPayment: 100000 }).payment, 0);
     assert.equal(monthlyPayment(12000, 0, 12), 1000);
+  });
+  it("covers BC to Ontario with combined rates", () => {
+    assert.deepEqual(PROVINCES.map((p) => p.id), ["BC", "AB", "SK", "MB", "ON"]);
+    assert.equal(provinceRate("ON", "general"), 0.265);
+    assert.equal(provinceRate("MB", "small"), 0.09);
+    assert.equal(provinceRate("BC", "custom"), 0);
   });
   it("is routed, in the sitemap meta, and has an Apply button and the disclaimer", () => {
     assert.match(r("router/AppRouter.tsx"), /path="\/equipment-tax-2026"/);
