@@ -55,6 +55,11 @@ const STATIC_ROUTES: Record<string, Entry> = {
     description:
       "Answer a few questions and we'll tell you which kinds of financing are realistic. Two minutes, no documents needed, and no credit check.",
   },
+  "/equipment-tax-2026": {
+    title: "Budget 2026 Equipment Tax Calculator | Productivity Mega Deduction | Boreal Financial",
+    description:
+      "See what Canada's proposed 100% immediate deduction could mean for your next equipment purchase, and how many months of finance payments the tax saving could cover.",
+  },
   "/faq": {
     title: "Business Financing FAQ | Boreal Financial",
     description: "Common questions about applying, qualifying, credit checks, timing and cost.",

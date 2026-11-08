@@ -12,6 +12,7 @@ export const ROUTES: string[] = [
   "/contact",
   "/credit-readiness",
   "/faq",
+  "/equipment-tax-2026",
   "/how-it-works",
   "/industries",
   "/privacy",
