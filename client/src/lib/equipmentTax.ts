@@ -10,11 +10,30 @@ export const ASSET_KINDS: AssetKind[] = [
   { id: "tech", label: "Computers and point-of-sale hardware", previousRate: 0.55, examples: "Computers, servers, point-of-sale hardware" },
 ];
 
-export const TAX_RATES = [
-  { id: "small", label: "Small business rate (about 11% in Alberta)", rate: 0.11 },
-  { id: "general", label: "General corporate rate (about 23% in Alberta)", rate: 0.23 },
-  { id: "custom", label: "My own rate", rate: 0 },
+// Combined federal + provincial corporate income tax rates (federal 9% small business, 15% general), approximate.
+// BF_WEBSITE_EQUIPMENT_TAX_2026_v2 - the provinces the campaign reaches, BC to Ontario.
+export type Province = { id: string; label: string; small: number; general: number };
+export const PROVINCES: Province[] = [
+  { id: "BC", label: "British Columbia", small: 0.11, general: 0.27 },
+  { id: "AB", label: "Alberta", small: 0.11, general: 0.23 },
+  { id: "SK", label: "Saskatchewan", small: 0.1, general: 0.27 },
+  { id: "MB", label: "Manitoba", small: 0.09, general: 0.27 },
+  { id: "ON", label: "Ontario", small: 0.122, general: 0.265 },
 ];
+
+export const RATE_TYPES = [
+  { id: "small", label: "Small business rate" },
+  { id: "general", label: "General corporate rate" },
+  { id: "custom", label: "My own rate" },
+] as const;
+
+export function provinceRate(provinceId: string, rateType: string): number {
+  const p = PROVINCES.find((x) => x.id === provinceId) ?? PROVINCES[1];
+  if (!p) return 0;
+  return rateType === "general" ? p.general : rateType === "small" ? p.small : 0;
+}
+
+export const pct = (r: number) => `${Math.round(r * 1000) / 10}%`;
 
 export function monthlyPayment(principal: number, annualRatePct: number, months: number): number {
   if (principal <= 0 || months <= 0) return 0;
