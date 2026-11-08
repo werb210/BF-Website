@@ -54,3 +54,25 @@ export function calculate(input: { cost: number; previousRate: number; taxRate: 
   return { before, after, extraDeduction, taxSaving, financed, payment, monthsCovered };
 }
 
+
+// BF_WEBSITE_EQUIPMENT_TAX_2026_v3 - pre-select the visitor's province from the browser's time zone (no permission
+// prompt, no IP lookup). Zones outside BC-Ontario, or an unreadable zone, fall back to Alberta.
+const ZONE_PROVINCE: Record<string, string> = {
+  "America/Vancouver": "BC", "America/Dawson_Creek": "BC", "America/Fort_Nelson": "BC", "America/Creston": "BC",
+  "America/Edmonton": "AB",
+  "America/Regina": "SK", "America/Swift_Current": "SK",
+  "America/Winnipeg": "MB",
+  "America/Toronto": "ON", "America/Montreal": "ON", "America/Nipigon": "ON", "America/Thunder_Bay": "ON", "America/Atikokan": "ON", "America/Rainy_River": "ON",
+};
+
+export function provinceFromTimeZone(timeZone: string | undefined, fallback = "AB"): string {
+  return (timeZone && ZONE_PROVINCE[timeZone]) || fallback;
+}
+
+export function visitorProvince(read: () => string | undefined = () => Intl.DateTimeFormat().resolvedOptions().timeZone): string {
+  try {
+    return provinceFromTimeZone(read());
+  } catch {
+    return "AB";
+  }
+}

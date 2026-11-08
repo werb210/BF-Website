@@ -9,7 +9,7 @@ import { APPLY_URL } from "@/config/site";
 import { trackConversion } from "@/main";
 import { buildApplyUrl, getReadinessSessionToken } from "@/utils/session";
 
-import { ASSET_KINDS, PROVINCES, RATE_TYPES, calculate, pct, provinceRate, type AssetKind } from "@/lib/equipmentTax";
+import { ASSET_KINDS, PROVINCES, RATE_TYPES, calculate, pct, provinceRate, visitorProvince, type AssetKind } from "@/lib/equipmentTax";
 
 const money = (n: number) => n.toLocaleString("en-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 });
 const num = (v: string) => {
@@ -23,7 +23,7 @@ const label = "block text-[14px] font-semibold text-boreal-ink";
 export default function EquipmentTax2026() {
   const [cost, setCost] = useState("250000");
   const [kind, setKind] = useState("construction");
-  const [province, setProvince] = useState("AB");
+  const [province, setProvince] = useState(() => visitorProvince());
   const [taxId, setTaxId] = useState("general");
   const [customTax, setCustomTax] = useState("15");
   const [financeRate, setFinanceRate] = useState("9.5");
