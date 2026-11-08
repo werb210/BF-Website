@@ -28,6 +28,7 @@ import Products from "../pages/Products";
 import ProductDetail from "../pages/ProductDetail";
 import GetTheApp from "../pages/GetTheApp"; // BF_WEBSITE_APP_LAUNCH_v1
 import AppDrawRules from "../pages/AppDrawRules"; // BF_WEBSITE_APP_LAUNCH_v1
+import EquipmentTax2026 from "../pages/EquipmentTax2026"; // BF_WEBSITE_EQUIPMENT_TAX_2026_v1
 
 export function AppRouter() {
   return (
@@ -76,6 +77,8 @@ export function AppRouter() {
         <Route path="/product-comparison" component={Compare} />
         <Route path="/how-it-works" component={HowItWorks} />
         <Route path="/faq" component={FAQ} />
+        <Route path="/equipment-tax-2026" component={EquipmentTax2026} />
+        <Route path="/budget-2026">{() => <Redirect to="/equipment-tax-2026" />}</Route>
         <Route path="/privacy" component={Privacy} />
         <Route path="/delete-account" component={DeleteAccount} />
         <Route path="/book">{() => <Book />}</Route>
