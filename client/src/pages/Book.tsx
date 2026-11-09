@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useState } from "react";
 import SEO from "@/components/SEO";
 import { apiUrl } from "@/config/env"; // BF_WEBSITE_v789_ONE_API_BASE
-import { caslFields } from "@/lib/casl"; // BF_WEBSITE_v789_CASL
+import { type Consent, NO_CONSENT, caslFields } from "@/lib/casl"; // BF_WEBSITE_v789_CASL
 import CaslConsent from "@/components/CaslConsent";
 import { formatPhoneInput, toE164 } from "@/lib/bookingPhone"; // BF_WEBSITE_v786_BOOK_PHONE
 import { dayHeading, dayKey, monthCells, MONTHS, pad2, slotsByDay, timeIn, visitorTimeZone, zoneLabel } from "@/lib/bookingCalendar"; // BF_WEBSITE_BOOKING_CALENDAR_v176 / BF_WEBSITE_LOCAL_TIME_v177
@@ -30,7 +30,7 @@ export default function Book({ slug }: { slug?: string } = {}) {
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [trap, setTrap] = useState("");
-  const [caslConsent, setCaslConsent] = useState(false); // BF_WEBSITE_v789_CASL
+  const [caslConsent, setCaslConsent] = useState<Consent>(NO_CONSENT); // BF_WEBSITE_v789_CASL / SEPARATE_CONSENT_v1
   const [state, setState] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState<{ startsAt: string; staffFirstName: string | null; joinUrl: string | null } | null>(null);
@@ -157,7 +157,7 @@ export default function Book({ slug }: { slug?: string } = {}) {
                 {phoneError && <p id="booking-phone-error" data-testid="booking-phone-error" style={{ color: "#b91c1c", fontSize: 14, fontWeight: 600, marginTop: -6 }}>Enter a 10-digit phone number</p>}
                 <textarea aria-label="Notes" placeholder="What would you like to talk about? (optional)" value={notes} onChange={(e) => setNotes(e.target.value)} style={{ ...field, minHeight: 80 }} />
                 {/* BF_WEBSITE_v789_CASL */}
-                <CaslConsent id="booking-casl-consent" checked={caslConsent} onChange={setCaslConsent} />
+                <CaslConsent id="booking-casl-consent" value={caslConsent} onChange={setCaslConsent} />
                 <input tabIndex={-1} autoComplete="off" aria-hidden="true" value={trap} onChange={(e) => setTrap(e.target.value)} style={{ position: "absolute", left: -9999, width: 1, height: 1 }} />
                 {error && slots && slots.length > 0 && <p role="alert" style={{ color: "#b91c1c" }}>{error}</p>}
                 <button type="button" disabled={!ready || state === "saving"} onClick={() => void submit()} style={{ ...btn(true), opacity: ready ? 1 : 0.5 }}>{state === "saving" ? "Booking..." : "Book it"}</button>

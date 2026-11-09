@@ -7,7 +7,7 @@ import { apiUrl } from "@/config/env"; // BF_WEBSITE_v789_ONE_API_BASE
 import { formatPhone, PHONE_PATTERN, PHONE_TITLE, toE164 } from "@/utils/formatters";
 // BF_WEBSITE_CONTACT_REDIRECT_v151
 import { readStoredAttribution, resolveContactRedirect } from "@shared/applyRedirect";
-import { caslFields } from "@/lib/casl"; // BF_WEBSITE_v789_CASL
+import { type Consent, NO_CONSENT, caslFields } from "@/lib/casl"; // BF_WEBSITE_v789_CASL
 import CaslConsent from "@/components/CaslConsent";
 
 type ContactFormData = {
@@ -50,7 +50,7 @@ export default function ContactForm() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [caslConsent, setCaslConsent] = useState(false); // BF_WEBSITE_v789_CASL
+  const [caslConsent, setCaslConsent] = useState<Consent>(NO_CONSENT); // BF_WEBSITE_v789_CASL / SEPARATE_CONSENT_v1
   // BF_WEBSITE_BLOCK_v130c_READINESS_HANDOFF_REPAIR_v1 — server returns
   // { success, leadId, redirect: "https://client.boreal.financial/apply?continue=<token>" }.
   // Capture the redirect so the success modal's Continue button can take
@@ -140,7 +140,7 @@ export default function ContactForm() {
 
       setShowSuccess(true);
       setFormData(initialForm);
-      setCaslConsent(false);
+      setCaslConsent(NO_CONSENT);
     } catch {
       setError("Unable to submit request. Please try again.");
     } finally {
@@ -173,7 +173,7 @@ export default function ContactForm() {
           <textarea id="contact-message" className={`min-h-[120px] ${fieldClass}`} name="message" placeholder="How can we help?" required value={formData.message} onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))} />
         </div>
         {/* BF_WEBSITE_v789_CASL */}
-        <CaslConsent id="contact-casl-consent" tone="dark" checked={caslConsent} onChange={setCaslConsent} />
+        <CaslConsent id="contact-casl-consent" tone="dark" value={caslConsent} onChange={setCaslConsent} />
         <input
           className="hidden"
           aria-hidden="true"
