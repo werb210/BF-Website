@@ -68,7 +68,50 @@ export function prerenderHeads(distDir: string, routes: string[] = ROUTES): stri
   return written;
 }
 
+// BF_WEBSITE_STATIC_POLICIES_v1 - /privacy and /terms also get their full text inside <div id="root">, rendered with
+// React on the server, so carrier and app-store vetting tools that do not run JavaScript can read the policies.
+// The app mounts with createRoot, which replaces this markup with the same page once the script runs.
+export const STATIC_BODY_ROUTES = ["/privacy", "/terms"];
+
+export function injectBody(html: string, markup: string): string {
+  if (!html.includes('<div id="root"></div>')) throw new Error('index.html has no empty <div id="root"></div>');
+  return html.replace('<div id="root"></div>', `<div id="root">${markup}</div>`);
+}
+
+export async function prerenderPolicyBodies(distDir: string): Promise<string[]> {
+  const { createServer } = await import("vite");
+  const vite = await createServer({
+    configFile: path.resolve("vite.config.ts"),
+    server: { middlewareMode: true, hmr: false },
+    appType: "custom",
+    logLevel: "error",
+    optimizeDeps: { noDiscovery: true, include: [] },
+    ssr: { noExternal: ["react-helmet-async"] },
+  });
+  const written: string[] = [];
+  try {
+    const mod = (await vite.ssrLoadModule("/src/ssr/policyPages.tsx")) as {
+      renderPolicyPage: (route: string) => string | null;
+    };
+    for (const route of STATIC_BODY_ROUTES) {
+      const markup = mod.renderPolicyPage(route);
+      if (!markup || markup.replace(/<[^>]+>/g, " ").trim().length < 1000) {
+        throw new Error(`prerender-head: ${route} rendered too little text to be the real policy`);
+      }
+      const out = outputPathFor(distDir, route);
+      fs.writeFileSync(out, injectBody(fs.readFileSync(out, "utf8"), markup));
+      written.push(out);
+    }
+  } finally {
+    await vite.close();
+  }
+  return written;
+}
+
 if (process.argv[1] && process.argv[1].includes("prerender-head")) {
-  const written = prerenderHeads(path.resolve("dist"));
+  const distDir = path.resolve("dist");
+  const written = prerenderHeads(distDir);
   console.log(`prerender-head: wrote head tags for ${written.length} routes`);
+  const bodies = await prerenderPolicyBodies(distDir);
+  console.log(`prerender-head: wrote full page text for ${bodies.length} policy pages`);
 }
