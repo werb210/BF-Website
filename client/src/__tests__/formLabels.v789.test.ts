@@ -110,13 +110,14 @@ describe("every lead form field has an accessible label", () => {
       ["Book", createElement(Book)],
     ] as const) {
       const html = render(node);
-      const box = controls(html).find((c) => c.attrs.type === "checkbox" && c.attrs.name === "casl_consent");
-      assert.ok(box, `${name}: no CASL checkbox`);
-      assert.equal("checked" in (box as Control).attrs, false, `${name}: CASL box is pre-ticked`);
-      assert.ok(
-        html.includes("I agree to receive calls, texts and emails from Boreal Financial about my inquiry. I can unsubscribe at any time."),
-        `${name}: consent sentence missing`,
-      );
+      // BF_WEBSITE_SEPARATE_CONSENT_v1 - two unticked boxes: calls and texts, and email.
+      for (const field of ["sms_consent", "email_consent"]) {
+        const box = controls(html).find((c) => c.attrs.type === "checkbox" && c.attrs.name === field);
+        assert.ok(box, `${name}: no ${field} checkbox`);
+        assert.equal("checked" in (box as Control).attrs, false, `${name}: ${field} box is pre-ticked`);
+      }
+      assert.ok(html.includes("I agree to receive calls and text messages from Boreal Financial"), `${name}: texts sentence missing`);
+      assert.ok(html.includes("I agree to receive emails from Boreal Financial"), `${name}: email sentence missing`);
       assert.ok(
         html.includes("2630108 Alberta Ltd. o/a Boreal Financial, 450 Sparling Crt SW, Edmonton, Alberta T6X 1G9, (866) 631-8939."),
         `${name}: sender identification missing`,

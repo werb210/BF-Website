@@ -8,7 +8,7 @@ import { scoreCreditReadiness } from "@/lib/creditReadinessScore";
 import SEO from "@/components/SEO";
 // BF_WEBSITE_BLOCK_v129c_PHONE_NORMALIZATION_v1
 import { formatPhone, formatCurrency, unformatCurrency, toE164, PHONE_PATTERN, PHONE_TITLE } from "@/utils/formatters";
-import { caslFields } from "@/lib/casl"; // BF_WEBSITE_v789_CASL
+import { type Consent, NO_CONSENT, caslFields } from "@/lib/casl"; // BF_WEBSITE_v789_CASL
 import CaslConsent from "@/components/CaslConsent";
 
 // BF_WEBSITE_BLOCK_1_13_V2 — V1 14-field form aligned with BF-client
@@ -123,7 +123,7 @@ export default function CreditReadiness() {
   const [form, setForm] = useState<ReadinessForm>(initialForm);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [caslConsent, setCaslConsent] = useState(false); // BF_WEBSITE_v789_CASL
+  const [caslConsent, setCaslConsent] = useState<Consent>(NO_CONSENT); // BF_WEBSITE_v789_CASL / SEPARATE_CONSENT_v1
 
   useEffect(() => {
     trackEvent("funnel_stage", { stage: "credit_readiness_start" });
@@ -335,7 +335,7 @@ export default function CreditReadiness() {
 
           {/* BF_WEBSITE_v789_CASL */}
           <div className="mt-6">
-            <CaslConsent id="readiness-casl-consent" checked={caslConsent} onChange={setCaslConsent} />
+            <CaslConsent id="readiness-casl-consent" value={caslConsent} onChange={setCaslConsent} />
           </div>
 
           {/* BF_WEBSITE_v789_READABILITY - was a pale red (red-300) on white, 1.9:1; #b91c1c is 6.5:1. */}

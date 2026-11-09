@@ -132,8 +132,13 @@ describe("[12] conversation token", () => {
 describe("[126] CASL fields", () => {
   it("consent is true only when ticked; text and ISO time always sent", () => {
     const at = new Date("2026-10-11T12:00:00Z");
-    assert.deepEqual(caslFields(false, at), { casl_consent: false, casl_consent_text: CASL_CONSENT_TEXT, casl_consent_at: "2026-10-11T12:00:00.000Z" });
+    assert.deepEqual(caslFields(false, at), { casl_consent: false, sms_consent: false, email_consent: false, casl_consent_text: CASL_CONSENT_TEXT, casl_consent_at: "2026-10-11T12:00:00.000Z" });
     assert.equal(caslFields(true, at).casl_consent, true);
+    // BF_WEBSITE_SEPARATE_CONSENT_v1 - each box on its own.
+    const emailOnly = caslFields({ sms: false, email: true }, at);
+    assert.equal(emailOnly.email_consent, true);
+    assert.equal(emailOnly.sms_consent, false);
+    assert.equal(emailOnly.casl_consent, true);
     assert.equal(CASL_CONSENT_TEXT, "I agree to receive calls, texts and emails from Boreal Financial about my inquiry. I can unsubscribe at any time.");
     assert.equal(CASL_SENDER_LINE, "2630108 Alberta Ltd. o/a Boreal Financial, 450 Sparling Crt SW, Edmonton, Alberta T6X 1G9, (866) 631-8939.");
   });

@@ -18,7 +18,7 @@ import {
   loadConversation,
   saveConversation,
 } from "@/lib/conversationToken"; // BF_WEBSITE_v789_CONVERSATION_TOKEN
-import { caslFields } from "@/lib/casl"; // BF_WEBSITE_v789_CASL
+import { type Consent, NO_CONSENT, caslFields } from "@/lib/casl"; // BF_WEBSITE_v789_CASL
 import CaslConsent from "./CaslConsent";
 
 type ChatMessage = {
@@ -39,7 +39,7 @@ export default function FloatingChat() {
   const [leadDraft, setLeadDraft] = useState<{ name: string; email: string; phone: string }>({ name: "", email: "", phone: "" });
   const [leadError, setLeadError] = useState<string | null>(null);
   // BF_WEBSITE_v789_CASL - unticked by default; the chat works either way.
-  const [leadConsent, setLeadConsent] = useState(false);
+  const [leadConsent, setLeadConsent] = useState<Consent>(NO_CONSENT); // BF_WEBSITE_SEPARATE_CONSENT_v1
   const [issue, setIssue] = useState("");
   const [issueShot, setIssueShot] = useState<string | null>(null);
   const [issueShotBusy, setIssueShotBusy] = useState(false);
@@ -380,7 +380,7 @@ export default function FloatingChat() {
               <input aria-label="Mobile number" autoComplete="tel" className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Mobile number" type="tel" value={leadDraft.phone} onChange={(e) => setLeadDraft({ ...leadDraft, phone: e.target.value })} autoFocus />
               <input aria-label="Email" autoComplete="email" className="rounded border border-white/20 bg-[#0f1d3a] p-2 text-sm text-white placeholder:text-slate-400" placeholder="Email (optional if you gave a number)" type="email" value={leadDraft.email} onChange={(e) => setLeadDraft({ ...leadDraft, email: e.target.value })} />
               {/* BF_WEBSITE_v789_CASL */}
-              <CaslConsent id="maya-casl-consent" tone="dark" checked={leadConsent} onChange={setLeadConsent} />
+              <CaslConsent id="maya-casl-consent" tone="dark" value={leadConsent} onChange={setLeadConsent} />
               {leadError ? <div className="text-xs text-red-400">{leadError}</div> : null}
               <div className="flex gap-2">
                 <button type="button" onClick={() => setMode("chat")} className="flex-1 rounded border border-white/20 px-3 py-2 text-sm">Cancel</button>
