@@ -82,6 +82,8 @@ export function AppRouter() {
         <Route path="/privacy" component={Privacy} />
         <Route path="/delete-account" component={DeleteAccount} />
         <Route path="/book">{() => <Book />}</Route>
+        {/* BF_WEBSITE_BOOK_TEAM_v1 - the Personal Guarantee Insurance team page: Todd and Andrew in turn */}
+        <Route path="/book-pgi">{() => <Book team="pgi" />}</Route>
         {/* BF_WEBSITE_BOOKING_PER_STAFF_v174 - per-advisor links: /book-todd (and /book/todd) */}
         <Route path="/book/:slug">{(params: { slug: string }) => <Book slug={params.slug} />}</Route>
         <Route path="/terms" component={TermsPage} />

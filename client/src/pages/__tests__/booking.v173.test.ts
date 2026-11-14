@@ -13,12 +13,12 @@ describe("booking page", () => {
     assert.ok(r("router/AppRouter.tsx").includes('<Route path="/book">{() => <Book />}</Route>'));
   });
   it("offers a phone call or Microsoft Teams only - no conference calls", () => {
-    assert.ok(page.includes(">Phone call</button>"));
-    assert.ok(page.includes(">Microsoft Teams</button>"));
+    assert.ok(page.includes('teamPage.phone : "Phone call"}</button>'));
+    assert.ok(page.includes('teamPage.teams : "Microsoft Teams"}</button>'));
     assert.ok(!/conference/i.test(page.replace("Conference calls are\n// staff-only and are not offered here.", "")));
   });
   it("uses the server's booking API with a bot trap, and needs a phone number for phone calls", () => {
-    assert.ok(page.includes('apiUrl("/booking/slots?staff="')); // BF_WEBSITE_v789_ONE_API_BASE
+    assert.ok(page.includes('"/booking/slots?staff=" + encodeURIComponent(staffId)')); // BF_WEBSITE_v789_ONE_API_BASE
     assert.ok(page.includes('website: trap'));
     assert.ok(page.includes('kind === "teams" ? !phone.trim() || phoneE164 !== null : phoneE164 !== null')); // BF_WEBSITE_v786_BOOK_PHONE
   });

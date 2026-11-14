@@ -18,7 +18,23 @@ const TZ = "America/Regina";
 // BF_WEBSITE_BOOKING_PER_STAFF_v174 - each advisor has their own link: boreal.financial/book-todd
 // shows only Todd's free times and never lists the rest of the team. Plain /book books the
 // first free advisor without naming anyone.
-export default function Book({ slug }: { slug?: string } = {}) {
+// BF_WEBSITE_BOOK_TEAM_v1 - a team page (/book-pgi): the server picks who takes the call, in turn, and sets the hours
+// and the length (a 15-minute phone call or a 30-minute Teams meeting). ?rep=<code> credits the rep whose link it was.
+const TEAM_PAGES: Record<string, { title: string; intro: string; seo: string; phone: string; teams: string }> = {
+  pgi: {
+    title: "Book a call about Personal Guarantee Insurance",
+    intro: "For banks, lenders and loan brokers. A 15-minute phone call or a 30-minute Microsoft Teams meeting with the Boreal team. Times are shown in your time zone.",
+    seo: "Book a call or a Microsoft Teams meeting with Boreal about Personal Guarantee Insurance.",
+    phone: "15-minute phone call", teams: "30-minute Teams meeting",
+  },
+};
+export function repFromSearch(search: string): string {
+  const v = (new URLSearchParams(search).get("rep") ?? "").trim().toLowerCase();
+  return /^[a-z0-9]{4,16}$/.test(v) ? v : "";
+}
+export default function Book({ slug, team }: { slug?: string; team?: string } = {}) {
+  const teamPage = team ? TEAM_PAGES[team] ?? null : null;
+  const rep = useMemo(() => (team && typeof window !== "undefined" ? repFromSearch(window.location.search) : ""), [team]);
   const [kind, setKind] = useState<"phone" | "teams">("phone");
   const [advisor, setAdvisor] = useState<Staff | null>(null);
   const [notFound, setNotFound] = useState(false);
@@ -48,10 +64,10 @@ export default function Book({ slug }: { slug?: string } = {}) {
   useEffect(() => {
     if (!staffId) return;
     setSlots(null); setPick(null);
-    fetch(apiUrl("/booking/slots?staff=" + encodeURIComponent(staffId)))
+    fetch(apiUrl(team ? "/booking/slots?team=" + encodeURIComponent(team) + "&kind=" + kind : "/booking/slots?staff=" + encodeURIComponent(staffId)))
       .then(async (r) => { const d = await r.json(); if (!r.ok) throw new Error(d?.message || "unavailable"); setSlots(Array.isArray(d?.slots) ? d.slots : []); })
       .catch((e) => { setSlots([]); setError(e instanceof Error ? e.message : "Booking is temporarily unavailable. Please call (866) 631-8939."); });
-  }, [staffId]);
+  }, [staffId, team, team ? kind : ""]);
   const byDay = useMemo(() => slotsByDay(slots ?? [], tz), [slots, tz]);
   const firstKey = useMemo(() => (slots && slots.length ? dayKey(slots[0]!.startsAt, tz) : null), [slots, tz]);
   const [day, setDay] = useState<string | null>(null);
@@ -72,7 +88,7 @@ export default function Book({ slug }: { slug?: string } = {}) {
   const submit = async () => {
     setState("saving"); setError(null);
     try {
-      const r = await fetch(apiUrl("/booking"), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind, startsAt: pick, staffId, name: name.trim(), email: email.trim(), phone: phoneE164 ?? "", notes: notes.trim(), website: trap, ...caslFields(caslConsent) }) });
+      const r = await fetch(apiUrl("/booking"), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind, startsAt: pick, ...(team ? { team, ...(rep ? { rep } : {}) } : { staffId }), name: name.trim(), email: email.trim(), phone: phoneE164 ?? "", notes: notes.trim(), website: trap, ...caslFields(caslConsent) }) });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) { setError(d?.message || "That didn't go through. Please try another time or call (866) 631-8939."); setState("idle"); if (r.status === 409) setStaffId((s) => s); return; }
       setDone(d.booking ?? null); setState("done");
@@ -83,12 +99,12 @@ export default function Book({ slug }: { slug?: string } = {}) {
   const field = { width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: 8, color: "#0B1F3A", background: "#fff" };
   return (
     <>
-      <SEO title="Book a call" description="Book a phone call or Microsoft Teams meeting with a Boreal Financial advisor." url="https://www.boreal.financial/book" />
+      <SEO title={teamPage ? teamPage.title : "Book a call"} description={teamPage ? teamPage.seo : "Book a phone call or Microsoft Teams meeting with a Boreal Financial advisor."} url={teamPage ? "https://www.boreal.financial/book-" + team : "https://www.boreal.financial/book"} noindex={Boolean(teamPage)} />
       <main className="bg-white font-sans text-boreal-ink" style={{ color: "#0B1F3A" }}>
         <section className="bg-gradient-to-br from-boreal-ink via-boreal-inkDeep to-[#0d233f]">
           <div className="mx-auto max-w-[820px] px-6 py-12">
-            <h1 className="font-display text-4xl font-bold text-white">{advisor ? "Book a call with " + advisor.firstName : "Book a call"}</h1>
-            <p className="mt-3 text-[17px] text-[#e2e8f0]">30 minutes with a Boreal Financial advisor, by phone or Microsoft Teams. Times are shown in your time zone.</p>
+            <h1 className="font-display text-4xl font-bold text-white">{teamPage ? teamPage.title : advisor ? "Book a call with " + advisor.firstName : "Book a call"}</h1>
+            <p className="mt-3 text-[17px] text-[#e2e8f0]">{teamPage ? teamPage.intro : "30 minutes with a Boreal Financial advisor, by phone or Microsoft Teams. Times are shown in your time zone."}</p>
           </div>
         </section>
         <section className="mx-auto max-w-[820px] px-6 py-10" data-testid="booking">
@@ -104,8 +120,8 @@ export default function Book({ slug }: { slug?: string } = {}) {
             <>
               <h2 className="text-lg font-bold">1. How would you like to meet?</h2>
               <div className="mt-3 flex gap-3">
-                <button type="button" style={btn(kind === "phone")} aria-pressed={kind === "phone"} onClick={() => setKind("phone")}>Phone call</button>
-                <button type="button" style={btn(kind === "teams")} aria-pressed={kind === "teams"} onClick={() => setKind("teams")}>Microsoft Teams</button>
+                <button type="button" style={btn(kind === "phone")} aria-pressed={kind === "phone"} onClick={() => setKind("phone")}>{teamPage ? teamPage.phone : "Phone call"}</button>
+                <button type="button" style={btn(kind === "teams")} aria-pressed={kind === "teams"} onClick={() => setKind("teams")}>{teamPage ? teamPage.teams : "Microsoft Teams"}</button>
               </div>
               <h2 className="mt-8 text-lg font-bold">2. Pick a time</h2>
               <p data-testid="booking-zone" className="mt-2" style={{ fontSize: 14, color: "#334155" }}>
