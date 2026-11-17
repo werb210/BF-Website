@@ -40,7 +40,7 @@ export function Footer() {
               Check your Credit Readiness
             </Link>
             <Link href="/contact" className="block text-white/75 no-underline text-sm mb-2">Contact Us</Link>
-            <Link href="/product-comparison" className="block text-white/75 no-underline text-sm">Product Comparison</Link>
+            <Link href="/compare" className="block text-white/75 no-underline text-sm">Product Comparison</Link>
           </div>
         </div>
         <div className="border-t border-[#1c2538] pt-4 flex justify-between text-xs text-white/55">
