@@ -154,11 +154,11 @@ export default function ContactForm() {
         {/* BF_WEBSITE_CONTACT_CONTRAST_v171 - typed text was navy on near-black (1.2:1), effectively invisible */}
         <div>
           <label htmlFor="contact-company" className={labelClass}>Company name</label>
-          <input id="contact-company" className={fieldClass} name="companyName" autoComplete="organization" placeholder="Company Name" required value={formData.companyName} onChange={(e) => setFormData((prev) => ({ ...prev, companyName: e.target.value }))} />
+          <input id="contact-company" className={fieldClass} name="companyName" autoComplete="organization" placeholder="Company name" required value={formData.companyName} onChange={(e) => setFormData((prev) => ({ ...prev, companyName: e.target.value }))} />
         </div>
         <div>
           <label htmlFor="contact-name" className={labelClass}>Full name</label>
-          <input id="contact-name" className={fieldClass} name="name" autoComplete="name" placeholder="Full Name" required value={formData.name} onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))} />
+          <input id="contact-name" className={fieldClass} name="name" autoComplete="name" placeholder="Full name" required value={formData.name} onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))} />
         </div>
         <div>
           <label htmlFor="contact-email" className={labelClass}>Email</label>
@@ -166,7 +166,7 @@ export default function ContactForm() {
         </div>
         <div>
           <label htmlFor="contact-phone" className={labelClass}>Mobile phone</label>
-          <input id="contact-phone" className={fieldClass} name="mobilePhone" type="tel" inputMode="tel" autoComplete="tel" placeholder="Mobile Phone" required pattern={PHONE_PATTERN} title={PHONE_TITLE} value={formData.mobilePhone} onChange={(e) => setFormData((prev) => ({ ...prev, mobilePhone: formatPhone(e.target.value) }))} />
+          <input id="contact-phone" className={fieldClass} name="mobilePhone" type="tel" inputMode="tel" autoComplete="tel" placeholder="Mobile phone" required pattern={PHONE_PATTERN} title={PHONE_TITLE} value={formData.mobilePhone} onChange={(e) => setFormData((prev) => ({ ...prev, mobilePhone: formatPhone(e.target.value) }))} />
         </div>
         <div>
           <label htmlFor="contact-message" className={labelClass}>How can we help?</label>

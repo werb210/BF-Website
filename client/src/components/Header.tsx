@@ -45,7 +45,7 @@ export default function Header() {
             rel="noopener noreferrer"
             className="rounded-full bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-500"
           >
-            Apply Now
+            Apply now
           </a>
         </nav>
 
@@ -82,7 +82,7 @@ export default function Header() {
                 className="mt-2 inline-flex justify-center rounded-full bg-blue-600 px-5 py-3 font-medium text-white"
                 onClick={() => setOpen(false)}
               >
-                Apply Now
+                Apply now
               </a>
               {/* BF_WEBSITE_BLOCK_1_13_V2 — cross-link to BI-Website */}
               <a

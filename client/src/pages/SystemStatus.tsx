@@ -11,13 +11,13 @@ export default function SystemStatus() {
         description="Build and environment diagnostics."
         noindex
       />
-      <main className="bg-white font-sans text-boreal-ink">
+      <main className="min-h-[70vh] bg-white font-sans text-boreal-ink">
         <div className="mx-auto max-w-[820px] px-6 py-16">
           <h1 className="font-display text-3xl font-bold">System status</h1>
           <dl className="mt-6 space-y-3">
             {([
               ["Environment", import.meta.env.MODE],
-              ["Rendered at", new Date().toISOString()],
+              ["Rendered at", new Intl.DateTimeFormat("en-CA", { timeZone: "America/Edmonton", dateStyle: "medium", timeStyle: "medium" }).format(new Date()) + " Alberta time"],
             ] as const).map(([k, v]) => (
               <div
                 key={k}

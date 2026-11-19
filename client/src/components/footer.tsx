@@ -30,17 +30,17 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <div className="font-semibold text-white mb-3">Apply Now</div>
+            <div className="font-semibold text-white mb-3">Apply now</div>
             <a href={buildApplyUrl(APPLY_URL)} target="_blank" rel="noopener noreferrer"
                className="inline-block bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium no-underline mb-3">
-              Apply Now
+              Apply now
             </a>
             {/* BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1 — single credit readiness target */}
             <Link href="/credit-readiness" className="block text-white/75 no-underline text-sm mb-2">
-              Check your Credit Readiness
+              Check your credit readiness
             </Link>
-            <Link href="/contact" className="block text-white/75 no-underline text-sm mb-2">Contact Us</Link>
-            <Link href="/compare" className="block text-white/75 no-underline text-sm">Product Comparison</Link>
+            <Link href="/contact" className="block text-white/75 no-underline text-sm mb-2">Contact us</Link>
+            <Link href="/compare" className="block text-white/75 no-underline text-sm">Compare products</Link>
           </div>
         </div>
         <div className="border-t border-[#1c2538] pt-4 flex justify-between text-xs text-white/55">
