@@ -12,7 +12,7 @@ export default function CapitalScore() {
 
       <input
         type="number"
-        placeholder="Annual Revenue"
+        placeholder="Annual revenue"
         className="mb-3 w-full border p-2"
         value={rev}
         onChange={(e) => setRev(e.target.value)}
@@ -20,7 +20,7 @@ export default function CapitalScore() {
 
       <input
         type="number"
-        placeholder="Years in Biz"
+        placeholder="Years in business"
         className="mb-3 w-full border p-2"
         value={yrs}
         onChange={(e) => setYrs(e.target.value)}

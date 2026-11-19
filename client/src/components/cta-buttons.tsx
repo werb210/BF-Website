@@ -18,7 +18,7 @@ export function ApplyNowButton({ children, className, variant = "cta", size = "l
   return (
     <Button asChild className={["h-11 px-6 rounded-full", className].filter(Boolean).join(" ")} variant={variant} size={size}>
       <a href={href} onClick={() => trackEvent("apply_clicked", { source: "homepage", readinessSession: token ? "present" : "none" })}>
-        {children ?? "Apply Now"}
+        {children ?? "Apply now"}
       </a>
     </Button>
   );

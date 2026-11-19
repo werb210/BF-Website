@@ -253,11 +253,11 @@ export default function CreditReadiness() {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
               <label htmlFor="readiness-company-name" className={labelClass}>Company name</label>
-              <input id="readiness-company-name" name="companyName" required type="text" autoComplete="organization" placeholder="Company Name" value={form.companyName} onChange={(e) => update("companyName", e.target.value)} className={fieldClass} />
+              <input id="readiness-company-name" name="companyName" required type="text" autoComplete="organization" placeholder="Company name" value={form.companyName} onChange={(e) => update("companyName", e.target.value)} className={fieldClass} />
             </div>
             <div>
               <label htmlFor="readiness-full-name" className={labelClass}>Full name</label>
-              <input id="readiness-full-name" name="fullName" required type="text" autoComplete="name" placeholder="Full Name" value={form.fullName} onChange={(e) => update("fullName", e.target.value)} className={fieldClass} />
+              <input id="readiness-full-name" name="fullName" required type="text" autoComplete="name" placeholder="Full name" value={form.fullName} onChange={(e) => update("fullName", e.target.value)} className={fieldClass} />
             </div>
             <div>
               <label htmlFor="readiness-email" className={labelClass}>Email</label>
@@ -265,7 +265,7 @@ export default function CreditReadiness() {
             </div>
             <div>
               <label htmlFor="readiness-phone" className={labelClass}>Mobile phone</label>
-              <input id="readiness-phone" name="phone" required type="tel" autoComplete="tel" inputMode="tel" placeholder="Mobile Phone" pattern={PHONE_PATTERN} title={PHONE_TITLE} value={form.phone} onChange={(e) => update("phone", formatPhone(e.target.value))} className={fieldClass} />
+              <input id="readiness-phone" name="phone" required type="tel" autoComplete="tel" inputMode="tel" placeholder="Mobile phone" pattern={PHONE_PATTERN} title={PHONE_TITLE} value={form.phone} onChange={(e) => update("phone", formatPhone(e.target.value))} className={fieldClass} />
             </div>
 
             <div>
@@ -278,14 +278,14 @@ export default function CreditReadiness() {
             <div>
               <label htmlFor="readiness-business-location" className={labelClass}>Business location</label>
               <select id="readiness-business-location" name="businessLocation" required value={form.businessLocation} onChange={(e) => update("businessLocation", e.target.value)} className={fieldClass}>
-                <option value="">Business Location</option>
+                <option value="">Business location</option>
                 {LOCATIONS.map((opt) => <option key={opt}>{opt}</option>)}
               </select>
             </div>
 
             <div>
               <label htmlFor="readiness-requested-amount" className={labelClass}>Requested amount ($)</label>
-              <input id="readiness-requested-amount" name="requestedAmount" required type="text" inputMode="numeric" placeholder="Requested Amount ($)" value={form.requestedAmount} onChange={(e) => update("requestedAmount", formatCurrency(e.target.value))} className={fieldClass} />
+              <input id="readiness-requested-amount" name="requestedAmount" required type="text" inputMode="numeric" placeholder="Requested amount ($)" value={form.requestedAmount} onChange={(e) => update("requestedAmount", formatCurrency(e.target.value))} className={fieldClass} />
             </div>
 
             <div>

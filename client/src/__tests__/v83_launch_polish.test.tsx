@@ -18,7 +18,7 @@ describe("BF_WEBSITE_BLOCK_v83_LAUNCH_POLISH_v1", () => {
   });
   it("Footer 'Check your Credit Readiness' uses /credit-readiness (single source)", () => {
     render(<Footer />);
-    expect(screen.getByRole("link", { name: /Check your Credit Readiness/i }).getAttribute("href")).toBe("/credit-readiness");
+    expect(screen.getByRole("link", { name: /Check your credit readiness/i }).getAttribute("href")).toBe("/credit-readiness");
   });
   it("Footer Boreal Risk Management link points to www.boreal.insure", () => {
     render(<Footer />);

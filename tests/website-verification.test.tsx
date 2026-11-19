@@ -47,7 +47,7 @@ test("navigation renders products and industries links", () => {
   const html = renderToStaticMarkup(withStaticRouter(<Header />));
   assert.match(html, /Boreal Financial/);
   assert.match(html, /Products/);
-  assert.match(html, /Credit Readiness/);
+  assert.match(html, /Credit Readiness/i);
   assert.match(html, /Contact/);
   for (const slug of requiredIndustries) {
     assert.match(html, new RegExp(`/industries/${slug}`));
@@ -73,7 +73,7 @@ test("industry routes resolve with advisory and challenge content", () => {
     const html = renderToStaticMarkup(withStaticRouter(<IndustryDetail slug={slug} />));
     assert.match(html, /Industry Challenges/);
     assert.match(html, /How Boreal Solves This/);
-    assert.match(html, /Apply Now/);
+    assert.match(html, /Apply now/i);
   }
 });
 
